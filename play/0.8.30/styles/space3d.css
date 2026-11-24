@@ -1,0 +1,12 @@
+/* 0.23 — 3D для Graph и Galaxy: переключатель 2D/3D рядом с масштабом. */
+.view3dCluster{display:inline-flex;align-items:center;gap:4px;margin-left:4px}
+.view3dCluster[hidden],.view3dCluster [hidden]{display:none!important}
+.view3dBtn{min-width:38px;font-weight:700}
+.view3dCluster .modeBtn.active{box-shadow:inset 0 0 0 1px currentColor}
+.canvasWrap.graph3d canvas{cursor:grab}
+/* 0.23.5: Galaxy as a star map — stars and their names keep a comfortable size while the distances grow;
+   names of deeper levels appear as you zoom in (gOff hides one). */
+#galaxyView .galaxyScaled{transform:scale(var(--gk,1))}
+#galaxyView .gOff{display:none}
+#galaxyView .galaxyOrbitInner{stroke-dasharray:calc(2px / var(--gz,1)) calc(9px / var(--gz,1))}
+#galaxyView .galaxyParentHalo{stroke-dasharray:calc(3px / var(--gz,1)) calc(8px / var(--gz,1))}

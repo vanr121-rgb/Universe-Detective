@@ -1,0 +1,109 @@
+/* Universe Graph — набор правил, статусы и анкеты (0.17).
+   Цвета берутся из переменных скина (--text, --muted, --panel2, --line2, --accent),
+   поэтому всё читается во всех темах; цвет статуса — в --status. */
+
+/* ---- Статусы ---- */
+.statusChip{--status:#9aa8c6;display:inline-flex;align-items:center;gap:4px;max-width:100%;padding:2px 8px 2px 6px;border-radius:999px;border:1px solid color-mix(in srgb,var(--status) 70%,transparent);background:color-mix(in srgb,var(--status) 16%,transparent);color:inherit;font-size:11px;line-height:18px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.statusChip i{font-style:normal;color:var(--status);font-weight:700}
+.statusChip.pick{cursor:pointer;font:inherit;font-size:11.5px;opacity:.72;background:transparent}
+.statusChip.pick:hover{opacity:1}
+.statusChip.pick.on{opacity:1;background:color-mix(in srgb,var(--status) 30%,transparent);border-color:var(--status);box-shadow:0 0 0 1px color-mix(in srgb,var(--status) 45%,transparent)}
+.statusRow{display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-top:8px}
+.statusAddBtn{border:1px dashed var(--line2,rgba(255,255,255,.25));background:transparent;color:inherit;border-radius:999px;padding:1px 9px;font:inherit;font-size:11px;line-height:18px;cursor:pointer;opacity:.8}
+.statusAddBtn:hover{opacity:1}
+.statusPick{display:flex;flex-wrap:wrap;gap:5px}
+.statusEditGroup,.statusMenuGroup,.statusFilterGroup{display:flex;flex-direction:column;gap:5px;margin-bottom:9px}
+.statusEditGroup small,.statusMenuGroup small,.statusFilterGroup small{opacity:.75;font-size:11px}
+.statusMenu{position:fixed;z-index:2750;display:none;width:290px;max-height:calc(60vh / var(--zf,1));overflow:auto;padding:12px;border-radius:12px;background:var(--panel2,#0e1628);color:var(--text,#edf4ff);border:1px solid var(--line2,rgba(255,255,255,.2));box-shadow:0 18px 50px rgba(0,0,0,.45)}
+.statusMenu.open{display:block}
+.statusFilters .statusFilterReset{margin-top:2px;font-size:11px;padding:4px 10px}
+.emptyHint{font-size:11px;opacity:.7;line-height:1.45}
+
+/* ---- Окно «Набор правил» ---- */
+.rulesHead small{display:block;opacity:.75;margin-top:2px;font-size:11.5px}
+.rulesTabs{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 10px;border-bottom:1px solid var(--line2,rgba(255,255,255,.14));padding-bottom:8px}
+.rulesTab{border:1px solid transparent;background:transparent;color:inherit;font:inherit;font-size:12.5px;padding:6px 11px;border-radius:9px;cursor:pointer;opacity:.75}
+.rulesTab span{margin-left:6px;font-size:11px;opacity:.7}
+.rulesTab:hover{opacity:1}
+.rulesTab.active{opacity:1;border-color:var(--line2,rgba(255,255,255,.25));background:color-mix(in srgb,var(--accent,#7aa7ff) 16%,transparent)}
+.rulesIntro{font-size:12px;line-height:1.5;opacity:.85;margin-bottom:10px}
+.statusPreview{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.statusGroupItem{align-items:flex-start}
+.ghostIcon{opacity:.8;cursor:default;display:inline-grid;place-items:center}
+.presetCards{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:10px}
+.presetCard{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:12px;border:1px solid var(--line2,rgba(255,255,255,.18))}
+.presetCard small{opacity:.78;font-size:11.5px;line-height:1.45}
+.presetActions{display:flex;flex-wrap:wrap;gap:7px;margin-top:4px}
+.dangerZone{display:flex;align-items:center;gap:14px;padding:12px;border-radius:12px;border:1px solid color-mix(in srgb,#ff6b88 55%,transparent)}
+.dangerZone small{display:block;opacity:.78;font-size:11.5px;line-height:1.45;margin-top:3px}
+.dangerZone>div{flex:1}
+.segmented{display:flex;flex-direction:column;gap:4px;font-size:12px}
+.typeChecks{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:4px 10px;font-size:12px}
+.typeChecks label,.segmented label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.statusOptionRow{position:relative;display:grid;grid-template-columns:26px minmax(45px,1fr) 44px minmax(36px,64px) minmax(70px,170px) 30px;gap:6px;align-items:center}
+.statusOptionRow :is(input,select){min-width:0}
+.statusOptionRow .soGrip{width:100%;min-width:0;padding:0;cursor:grab;user-select:none;touch-action:none}
+.statusOptionRow.soDragging{opacity:.55}
+.statusOptionRow[data-so-drop]::after{content:"";position:absolute;left:0;right:0;height:2px;border-radius:2px;background:var(--skin-accent,var(--accent,#79b8ff));pointer-events:none}
+.statusOptionRow[data-so-drop="before"]::after{top:0}
+.statusOptionRow[data-so-drop="after"]::after{bottom:0}
+.statusOptionRow .colorInput{height:32px;padding:2px}
+
+/* ---- Анкета типа (поля) ---- */
+.fieldDefRow{display:grid;grid-template-columns:minmax(140px,1fr) 150px minmax(120px,1fr) 30px;gap:6px;align-items:center}
+.fieldDefRow .fdOptions,.fieldDefRow .fdRef{display:none}
+.fieldDefRow[data-kind="choice"] .fdOptions{display:block}
+.fieldDefRow[data-kind="ref"] .fdRef{display:block}
+.fieldDefRow:not([data-kind="choice"]):not([data-kind="ref"])::after{content:"";grid-column:3}
+.fieldDefRow .fdDel{grid-column:4}
+.fieldForm{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px 12px}
+.fieldRow{display:flex;flex-direction:column;gap:4px}
+.fieldRow textarea{min-height:64px}
+.fieldKv .kvItem span{overflow-wrap:anywhere}
+.linkBtn{border:0;background:none;padding:0;color:var(--accent,#7aa7ff);font:inherit;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+/* ---- Новое пространство: выбор набора правил ---- */
+.presetChoice{display:flex;flex-direction:column;gap:6px}
+.presetOption{display:flex;gap:10px;align-items:flex-start;padding:9px 11px;border-radius:10px;border:1px solid var(--line2,rgba(255,255,255,.16));cursor:pointer}
+.presetOption:has(input:checked){border-color:var(--accent,#7aa7ff);background:color-mix(in srgb,var(--accent,#7aa7ff) 12%,transparent)}
+.presetOption small{display:block;opacity:.78;font-size:11.5px;line-height:1.45;margin-top:2px}
+.presetOption input{margin-top:3px}
+
+/* Списки в окне правил: строка на всю ширину, кнопки справа. */
+.rulesBody .typeList .listItem{display:flex;align-items:center;gap:10px;width:100%}
+.rulesBody .typeList .listMeta{flex:1;min-width:0}
+.rulesBody .statusGroupItem{align-items:flex-start}
+.rulesBody>.buttonGrid{display:flex;justify-content:flex-start;margin-bottom:10px}
+.rulesBody>.buttonGrid .btn{width:auto}
+
+/* ---- Масштаб интерфейса (в меню скинов) ---- */
+.styleMenu .scaleRow{grid-column:1/-1;display:flex;flex-direction:column;gap:6px;margin-top:6px;padding-top:8px;border-top:1px solid var(--line2,rgba(255,255,255,.18))}
+.styleMenu .scaleRow small{opacity:.8;font-size:11px}
+.styleMenu .scaleOptions{display:flex;flex-wrap:wrap;gap:4px}
+.styleMenu .scaleBtn{flex:0 0 auto;width:auto;min-width:0;padding:4px 8px;font-size:11.5px;border-radius:7px}
+.styleMenu .scaleBtn.active{outline:1px solid var(--accent,#7aa7ff);background:color-mix(in srgb,var(--accent,#7aa7ff) 22%,transparent)}
+.styleMenu .scaleNote{line-height:1.4}
+
+/* ---- Большие и широкие мониторы ----
+   На ультрашироком экране окна и подсказки не растягиваются на всю ширину. */
+@media (min-width:2400px){
+  .modal{width:min(820px,calc(calc(100vw / var(--zf,1)) - 24px))}
+  .toastWrap{max-width:520px}
+}
+/* 0.22: which record types a relation type may join — small toggles in the type editor. */
+.relTypeChips{display:flex;flex-wrap:wrap;gap:5px}
+.form label.relTypeChip{display:inline-flex;align-items:center;gap:4px;margin:0;padding:4px 8px;border:1px solid var(--line2);border-radius:999px;font-size:11px;color:inherit;cursor:pointer}
+.relTypeChip input{margin:0}
+.relTypeHint{font-size:11px;margin-top:5px;color:inherit}
+.relTypeHint.bad{color:var(--danger,#ff6b88);font-weight:600}
+/* 0.24: the window itself scrolls — a second scroll inside it (calc(52vh / var(--zf,1)) list) made the wheel move the list or the window by turns */
+.rulesBody .typeList{max-height:none;overflow:visible}
+/* 0.28.3: long lists of the rules window — groups that open into lists, and a search field */
+.rulesSearch{width:100%;box-sizing:border-box;margin:0 0 8px;padding:7px 10px;border-radius:9px;border:1px solid var(--skin-border,rgba(150,170,220,.3));background:color-mix(in srgb,currentColor 6%,transparent);color:inherit;font:inherit}
+.rulesGroup{border:1px solid var(--skin-border,rgba(150,170,220,.25));border-radius:11px;margin:0 0 7px;background:color-mix(in srgb,currentColor 3%,transparent)}
+.rulesGroup>summary{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;padding:9px 12px;cursor:pointer;list-style:none}
+.rulesGroup>summary::-webkit-details-marker{display:none}
+.rulesGroup>summary::before{content:'▸';opacity:.7;transition:transform .12s}.rulesGroup[open]>summary::before{transform:rotate(90deg)}
+.rulesGroup>summary .rulesGroupN{min-width:20px;padding:0 6px;border-radius:10px;text-align:center;font-size:11px;background:color-mix(in srgb,var(--skin-accent,#78b8ff) 22%,transparent)}
+.rulesGroup>summary small{flex-basis:100%;margin-left:18px;opacity:.72;font-size:11px}
+.rulesGroup>.stack{padding:0 8px 8px}

@@ -1,0 +1,28 @@
+/* Universe Graph — индикатор сохранения, баннер ошибок сохранения и экран сбоя (0.16). */
+.saveStatus{display:inline-flex;align-items:center;gap:5px;height:30px;padding:0 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--muted);font:inherit;font-size:11px;white-space:nowrap;cursor:pointer}
+.saveStatus[data-kind="saved"] .saveStatusIcon{color:var(--ok,#57dfb3)}
+.saveStatus[data-kind="error"]{color:#fff;background:#b3263e;border-color:#ff6b88}
+.saveStatus[data-kind="locked"]{color:#1c1300;background:#ffd05a;border-color:#e0b23a}
+@media (max-width:1480px){.saveStatus .saveStatusText{display:none}.saveStatus[data-kind="error"] .saveStatusText,.saveStatus[data-kind="locked"] .saveStatusText{display:inline}}
+.saveBanner{position:fixed;left:50%;top:64px;transform:translateX(-50%);z-index:2600;display:flex;align-items:center;gap:10px 16px;width:min(820px,calc(calc(100vw / var(--zf,1)) - 32px));padding:12px 14px;border-radius:12px;background:#2a0b12;color:#ffe3e8;border:1px solid #ff6b88;box-shadow:0 18px 50px rgba(0,0,0,.45);font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial,sans-serif;font-size:12px;line-height:1.45}
+/* Под окнами (z 2700): открытое окно не перекрывается плашкой; после закрытия окна она снова видна. */
+.saveBannerText{flex:1 1 auto;display:flex;flex-direction:column;gap:2px;min-width:0}
+.saveBannerText b{font-size:13px;color:#fff}
+.saveBannerActions{flex:0 0 auto;display:flex;gap:8px}
+/* Плашка и экран сбоя одинаковы во всех скинах: кнопки скина сюда не попадают. */
+body .saveBanner .btn{padding:7px 12px!important;border-radius:9px!important;border:1px solid #ff8aa1!important;background:#3d1220!important;color:#fff!important;font:inherit!important;font-size:12px!important;cursor:pointer;white-space:nowrap;box-shadow:none!important;text-shadow:none!important;min-height:0!important}
+body .saveBanner .btn.primary{background:#d6365a!important}
+@media (max-width:760px){.saveBanner{flex-direction:column;align-items:stretch}.saveBannerActions{flex-wrap:wrap}}
+.startupNotice{white-space:pre-line;line-height:1.55}
+.fatalScreen{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;padding:24px;background:#070b16;color:#edf4ff;font-family:Inter,ui-sans-serif,system-ui,Segoe UI,Roboto,Arial,sans-serif}
+.fatalCard{max-width:640px;width:100%;padding:24px 26px;border-radius:16px;background:#0e1628;border:1px solid #2b3b5e;box-shadow:0 24px 70px rgba(0,0,0,.5)}
+.fatalCard h1{margin:0 0 10px;font-size:20px}
+.fatalCard p{margin:8px 0;font-size:13px;line-height:1.55;color:#c9d6ee}
+.fatalWhat{padding:8px 10px;border-radius:8px;background:#2a0b12;color:#ffd0d9!important;font-family:ui-monospace,Consolas,monospace;font-size:12px!important;word-break:break-word}
+.fatalActions{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+body .fatalActions .btn{padding:9px 14px!important;border-radius:9px!important;border:1px solid #3a4f7a!important;background:#16223a!important;color:#edf4ff!important;cursor:pointer;font:inherit!important;font-size:13px!important;box-shadow:none!important;text-shadow:none!important}
+body .fatalActions .btn.primary{background:#2b6cd8!important;border-color:#4d8cf0!important}
+.fatalHint{color:#8fa3c7!important;font-size:12px!important}
+.fatalCard details{margin-top:10px;font-size:12px;color:#8fa3c7}
+.fatalCard pre{white-space:pre-wrap;max-height:200px;overflow:auto;background:#060a14;padding:10px;border-radius:8px;color:#a9bddd}
+.viewFailed{display:flex;flex-direction:column;gap:6px;max-width:520px;margin:140px auto 0;padding:16px 18px;border-radius:12px;border:1px solid #ff6b88;background:rgba(42,11,18,.92);color:#ffe3e8;font-size:13px;line-height:1.5}

@@ -1,0 +1,114 @@
+/* Universe Graph — Detective в стиле программы (0.23.5).
+   Каждый стиль даёт доске свой «материал»: поверхность, бумагу, булавки, нитки, табличку и шрифты.
+   Цвета и шрифты берутся из настроек самого стиля (--skin-*: фон, панели, текст, акцент, шрифт), чтобы доска
+   выглядела частью того же мира. Пары «фон — текст» на бумаге подобраны так, чтобы читаться (проверка скинов). */
+
+/* Общая табличка — из панелей стиля. */
+:is(.app,body)[data-visual-style] .detectiveView{
+  --tb-bg:var(--skin-panel2);--tb-border:var(--skin-border-strong);--tb-ink:var(--skin-text);--tb-ink2:var(--skin-muted);
+  --tb-btn:color-mix(in srgb,var(--skin-text) 8%,transparent);--tb-btn-hover:color-mix(in srgb,var(--skin-text) 16%,transparent);--tb-btn-border:var(--skin-border-strong);
+  --tb-active:var(--skin-accent);--tb-active-border:var(--skin-accent);--tb-active-ink:var(--skin-bg)}
+
+/* ——— Classic: ночной штаб — тёмно-синее сукно с сеткой, белые карточки, булавки цвета акцента, стальная рамка ——— */
+:is(.app,body)[data-visual-style="classic"] .detectiveView{
+  --string-contain:#9fb4dc;--contain-dash:6 5;
+  --board-a:var(--skin-canvas-a);--board-b:var(--skin-canvas-c);--board-dark:rgba(0,0,0,.30);--board-light:rgba(120,184,255,.07);--board-frame:#1b2742;--board-frame2:var(--skin-accent);
+  --board-pattern:linear-gradient(rgba(120,184,255,.07) 1px,transparent 1px) var(--board-bg-x,0) var(--board-bg-y,0)/48px 48px,linear-gradient(90deg,rgba(120,184,255,.07) 1px,transparent 1px) var(--board-bg-x,0) var(--board-bg-y,0)/48px 48px;
+  --paper:#f7f9fd;--paper-ink:#1c2433;--paper-text:#2b3445;--paper-name:#173a7a;--paper-kind:#4d5a72;--paper-line:rgba(120,160,230,.25);--paper-margin:rgba(120,184,255,.6);
+  --paper-font:var(--skin-font);--paper-hand:var(--skin-font);--note:#dceaff;--folder:#cfdaf0;--case:#bccbe8;--folder-tab-ink:#1f3d75;--case-tab-ink:#173a7a;--case-name:#13306a;
+  --pin-bg:radial-gradient(circle at 35% 30%,#fff 0 2px,var(--skin-accent) 3.5px,color-mix(in srgb,var(--skin-accent) 50%,#000) 100%);
+  --board-red:#ff5f73;--string-shadow:rgba(0,0,0,.45);--string-filter:drop-shadow(0 0 2px rgba(120,184,255,.35));
+  --label-bg:var(--skin-panel2);--label-ink:var(--skin-text);--label-border:var(--skin-border-strong)}
+
+/* ——— Medieval: пергамент на дубовой доске, сургучные печати, бечёвка ——— */
+:is(.app,body)[data-visual-style="medieval"] .detectiveView{
+  --string-contain:#3a2614;--contain-dash:3 4;
+  --board-a:#8a6a43;--board-b:#5d4329;--board-dark:rgba(40,22,8,.35);--board-light:rgba(255,226,170,.10);--board-frame:#3a2614;--board-frame2:#1f130a;
+  --board-pattern:repeating-linear-gradient(90deg,rgba(40,22,8,.18) 0 2px,transparent 2px 120px) var(--board-bg-x,0) 0;
+  --paper:#efdfb8;--paper-ink:#3a2a17;--paper-text:#4a3820;--paper-name:#5b1f12;--paper-kind:#4a3418;--paper-line:transparent;--paper-margin:transparent;
+  --paper-font:var(--skin-font);--paper-hand:"Palatino Linotype",Georgia,serif;--paper-mono:var(--skin-font);
+  --paper-shadow:inset 0 0 18px rgba(120,80,30,.35),0 1px 1px rgba(0,0,0,.25),0 8px 16px rgba(30,15,0,.4);--paper-radius:3px 6px 4px 5px;
+  --note:#e8d28f;--folder:#c9a66b;--case:#b98f52;--folder-tab-ink:#3a2a17;--case-tab-ink:#5b1f12;--case-name:#4a1a0e;
+  --pin-size:22px;--pin-top:1px;--pin-radius:52% 46% 55% 48%;--pin-bg:radial-gradient(circle at 42% 38%,#d0503f 0 3px,#a3281d 6px,#6d140d 100%);--pin-shadow:1px 3px 3px rgba(40,10,0,.5),inset 0 0 0 3px rgba(255,160,140,.25);
+  --board-red:#8a5a2b;--string-dash:7 2 2 2;--string-shadow:rgba(30,15,0,.35);
+  --label-bg:#efdfb8;--label-ink:#3a2a17;--label-border:rgba(60,35,10,.35);
+  --tb-bg:linear-gradient(180deg,#5a3a20,#3e2713);--tb-border:#2a180a;--tb-ink:#f7e9cf;--tb-ink2:#e6d2ad;--tb-btn:rgba(255,240,215,.12);--tb-btn-hover:rgba(255,240,215,.24);--tb-btn-border:rgba(255,230,190,.35);--tb-active:#8f2a1f;--tb-active-border:#e0a080;--tb-active-ink:#fff}
+
+/* ——— High Fantasy: светлый мрамор и золото, пергамент с золотой каймой, золотые гвоздики, золотая нить ——— */
+:is(.app,body)[data-visual-style="high-fantasy"] .detectiveView{
+  --string-contain:#8c6f24;--contain-dash:6 4;
+  --board-a:#e3e8e6;--board-b:#b9cbd0;--board-dark:rgba(40,75,117,.10);--board-light:rgba(255,255,255,.45);--board-frame:var(--skin-accent);--board-frame2:#8c6f24;
+  --board-pattern:linear-gradient(115deg,transparent 40%,rgba(255,255,255,.35) 50%,transparent 60%) 0 0/420px 420px;
+  --paper:#fbf8ec;--paper-ink:#16263b;--paper-text:#2b3a50;--paper-name:#1d3d6e;--paper-kind:#6a5520;--paper-line:transparent;--paper-margin:rgba(203,169,81,.75);
+  --paper-border:1.5px solid rgba(203,169,81,.75);--paper-font:var(--skin-font);--paper-hand:var(--skin-font);--paper-radius:4px;
+  --note:#f6ecc4;--folder:#efe3bd;--case:#e8d6a0;--folder-tab-ink:#5e4a12;--case-tab-ink:#1d3d6e;--case-name:#16263b;
+  --pin-bg:radial-gradient(circle at 35% 30%,#fff6d0 0 2px,#e4c35d 4px,#9b7a24 100%);--pin-size:16px;
+  --board-red:#b8862a;--string-shadow:rgba(40,75,117,.18);
+  --label-bg:#fbf8ec;--label-ink:#16263b;--label-border:rgba(203,169,81,.7)}
+
+/* ——— Dark Fantasy: чёрное дерево, старая обожжённая бумага, железные гвозди, кроваво-красная нить ——— */
+:is(.app,body)[data-visual-style="dark-fantasy"] .detectiveView{
+  --string-contain:#b8a1ae;--contain-dash:4 5;
+  --board-a:#2b1a1f;--board-b:#0f080b;--board-dark:rgba(0,0,0,.45);--board-light:rgba(155,61,103,.10);--board-frame:#140a0e;--board-frame2:var(--skin-accent);
+  --board-pattern:repeating-linear-gradient(90deg,rgba(0,0,0,.25) 0 1px,transparent 1px 34px) var(--board-bg-x,0) 0;
+  --paper:#e2d4b8;--paper-ink:#24171a;--paper-text:#35252a;--paper-name:#5e0f24;--paper-kind:#3a282c;--paper-line:transparent;--paper-margin:transparent;
+  --paper-shadow:inset 0 0 22px rgba(70,30,10,.55),inset 0 0 4px rgba(40,10,0,.6),0 10px 18px rgba(0,0,0,.6);--paper-font:var(--skin-font);--paper-hand:var(--skin-font);--paper-radius:1px 4px 2px 5px;
+  --note:#cdb98f;--folder:#a99472;--case:#977f5a;--folder-tab-ink:#24171a;--case-tab-ink:#5e0f24;--case-name:#24171a;
+  --pin-bg:radial-gradient(circle at 38% 32%,#c9c4cf 0 1.5px,#6b6570 3.5px,#25222a 100%);--pin-size:14px;--pin-top:5px;
+  --board-red:#a3122e;--string-shadow:rgba(0,0,0,.6);
+  --label-bg:#e2d4b8;--label-ink:#24171a;--label-border:rgba(60,10,20,.45)}
+
+/* ——— Forest: кора и мох, берёста вместо бумаги, листья-заметки, жёлуди-булавки, зелёная лоза ——— */
+:is(.app,body)[data-visual-style="forest"] .detectiveView{
+  --string-contain:#c69a4b;--contain-dash:10 4 2 4;
+  --board-a:#3c4a2a;--board-b:#1d2614;--board-dark:rgba(0,0,0,.30);--board-light:rgba(170,200,110,.10);--board-frame:#3c3018;--board-frame2:var(--skin-accent);
+  --board-pattern:repeating-linear-gradient(176deg,rgba(0,0,0,.18) 0 3px,transparent 3px 22px) var(--board-bg-x,0) var(--board-bg-y,0)/100% 100%;
+  --paper:#f1ead3;--paper-ink:#2c2a1a;--paper-text:#3a3622;--paper-name:#2f4f1c;--paper-kind:#5d5634;--paper-line:rgba(70,90,40,.16);--paper-margin:rgba(127,166,79,.55);
+  --paper-font:var(--skin-font);--paper-hand:var(--skin-font);--paper-radius:6px 3px 7px 4px;
+  --note:#c9dd9b;--note-ink:#22301a;--folder:#d6c18e;--case:#c8ae73;--folder-tab-ink:#3a3622;--case-tab-ink:#2f4f1c;--case-name:#2c2a1a;
+  --pin-size:16px;--pin-radius:50% 50% 45% 45%;--pin-bg:radial-gradient(circle at 50% 18%,#5a3c1c 0 4px,transparent 4.5px),radial-gradient(circle at 40% 60%,#c69a4b 0 2px,#8a6224 6px,#55380f 100%);
+  --board-red:#6fa042;--string-dash:12 4;--string-shadow:rgba(10,20,5,.45);
+  --label-bg:#f1ead3;--label-ink:#2c2a1a;--label-border:rgba(80,100,40,.4)}
+
+/* ——— Modern: белая доска в алюминиевой рамке, чистые карточки, круглые магниты, линии маркером ——— */
+:is(.app,body)[data-visual-style="modern"] .detectiveView{
+  --string-contain:#94a3b8;--contain-dash:none;
+  --board-a:#f7f9fb;--board-b:#e3e8ef;--board-dark:rgba(0,0,0,.03);--board-light:rgba(255,255,255,.6);--board-frame:#b9c1cc;--board-frame2:#8b95a3;
+  --paper:#ffffff;--paper-ink:#172235;--paper-text:#334155;--paper-name:#172235;--paper-kind:#64748b;--paper-line:transparent;--paper-margin:transparent;
+  --paper-font:var(--skin-font);--paper-hand:var(--skin-font);--paper-mono:ui-monospace,Consolas,monospace;--paper-radius:8px;--paper-border:1px solid #dbe2ea;--paper-shadow:0 1px 2px rgba(15,23,42,.08),0 6px 14px rgba(15,23,42,.10);
+  --note:#fff4b8;--folder:#e8eef8;--case:#dfe7f6;--folder-tab-ink:#334155;--case-tab-ink:#2563eb;--case-name:#172235;
+  --pin-size:16px;--pin-top:4px;--pin-bg:var(--accent,var(--skin-accent));--pin-shadow:0 2px 3px rgba(15,23,42,.35),inset 0 -2px 0 rgba(0,0,0,.2);
+  --board-red:#e11d48;--string-shadow:transparent;
+  --label-bg:#ffffff;--label-ink:#172235;--label-border:#dbe2ea}
+
+/* ——— Sci-Fi: голографическая панель с сеткой, полупрозрачные экраны, светящиеся узлы и линии ——— */
+:is(.app,body)[data-visual-style="sci-fi"] .detectiveView{
+  --string-contain:#68ffcf;--contain-dash:2 5;
+  --board-a:#07232d;--board-b:#020b10;--board-dark:rgba(0,0,0,.35);--board-light:rgba(57,212,255,.06);--board-frame:#06202a;--board-frame2:var(--skin-accent);
+  --board-pattern:linear-gradient(rgba(57,212,255,.10) 1px,transparent 1px) var(--board-bg-x,0) var(--board-bg-y,0)/32px 32px,linear-gradient(90deg,rgba(57,212,255,.10) 1px,transparent 1px) var(--board-bg-x,0) var(--board-bg-y,0)/32px 32px;
+  --paper:#08222c;--paper-ink:#e5fbff;--paper-text:#bfe8f2;--paper-name:#7fe9ff;--paper-kind:#8fc6d3;--paper-line:rgba(57,212,255,.10);--paper-margin:rgba(104,255,207,.45);
+  --paper-font:var(--skin-font);--paper-hand:var(--skin-font);--paper-mono:ui-monospace,Consolas,monospace;--paper-radius:6px 0 6px 0;--paper-border:1px solid rgba(57,212,255,.55);--paper-shadow:0 0 0 1px rgba(57,212,255,.12),0 0 18px rgba(57,212,255,.18),0 10px 18px rgba(0,0,0,.5);
+  --note:#0c3a33;--note-ink:#d9fff3;--folder:#0d2a38;--folder-ink:#e5fbff;--case:#10324a;--folder-tab-ink:#7fe9ff;--case-tab-ink:#68ffcf;--case-name:#e5fbff;
+  --pin-size:14px;--pin-top:5px;--pin-bg:radial-gradient(circle,#e5fbff 0 2px,var(--skin-accent) 3px,transparent 7px);--pin-shadow:0 0 8px var(--skin-accent);--pin-border:1.5px solid var(--skin-accent);
+  --board-red:#ff4fd8;--string-filter:drop-shadow(0 0 3px currentColor);--string-shadow:transparent;
+  --label-bg:#08222c;--label-ink:#e5fbff;--label-border:rgba(57,212,255,.55)}
+
+/* ——— Space: звёздная карта — тёмное небо со звёздами, карточки-окна, звёзды-булавки, пунктир созвездий ——— */
+:is(.app,body)[data-visual-style="space"] .detectiveView{
+  --string-contain:#b879ff;--contain-dash:1 6;
+  --board-a:#131d4c;--board-b:#01030a;--board-dark:rgba(0,0,0,.25);--board-light:rgba(255,255,255,.55);--board-frame:#0a1230;--board-frame2:var(--skin-accent2);
+  --board-pattern:radial-gradient(circle at 30% 40%,#fff 0 .8px,transparent 1.3px) var(--board-bg-x,0) var(--board-bg-y,0)/83px 71px,radial-gradient(circle at 70% 20%,rgba(184,121,255,.9) 0 1px,transparent 1.6px) var(--board-bg-x,0) var(--board-bg-y,0)/131px 113px,radial-gradient(circle at 10% 80%,rgba(88,224,255,.9) 0 .9px,transparent 1.4px) var(--board-bg-x,0) var(--board-bg-y,0)/97px 149px;
+  --paper:#0e1838;--paper-ink:#f3f7ff;--paper-text:#c9d5f2;--paper-name:#9ff0ff;--paper-kind:#a7b6dc;--paper-line:transparent;--paper-margin:transparent;
+  --paper-font:var(--skin-font);--paper-hand:var(--skin-font);--paper-radius:10px;--paper-border:1px solid rgba(124,167,255,.45);--paper-shadow:0 0 22px rgba(88,224,255,.12),0 10px 20px rgba(0,0,0,.6);
+  --note:#1d2a5c;--note-ink:#f3f7ff;--folder:#18234e;--folder-ink:#f3f7ff;--case:#221d55;--folder-tab-ink:#9ff0ff;--case-tab-ink:#d6b8ff;--case-name:#f3f7ff;
+  --pin-size:16px;--pin-bg:radial-gradient(circle,#fff 0 1.5px,#cfe9ff 2.5px,rgba(88,224,255,.6) 4px,transparent 8px);--pin-shadow:0 0 10px rgba(160,220,255,.9);
+  --board-red:#ff7a9a;--string-dash:2 7;--string-shadow:transparent;
+  --label-bg:#0e1838;--label-ink:#f3f7ff;--label-border:rgba(124,167,255,.45)}
+
+/* На тёмной «бумаге» (Sci-Fi, Space) чипы статусов и штамп — светлые, чтобы читались. */
+:is(.app,body):is([data-visual-style="sci-fi"],[data-visual-style="space"]) #detectiveView .boardStamp{background:rgba(255,255,255,.88)}
+:is(.app,body):is([data-visual-style="sci-fi"],[data-visual-style="space"]) #detectiveView .boardCard.fade{outline-color:rgba(200,230,255,.55)}
+:is(.app,body)[data-visual-style="sci-fi"] #detectiveView .boardPhoto{box-shadow:inset 0 0 0 1px rgba(57,212,255,.5)}
+
+/* Папки и дела темнее бумаги — их мелкие подписи берут цвет чернил папки (проверка скинов: Medieval, Dark Fantasy). */
+#detectiveView :is(.k-folder,.k-case) :is(.boardKind,.boardInside){color:var(--folder-ink,var(--paper-ink,#2a2620))}

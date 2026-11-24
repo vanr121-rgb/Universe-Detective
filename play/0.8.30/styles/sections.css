@@ -1,0 +1,229 @@
+/* Universe Graph — страница записи и разделы (0.18).
+   Разделы наследуют вид .infoFold из скинов. Новые элементы берут цвет текста у панели (currentColor),
+   поэтому одинаково читаются в светлых и тёмных скинах. Бумажные стили текста (пергамент, листок) —
+   тёмные чернила на светлой бумаге, тоже в любом скине. */
+
+/* ——— Шапка страницы ——— */
+.pageHeader .cardHeader{align-items:center}
+.pagePortrait{flex:0 0 auto;width:58px;height:58px;padding:0;border-radius:14px;overflow:hidden;border:2px solid var(--portrait,#78b8ff);background:#0b1222;cursor:zoom-in;box-shadow:0 6px 18px rgba(0,0,0,.25)}
+.pagePortrait img{width:100%;height:100%;object-fit:cover;display:block}
+#entityPanel .pageExcerpt,:is(.app,body) .pageExcerpt{display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;width:100%;margin-top:9px;padding:0;border:0;background:transparent;color:inherit;font-family:inherit;font-size:12px;font-weight:400;line-height:1.5;text-align:left;opacity:.86;cursor:pointer;text-transform:none;letter-spacing:0}
+.pageExcerpt:hover{opacity:1}
+.relationEnds{font-size:12.5px;line-height:1.5;margin-top:6px}
+
+/* ——— Раздел ——— */
+.secBlock{position:relative}
+.secBlock>.infoFoldHead{padding-right:38px}
+.secBlock.accent>.infoFoldHead{box-shadow:inset 3px 0 0 var(--sec-accent)}
+.secIcon{display:inline-block;min-width:15px;margin-right:6px;font-style:normal;text-transform:none;letter-spacing:0}
+.secBlock.accent .secIcon{color:var(--sec-accent)}
+.secMenuBtn{position:absolute;top:6px;right:6px;width:26px;height:26px;padding:0;display:grid;place-items:center;font-size:14px;line-height:1;opacity:.6}
+.secMenuBtn:hover,.secMenuBtn:focus-visible{opacity:1}
+/* 0.25.1: Sci-Fi gives every .iconBtn position:relative (for its glow) — since 0.18 the «⋯» of each section fell out of
+   its corner onto a line of its own. The corner button keeps its place in every style. */
+:is(.app,body)[data-visual-style] .secMenuBtn{position:absolute}
+.secBody{overflow:auto;overscroll-behavior:contain;padding-right:2px}
+.secBlock.compact>.infoFoldHead{padding-top:7px;padding-bottom:7px}
+.secBlock.compact .infoFoldBody{padding:0 7px 7px}
+.secBlock.compact .secBody{font-size:11.5px}
+.secKv{grid-template-columns:repeat(var(--sec-cols,2),minmax(0,1fr));margin-top:2px}
+.secKv .kvItem span{overflow-wrap:anywhere}
+.secSub{margin:8px 0 5px;font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;opacity:.75}
+.secSub:first-child{margin-top:2px}
+.secRowChips{display:flex;flex-wrap:wrap;gap:3px;margin-top:3px}
+.secEntityRow .listMeta{min-width:0;flex:1}
+.secEntityRow .listMeta b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.secRowChips .statusChip{font-size:10px;line-height:15px;padding:0 6px}
+.secInlineBtn{margin-top:8px}
+
+/* ——— Текст: описание и заметки ——— */
+.secText{line-height:1.55;overflow-wrap:anywhere}
+.secText.size-s{font-size:11px}.secText.size-m{font-size:12.5px}.secText.size-l{font-size:14.5px}
+.secText.style-hand{font-family:"Segoe Print","Ink Free","Bradley Hand","Comic Sans MS",cursive}
+.secText.style-mono{font-family:Consolas,"Courier New",ui-monospace,monospace}
+.secText.style-parchment{padding:10px 12px;border-radius:6px;background:#f2e3bf;background-image:radial-gradient(ellipse at 20% 0%,rgba(255,255,255,.35),transparent 60%);color:#3a2a16;font-family:Georgia,"Times New Roman",serif;box-shadow:inset 0 0 18px rgba(120,80,30,.25)}
+.secText.style-note{padding:10px 12px;border-radius:3px;background:#f9e98a;color:#2a2620;font-family:"Segoe Print","Ink Free","Comic Sans MS",cursive;box-shadow:0 4px 10px rgba(0,0,0,.18)}
+.secText .descriptionImage{display:block;max-width:100%;height:auto;margin:8px auto;border-radius:8px}
+
+/* ——— Вики-ссылки ——— */
+.wikiLink{display:inline;padding:0;margin:0;border:0;background:transparent;color:inherit;font:inherit;font-weight:700;text-decoration:underline;text-decoration-thickness:1px;text-underline-offset:2px;text-decoration-color:color-mix(in srgb,currentColor 45%,transparent);cursor:pointer}
+.wikiLink:hover{text-decoration-color:currentColor}
+.wikiLink.missing{color:#e05a57;text-decoration-style:dashed;text-decoration-color:#e05a57}
+.style-parchment .wikiLink,.style-note .wikiLink{color:#5b210c}
+.style-parchment .wikiLink.missing,.style-note .wikiLink.missing{color:#a3201b}
+
+/* ——— Галерея ——— */
+.secGallery{display:grid;grid-template-columns:repeat(var(--sec-cols,3),minmax(0,1fr));gap:6px}
+.secFigure{margin:0;min-width:0}
+:is(.app,body) .secImgBtn{display:block;width:100%;padding:0;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:8px;overflow:hidden;background:rgba(0,0,0,.18);cursor:zoom-in}
+.secImgBtn img{display:block;width:100%;height:110px}
+.secGallery.size-s .secImgBtn img{height:70px}.secGallery.size-l .secImgBtn img{height:170px}.secGallery.size-auto .secImgBtn img{height:auto}
+.secGallery.fit-cover img{object-fit:cover}.secGallery.fit-contain img{object-fit:contain}
+.secImgBtn span{display:grid;place-items:center;height:70px;font-size:10px;opacity:.7}
+.secFigure figcaption{margin-top:3px;font-size:10.5px;opacity:.8;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.imageViewer img{display:block;max-width:100%;max-height:calc(70vh / var(--zf,1));margin:0 auto;border-radius:8px}
+.viewerCaption{margin-top:8px;text-align:center;font-size:12px;opacity:.85}
+
+/* ——— Списки ——— */
+.secList{margin:0;padding:0 0 0 18px;font-size:12.5px;line-height:1.5}
+.secList.m-check{padding-left:0;list-style:none}
+.secList li{margin:3px 0;overflow-wrap:anywhere}
+.secList.m-check li{display:flex;align-items:flex-start;gap:8px}
+:is(.app,body) .secCheck{flex:0 0 auto;width:18px;height:18px;margin-top:1px;padding:0;display:grid;place-items:center;border:1.5px solid color-mix(in srgb,currentColor 60%,transparent);border-radius:5px;background:transparent;color:inherit;font-size:12px;font-weight:800;line-height:1;cursor:pointer}
+.secList li.done .secCheck{background:color-mix(in srgb,#4fbf86 30%,transparent);border-color:#4fbf86}
+.secList li.done>span{text-decoration:line-through;opacity:.7}
+
+/* ——— Таблица ——— */
+.secTableWrap{overflow-x:auto;max-width:100%;border:1px solid color-mix(in srgb,currentColor 15%,transparent);border-radius:8px}
+.secTable{width:100%;border-collapse:collapse;font-size:11.5px;line-height:1.4}
+.secTable th,.secTable td{padding:5px 8px;text-align:left;vertical-align:top;border-bottom:1px solid color-mix(in srgb,currentColor 12%,transparent);min-width:60px;overflow-wrap:anywhere}
+.secTable th{font-size:10px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap}
+.secTable tr:last-child td{border-bottom:0}
+.secTable.striped tbody tr:nth-child(even){background:color-mix(in srgb,currentColor 5%,transparent)}
+
+/* ——— Характеристики ——— */
+.secStats{display:grid;grid-template-columns:repeat(var(--sec-cols,3),minmax(0,1fr));gap:6px}
+.secStat{display:flex;flex-direction:column;align-items:center;gap:1px;padding:7px 4px;border:1px solid color-mix(in srgb,currentColor 18%,transparent);border-radius:9px;background:color-mix(in srgb,currentColor 4%,transparent);min-width:0}
+.secStat small{max-width:100%;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:.85}
+.secStat b{font-size:18px;line-height:1.15}
+.secStat span{font-size:11px;padding:0 6px;border-radius:999px;border:1px solid color-mix(in srgb,currentColor 25%,transparent)}
+
+/* ——— Счётчики ——— */
+.secTrackers{display:flex;flex-direction:column;gap:9px}
+.secTrackerHead{display:flex;align-items:center;gap:6px;font-size:12px}
+.secTrackerHead b{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.secTrackerVal{font-variant-numeric:tabular-nums;font-weight:700}
+:is(.app,body) .secStep{width:24px;height:24px;padding:0;display:grid;place-items:center;font-size:15px;line-height:1}
+.secBar{height:9px;margin-top:5px;border-radius:5px;background:color-mix(in srgb,currentColor 13%,transparent);overflow:hidden}
+.secBar i{display:block;height:100%;border-radius:5px;background:var(--sec-accent,#4fbf86);transition:width .2s ease}
+.secPips{display:flex;flex-wrap:wrap;gap:4px;margin-top:5px}
+.secPips i{width:11px;height:11px;border-radius:50%;border:1.5px solid color-mix(in srgb,currentColor 55%,transparent)}
+.secPips i.on{background:var(--sec-accent,#4fbf86);border-color:var(--sec-accent,#4fbf86)}
+.secClock{width:46px;height:46px;margin-top:4px}
+.secClock path{fill:transparent;stroke:currentColor;stroke-width:1;stroke-opacity:.6}
+.secClock path.on{fill:var(--sec-accent,#e0605e)}
+
+/* ——— Хронология, цитаты, ссылки ——— */
+.secTimeline{list-style:none;margin:0;padding:0 0 0 14px;border-left:2px solid color-mix(in srgb,currentColor 25%,transparent)}
+.secTimeline li{position:relative;margin:0 0 9px;font-size:12px;line-height:1.45;overflow-wrap:anywhere}
+.secTimeline li::before{content:"";position:absolute;left:-20px;top:4px;width:10px;height:10px;border-radius:50%;background:var(--sec-accent,currentColor);box-shadow:0 0 0 3px color-mix(in srgb,currentColor 12%,transparent)}
+.secTimeline b{display:block;font-size:11px}
+.secQuote{margin:0 0 8px;padding:4px 10px;border-left:3px solid var(--sec-accent,color-mix(in srgb,currentColor 45%,transparent))}
+.secQuote p{margin:0;font-style:italic;font-size:12.5px;line-height:1.5}
+.secQuote cite{display:block;margin-top:3px;font-style:normal;font-size:11px;opacity:.85}
+.secLinks{list-style:none;margin:0;padding:0}
+.secLinks li{margin:0 0 7px;font-size:12.5px;overflow-wrap:anywhere}
+.secLinks a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:2px}
+.secLinks small{display:block;font-size:10.5px;opacity:.75}
+
+/* ——— Подборки ——— */
+.secChips{display:flex;flex-wrap:wrap;gap:5px}
+:is(.app,body) .secChip{cursor:pointer;font:inherit;font-size:11px}
+.secChip i{font-style:normal;margin-right:4px}
+.secCards{display:grid;gap:6px}
+:is(.app,body) .secCard{display:flex;flex-direction:column;gap:3px;width:100%;padding:8px 10px;text-align:left;border:1px solid color-mix(in srgb,currentColor 16%,transparent);border-radius:9px;background:color-mix(in srgb,currentColor 4%,transparent);color:inherit;font:inherit;cursor:pointer}
+.secCard b{font-size:12.5px}
+.secCard small{font-size:11px;line-height:1.4;opacity:.85}
+.secCard .secRowChips{max-width:100%;justify-content:flex-start}
+
+/* ——— Низ страницы ——— */
+.secFooter{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+:is(.app,body) .secFooter .btn{font-size:11px;padding:6px 10px}
+.secHidden{margin-top:8px;font-size:11px}
+.secHidden summary{cursor:pointer;opacity:.85}
+:is(.app,body) .secHidden .tagChip{margin:5px 5px 0 0;cursor:pointer;font:inherit;font-size:11px}
+
+/* ——— Меню раздела ——— */
+.sectionMenu{min-width:230px}
+.sectionMenu button[disabled]{opacity:.4;cursor:default}
+
+/* ——— Окна: выбор и настройка раздела ——— */
+.secScope{display:flex;flex-wrap:wrap;gap:6px 16px;margin-bottom:12px;font-size:12px}
+.secScope label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.secPickGroup h4{margin:10px 0 7px;font-size:11px;letter-spacing:.06em;text-transform:uppercase}
+.secPickGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:7px}
+:is(.app,body) .secPick{display:grid;grid-template-columns:30px minmax(0,1fr);grid-template-rows:auto auto;column-gap:8px;align-items:center;padding:9px 10px;text-align:left;border:1px solid var(--line,rgba(156,182,235,.18));border-radius:10px;background:rgba(127,127,127,.06);color:inherit;font:inherit;cursor:pointer}
+.secPick:hover:not([disabled]){border-color:var(--skin-accent,#78b8ff)}
+:is(.app,body) .secPick[disabled]{opacity:.62;cursor:default}
+.secPickIcon{grid-row:1/3;font-size:18px;text-align:center}
+.secPick b{font-size:12.5px}
+.secPick small{font-size:10.5px;line-height:1.35;opacity:.85}
+.secEditor .secWhere{margin-bottom:10px}
+.secCommon{margin-bottom:6px}
+.secColorRow{display:flex;align-items:center;gap:8px}
+.secKindSettings{display:grid;gap:9px;margin-top:10px}
+.secSetting[hidden]{display:none}
+.secSetting textarea{min-height:70px}
+.secRowsHead,.secRowEdit{display:grid;grid-template-columns:var(--row-cols);gap:5px;align-items:center}
+.secRowsHead{margin-bottom:4px;font-size:10px;opacity:.8}
+.secRows{display:flex;flex-direction:column;gap:5px;margin-bottom:7px;max-height:calc(46vh / var(--zf,1));overflow:auto}
+.secRowEdit input{min-width:0}
+.secRowBtns{display:flex;gap:2px}
+.secRowBtns .iconBtn{width:24px;height:24px;padding:0}
+.secTplRow .iconBtn[disabled]{opacity:.35}
+
+/* ——— Подсказка [[ ——— */
+.wikiSuggest{position:fixed;z-index:1000;display:none;max-height:300px;overflow:auto;padding:4px;border:1px solid var(--skin-border-strong,rgba(156,182,235,.3));border-radius:10px;background:#0c1426;color:#edf4ff;font-family:var(--skin-font,inherit);box-shadow:0 14px 34px rgba(0,0,0,.45)}
+.wikiSuggest.open{display:block}
+.wikiSuggestItem{display:grid;grid-template-columns:20px minmax(0,1fr) auto;align-items:center;gap:6px;width:100%;padding:6px 8px;border:0;border-radius:7px;background:transparent;color:inherit;font:inherit;font-size:12px;text-align:left;cursor:pointer}
+.wikiSuggestItem b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.wikiSuggestItem small{font-size:10px;opacity:.75}
+.wikiSuggestItem.active,.wikiSuggestItem:hover{background:rgba(120,184,255,.18)}
+.wikiSuggestNew{padding:6px 8px;font-size:11px;opacity:.8}
+
+/* ——— Поиск по тексту ——— */
+.searchSnippet{display:block;margin-top:2px;font-size:10.5px;line-height:1.35;overflow:hidden;text-overflow:ellipsis;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+.searchSnippet em{font-style:normal;font-weight:700}
+.searchSnippet mark{background:transparent;color:inherit;font-weight:800;text-decoration:underline;text-decoration-thickness:2px;text-underline-offset:2px}
+
+@media (max-width:1100px){.secPickGrid{grid-template-columns:1fr}.secRowBtns .iconBtn[data-row-up],.secRowBtns .iconBtn[data-row-down]{display:none}}
+
+/* Skins style every button and count; keep these readable everywhere (found by the readability scan). */
+:is(.app,body) .secPick{background:transparent;color:inherit;text-shadow:none;box-shadow:none}
+:is(.app,body) .secPick:hover:not([disabled]){background:color-mix(in srgb,currentColor 7%,transparent)}
+.secBlock>.infoFoldHead b{color:inherit;opacity:.85}
+
+/* Window layout (generic .form rules make labels and inputs full-width blocks). */
+.secScope label{display:flex!important;flex-direction:row;align-items:center;gap:7px;width:auto;margin:0;font-size:12.5px;text-transform:none;letter-spacing:0}
+.secScope input[type=radio]{width:auto;height:auto;margin:0;flex:0 0 auto}
+.secEditor .toggleRow{display:flex!important;align-items:center;justify-content:space-between;gap:12px;margin:6px 0}
+.secEditor .toggleRow input[type=checkbox]{width:18px;height:18px;flex:0 0 auto;margin:0}
+.secColorRow input[type=checkbox]{width:18px;height:18px;flex:0 0 auto;margin:0}
+.secColorRow input[type=color]{flex:1;min-width:0}
+.secRowEdit input[type=checkbox]{width:18px;height:18px;margin:0 6px}
+.secTplRow{display:flex!important;align-items:center;gap:6px}
+.secTplRow .listMeta{flex:1;min-width:0}
+.secTplRow .iconBtn{flex:0 0 auto}
+/* 0.21.5: «Карта» and «Статья» next to the name of the record. Skinned as ordinary buttons (.btn). */
+.pageTools{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.pageTool{display:inline-flex;align-items:center;gap:5px;padding:4px 9px!important;font-size:11px!important;line-height:1.2;min-height:0!important}
+.pageTool i{font-style:normal;font-size:12px}
+/* 0.21.5: dragging sections with the mouse */
+.secBlock{position:relative}
+.secGrip{position:absolute;left:-2px;top:9px;width:14px;height:22px;display:grid;place-items:center;font-size:11px;line-height:1;opacity:0;cursor:grab;user-select:none;touch-action:none;z-index:2}
+.secBlock:hover .secGrip,.secGrip:focus{opacity:.6}
+.secGrip:hover{opacity:1}
+.secDragging{opacity:.45}
+.secDropBefore{box-shadow:0 -3px 0 0 color-mix(in srgb,var(--skin-accent) 80%,transparent)}
+.secDropAfter{box-shadow:0 3px 0 0 color-mix(in srgb,var(--skin-accent) 80%,transparent)}
+body.secDraggingBody,body.secDraggingBody *{cursor:grabbing!important;user-select:none!important}
+
+/* 0.23.9: «Карта» и «Статья» — две крупные плитки под названием записи: что это и что внутри */
+.pageTools{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:7px;margin:10px 0 2px}
+.pageTool{display:grid!important;grid-template-columns:auto 1fr;grid-template-rows:auto auto;column-gap:9px;align-items:center;text-align:left;padding:9px 11px!important;min-height:52px!important;font-size:13px!important;border-radius:12px!important}
+.pageTool i{grid-row:1/3;font-size:22px;line-height:1}
+.pageTool b{font-size:13px;font-weight:700;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pageTool small{font-size:10.5px;opacity:.72;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 0.23.9: строка записи в блоках («Упоминания», «Подборка записей», «Содержание» по типам) — значок и текст на всю ширину.
+   Она брала сетку строки дерева (4 колонки: стрелка, значок, имя, действия), и имя оказывалось в колонке значка в 28 px. */
+.secEntityRow.relationTreeItem{grid-template-columns:28px minmax(0,1fr)!important}
+.secEntityRow .listMeta{min-width:0}
+.secEntityRow .listMeta b{white-space:normal;overflow-wrap:anywhere}
+.secEntityRow .secRowChips{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+/* 0.23.9: в узкой панели (меньше 360 px) каждый блок-график на всю ширину — иначе два рядом, и название зажато кнопками */
+.widgetGrid{container-type:inline-size}
+@container (max-width:360px){.widgetGrid>.widget{grid-column:1/-1!important}}
+/* 0.23.9: статус на странице записи нажимается — тот же выбор, что у ✎ рядом */
+#entityPanel .statusRow .statusChip[data-status-group]{cursor:pointer}
+#entityPanel .statusRow .statusChip[data-status-group]:hover{filter:brightness(1.15);outline:1px solid color-mix(in srgb,var(--status) 60%,transparent)}
+.secLinkAdd{display:block;width:100%;margin:0 0 8px;padding:7px 10px;text-align:left;font-size:12px;border-style:dashed}

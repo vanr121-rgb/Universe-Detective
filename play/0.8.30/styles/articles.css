@@ -1,0 +1,119 @@
+/* 0.20.5 — статьи: блок справа, окошко поверх карты, вся рабочая зона (карта — подвижным окошком). */
+.articleHost{color:inherit;font-family:var(--skin-font)}
+/* Colours: skins pair --skin-panel with --skin-text; on other surfaces the text colour is inherited and «quiet» text is made with opacity, not --skin-muted (dark in some skins with light panels). */
+.articleHost[hidden]{display:none!important}
+.articleHost{display:flex;flex-direction:column;min-height:0}
+.articlePanel{max-height:min(380px,calc(48vh / var(--zf,1)));border-bottom:1px solid var(--skin-border-strong);background:color-mix(in srgb,var(--skin-accent) 4%,transparent)}
+.articleTools{display:flex;gap:4px;justify-content:flex-end;flex:0 0 auto;margin-bottom:4px}
+.articleTool{width:26px;height:26px;font-size:13px;line-height:1}
+.articleTool.on{border-color:color-mix(in srgb,var(--skin-accent) 60%,transparent);color:var(--skin-accent);background:color-mix(in srgb,var(--skin-accent) 12%,transparent)}
+.articleHead{flex:0 0 auto}
+.articleCrumbs{font-size:10px;opacity:.78;margin-bottom:3px;overflow-wrap:anywhere}
+.articleTitle{margin:0 0 6px;font-size:15px;line-height:1.25;display:flex;gap:6px;align-items:baseline;overflow-wrap:anywhere}
+.articleScroll{flex:1 1 auto;min-height:0;overflow:auto;padding-right:3px;scrollbar-gutter:stable}
+.articleBody{font-size:12px;line-height:1.6;overflow-wrap:anywhere}
+.articleSub{margin:12px 0 6px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.78}
+.articleList{display:flex;flex-direction:column;gap:4px}
+.articleRow{display:flex;gap:8px;align-items:center;width:100%;padding:6px 8px;border:1px solid var(--skin-border);border-radius:9px;background:color-mix(in srgb,currentColor 3%,transparent);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.articleRow:hover{border-color:var(--skin-border-strong);background:color-mix(in srgb,var(--skin-accent) 8%,transparent)}
+.articleRowIcon{font-size:15px;flex:0 0 auto}
+.articleRowMain{min-width:0;display:flex;flex-direction:column}
+.articleRowMain b{font-size:11px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.articleRowMain small{font-size:10px;opacity:.78;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.articleTreeRow{padding-left:calc(var(--depth)*14px)}
+.articleCards{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:6px}
+.articleCard{display:flex;flex-direction:column;gap:3px;padding:8px 10px;text-align:left;border:1px solid var(--skin-border);border-radius:9px;background:color-mix(in srgb,currentColor 4%,transparent);color:inherit;font:inherit;cursor:pointer;min-width:0}
+.articleCard:hover{border-color:var(--skin-border-strong)}
+.articleCard b{font-size:11px;overflow-wrap:anywhere}.articleCard small{font-size:10px;opacity:.8;line-height:1.35}
+.articleFooter{margin:14px 0 4px}
+.articleLibBar{display:flex;gap:6px;margin-bottom:8px}.articleLibBar .articleSearch{flex:1;min-width:0}
+.articleSecFoot{margin-top:6px}
+.wikiLink.articleLink{font-style:italic}
+.artIcons{display:flex;flex-wrap:wrap;gap:3px;margin:-4px 0 6px}.artIcons .iconBtn{width:28px;height:28px}.artIcons .iconBtn.active{border-color:var(--skin-accent,#78b8ff);box-shadow:inset 0 0 0 1px var(--skin-accent,#78b8ff)}
+.artLinkAdd select{min-width:0;flex:1}
+/* Окошко поверх карты */
+.articleFloat{position:fixed;z-index:25;color:var(--skin-text);padding:10px 12px 14px;border:1px solid var(--skin-border-strong);border-radius:14px;background:var(--skin-panel);box-shadow:var(--skin-shadow);backdrop-filter:blur(14px)}
+.articleFloat .articleTools,.articleFloat .articleHead{cursor:move;user-select:none}
+.articleFloatResize{position:absolute;right:2px;bottom:2px;width:16px;height:16px;cursor:nwse-resize;border-right:2px solid var(--skin-border-strong);border-bottom:2px solid var(--skin-border-strong);border-radius:0 0 10px 0}
+/* Вся рабочая зона: статья на месте карты, карта — окошком справа снизу */
+.articleFullPane{position:absolute;inset:0;z-index:30;padding:18px max(28px,calc((100% - 900px)/2)) 18px;background:linear-gradient(var(--skin-panel),var(--skin-panel)),var(--skin-bg);color:var(--skin-text)}
+.articleFullPane .articleTitle{font-size:22px}
+.articleFullPane .articleBody{font-size:14px;max-width:860px}
+.main.articleFull .canvasWrap{inset:auto;left:var(--amap-x);top:var(--amap-y);width:var(--amap-w);height:var(--amap-h);z-index:32;border:1px solid var(--skin-border-strong);border-radius:12px;overflow:hidden;box-shadow:var(--skin-shadow);background:var(--skin-main-bg);visibility:visible!important;display:block!important;pointer-events:auto!important}
+.main.articleFull .hud,.main.articleFull .contextBar,.main.articleFull .hint,.main.articleFull .miniMap,.main.articleFull .zoomCluster,.main.articleFull .stars,.main.articleFull .vignette{display:none!important}
+.articleMapBar{position:absolute;z-index:33;left:var(--amap-x);top:calc(var(--amap-y) - 26px);width:var(--amap-w);height:24px;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:0 4px 0 9px;border:1px solid var(--skin-border-strong);border-radius:9px 9px 0 0;background:var(--skin-panel2);font-size:10px;color:var(--skin-text);cursor:move;user-select:none}
+.articleMapBar .iconBtn{width:20px;height:20px;font-size:11px}
+.articleMapResize{position:absolute;z-index:34;left:calc(var(--amap-x) - 6px);top:calc(var(--amap-y) - 32px);width:14px;height:14px;cursor:nwse-resize;border-left:2px solid var(--skin-accent);border-top:2px solid var(--skin-accent);border-radius:6px 0 0 0}
+.articleHost[hidden],.articleMapBar[hidden],.articleMapResize[hidden]{display:none!important}
+/* 0.20.5 — важность связей */
+.tierBar{display:inline-flex;gap:2px;margin-left:4px;align-items:center}
+.tierBar .tierChip{min-width:24px;height:22px;padding:0 5px;font-size:10px;font-weight:700;line-height:1;display:inline-grid;place-items:center}
+.tierBar .tierChip:not(.on){opacity:.62;text-decoration:line-through}
+.tierFilters{margin-bottom:10px}
+.tierHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px}.tierHead small{font-size:10px;letter-spacing:.06em;text-transform:uppercase;opacity:.8}
+.tierList{display:flex;flex-direction:column;gap:3px}
+.tierRow{display:grid;grid-template-columns:26px minmax(0,1fr) auto;gap:6px;align-items:center;padding:4px 7px;border:1px solid var(--skin-border);border-radius:8px;background:transparent;color:inherit;opacity:.72;font:inherit;font-size:11px;text-align:left;cursor:pointer}
+.tierRow,.tierRow span{font-size:11px!important;line-height:1.2}
+.tierRow i{font-style:normal;font-weight:700;font-size:10px;text-align:center}
+.tierRow b{font-size:10px;font-weight:600;opacity:.8}
+.tierRow.on{opacity:1;border-color:color-mix(in srgb,var(--skin-accent) 40%,transparent);background:color-mix(in srgb,var(--skin-accent) 7%,transparent)}
+.tierRow:not(.on) span{text-decoration:line-through}
+.tierPresets{display:flex;gap:4px;margin-top:6px;flex-wrap:wrap}.tierPresets .btn{padding:4px 7px;font-size:10px}
+.tierControl{display:flex;align-items:center;gap:8px;margin:8px 0 2px;font-size:11px}.tierControl label{margin:0;opacity:.8}.tierControl select{flex:1;min-width:0}
+/* 0.21.5: folded view bar — only the current view and the unfold button */
+.viewBar.folded>.viewBtn:not(.active):not(.viewBarFold),.viewBar.folded>.relationToggle,.viewBar.folded>.tierBar{display:none!important}
+.viewBar.folded>.viewBtn.relationToggle.active{display:none!important}
+.viewBarFold{padding-left:8px!important;padding-right:8px!important;min-width:0}
+
+/* Shared wiki reading and editing surfaces. */
+.articleTitle{font-size:clamp(18px,2vw,25px);min-width:0}
+.articleBody{font-size:14px;line-height:1.65;max-width:none}
+.articleFullPane .articleBody{max-width:none}
+.articleReadingGrid{display:grid;gap:16px;align-items:start}
+.articleReadingGrid.withInfo{grid-template-columns:minmax(0,1fr);grid-template-areas:"rail" "prose"}
+.articleProse{grid-area:prose;min-width:0}
+.articleReadingGrid:not(.withInfo) .articleProse{grid-area:auto}
+.articleInfoRail{grid-area:rail;min-width:0}
+.articleHost{container-type:inline-size}
+@container (min-width: 490px){
+  .articleReadingGrid.withInfo{grid-template-columns:minmax(0,1fr) minmax(165px,32%);grid-template-areas:"prose rail"}
+}
+.articleProse p,.articleProse ul,.articleProse ol{margin:0 0 .9em}
+.articleProse :is(h2,h3,h4,h5){margin:1.15em 0 .4em;line-height:1.3;scroll-margin-top:8px}
+.articleProse h2{padding-bottom:4px;border-bottom:1px solid var(--skin-border)}
+.articleContents{width:fit-content;max-width:100%;padding:6px 10px;margin:0 0 12px;border:1px solid var(--skin-border);border-radius:6px}
+.articleContents summary,.articleExtras summary{font-weight:700;cursor:pointer}
+.articleContents nav{display:grid;text-align:left;margin-top:5px}
+.articleContents nav button{justify-self:start;text-align:left;margin-left:calc(var(--article-depth)*10px);white-space:normal}
+.articleInfoBox{border:1px solid var(--skin-border-strong);border-radius:7px;margin:0 0 12px;overflow:hidden;background:color-mix(in srgb,currentColor 4%,transparent)}
+.articleInfoTitle{padding:6px 9px;text-align:center;font-weight:700;background:color-mix(in srgb,var(--skin-accent) 18%,transparent)}
+.articleInfoBox dl{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr);margin:0}
+.articleInfoBox :is(dt,dd){margin:0;padding:5px 8px;border-top:1px solid var(--skin-border);overflow-wrap:anywhere}
+.articleInfoBox dt{font-weight:600}
+.articleFigure{margin:8px 0;min-width:0;break-inside:avoid}
+.articleInfoBox .articleFigure{margin:7px}
+.articleFigure a{display:block;cursor:zoom-in}
+.articleFigure img,.articleEnlarged{display:block;max-width:100%;max-height:65vh;object-fit:contain;margin:auto}
+.articleFigure figcaption,.articleMissingImage{font-size:.88em;opacity:.86;text-align:center}
+.articleGallery>div{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,155px),1fr));gap:10px}
+.articleGallery img{max-height:180px}
+.articleMarkup,.articleEditActions{display:flex;flex-wrap:wrap;align-items:center;gap:5px}
+.articleMarkup{margin:4px 0}
+.articleExtras{display:grid;gap:8px}
+.articleExtras details,.articleExtras fieldset{margin:0;padding:8px;border:1px solid var(--skin-border);border-radius:7px;min-width:0}
+.articleExtras fieldset,.articleExtras summary{margin-bottom:6px}
+.articleExtras :is(input,select){min-width:0;max-width:100%}
+.articleBoxRows{display:grid;gap:4px;margin:5px 0}
+.articleBoxRow{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,3fr) auto;gap:4px;align-items:center}
+.articleImageRow{display:grid;grid-template-columns:56px minmax(0,1fr);gap:6px;margin-top:6px;align-items:start}
+.articleImageRow img{width:56px;height:52px;object-fit:contain}
+.articleImageRow input{display:block;margin:3px 0;width:100%}
+.articleFileLabel{display:block;margin-bottom:4px}
+
+#detectiveView .boardArticleButton{position:absolute;z-index:4;right:28px;top:4px;display:grid;place-items:center;width:23px;height:21px;padding:0;border:1px solid #2e34434d;border-radius:5px;background:#fff9;color:#243047;font:13px/1 var(--font-ui,system-ui);cursor:pointer}
+#detectiveView .boardArticleButton:hover,#detectiveView .boardArticleButton:focus-visible{background:#fff;outline:2px solid #456695;outline-offset:1px}
+#detectiveView .boardCard:has(.boardArticleButton) .boardKind{padding-right:43px}
+#detectiveView.bFar :where(.boardCard:not(.boardMeasuringNear)) .boardArticleButton{display:none}
+#artPreview{margin-top:8px}
+#artPreview summary{cursor:pointer}
+#artPreviewContent{max-height:340px;overflow:auto;padding:7px 9px;margin-top:4px;border:1px solid var(--skin-border);border-radius:7px}
