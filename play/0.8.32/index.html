@@ -1,0 +1,265 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="referrer" content="no-referrer" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' wss://*.trycloudflare.com data: blob: https://ru.wikipedia.org https://en.wikipedia.org https://geocoding-api.open-meteo.com https://api.open-meteo.com https://www.cbr-xml-daily.ru https://ru.wiktionary.org https://*.fandom.com https://date.nager.at https://earthquake.usgs.gov https://api.coingecko.com http://127.0.0.1:* http://localhost:*; object-src 'none'; base-uri 'none'; form-action 'none'; frame-src 'none'" />
+<title>Universe Detective · 0.8.32</title>
+<link rel="stylesheet" href="./styles/fonts.css">
+<link rel="stylesheet" href="./styles/base.css">
+<link rel="stylesheet" href="./styles/skins-fantasy.css">
+<link rel="stylesheet" href="./styles/skins-modern-scifi-space.css">
+<link rel="stylesheet" href="./styles/fixes.css">
+<link rel="stylesheet" href="./styles/skins-tokens.css">
+<link rel="stylesheet" href="./styles/skin-true-medieval.css">
+<link rel="stylesheet" href="./styles/galaxy-skies.css">
+<link rel="stylesheet" href="./styles/skin-contract.css">
+<link rel="stylesheet" href="./styles/robustness.css">
+<link rel="stylesheet" href="./styles/rules.css">
+<link rel="stylesheet" href="./styles/detective.css">
+<link rel="stylesheet" href="./styles/detective-skins.css">
+<link rel="stylesheet" href="./styles/sections.css">
+<link rel="stylesheet" href="./styles/articles.css">
+<link rel="stylesheet" href="./styles/maps.css">
+<link rel="stylesheet" href="./styles/tables.css">
+<link rel="stylesheet" href="./styles/space3d.css">
+<link rel="stylesheet" href="./styles/tutorial.css">
+<link rel="stylesheet" href="./styles/participants.css">
+<link rel="stylesheet" href="./styles/online.css">
+<link rel="stylesheet" href="./styles/ud.css">
+</head>
+<body>
+<!-- 0.26.7: открыли index.html прямо из zip — рядом нет папок styles и js; base.css прячет эту плашку, без него она видна -->
+<div id="unpackNotice" style="display:block;margin:24px auto;max-width:640px;padding:20px 24px;border:2px solid #c0392b;border-radius:12px;background:#fff6f4;color:#222;font:16px/1.5 system-ui,sans-serif">
+<b style="font-size:20px">Архив не распакован</b><br>
+Программа открыта прямо из zip-архива, поэтому ей не видны папки со стилями и кодом.<br>
+1. Закройте эту вкладку.<br>
+2. Щёлкните по архиву правой кнопкой → «Извлечь всё…» (или распакуйте любым архиватором).<br>
+3. Откройте папку, которая получилась, и запустите index.html оттуда.
+</div>
+<!-- 0.30.3: вход игрока в игру по сети (виден только по ссылке игры) -->
+<div class="onpGate" id="onpGate" hidden><div class="onpCard"><div class="onpLogo">Universe Detective</div><h1 class="onpTitle">Вход в игру</h1>
+<form id="onpForm" class="onpForm" autocomplete="on"><div id="onpAvatars" class="onpAvatars" role="group" aria-label="Выберите свой аватар" hidden></div>
+<label for="onpNick" id="onpNickLabel">Ник</label><input id="onpNick" name="username" autocomplete="username" maxlength="32" spellcheck="false">
+<label for="onpPass">Пароль</label><input id="onpPass" name="password" type="password" autocomplete="current-password" maxlength="200">
+<button class="onpGo" id="onpGo" type="submit">Войти</button></form><div class="onpMsg" id="onpMsg" role="status"></div>
+<div class="onpCopy" id="onpCopy" hidden><button type="button" class="onpCopyGo" id="onpCopyGo">📖 Открыть копию мира без связи</button><small>сохранена: <span id="onpCopyWhen"></span> · только смотреть и писать свои заметки · <button type="button" class="onpLink" id="onpCopyDrop">удалить копию</button></small></div>
+<button type="button" class="onpLink" id="onpMediaClear">Очистить кеш фотографий</button>
+<p class="onpNote">Пароль даёт Мастер. Браузер отправляет только подтверждение входа.</p></div></div>
+<div class="app ud">
+<header class="topbar">
+  <div class="logo"><span class="logoMark"></span><span class="logoText">UNIVERSE GRAPH</span></div>
+  <span class="badge">Living World · Desktop · 0.29.12</span>
+  <div class="topActions">
+    
+    
+    <button class="iconBtn" id="articlesBtn" title="Статьи — страницы вики мира" aria-label="Статьи">📖</button>
+    
+    
+    
+    <span class="topSep"></span>
+    
+     <div class="stylePicker" id="stylePicker">
+       <button class="btn topTool stylePickerBtn" id="stylePickerBtn" title="Визуальный стиль рабочей зоны" aria-haspopup="listbox" aria-expanded="false">◈<span class="tlabel"> <span id="stylePickerLabel">Classic</span></span> ▾</button>
+       <div class="styleMenu" id="styleMenu" role="listbox" aria-label="Визуальный стиль"></div>
+     </div>
+     
+    <button class="btn topTool" id="createRelationBtn" title="Создать связь">↔<span class="tlabel"> Связь</span></button>
+    <button class="btn topTool" id="openTypesBtn" title="Набор правил: типы сущностей, связи, статусы и анкеты">⚙<span class="tlabel"> Правила</span></button>
+    
+    <span class="topSep"></span>
+    
+    
+    
+    
+    <button class="iconBtn" id="resetBtn" title="Восстановить демо" aria-label="Восстановить демо">↺</button>
+    <span class="topSep"></span>
+    
+    <input id="fileInput" class="hidden" type="file" accept="application/json,.json">
+  </div>
+</header>
+<aside class="left">
+  <div class="section" data-panel="scope"><div class="sectionToggle"><span class="chev">▾</span><h3>Текущее пространство</h3></div><div class="sectionBody"><div class="scopeHead"><div class="scopeTitle" id="scopeTitle">Вселенная</div><div class="scopeNav"><button class="iconBtn tiny" id="scopeForward" title="Вперёд по пространствам">→</button></div></div><div class="scopeMeta"><span class="scopeChip" id="scopeKind">ROOT SPACE</span><span class="scopeChip" id="scopeCount">0 объектов</span></div><div class="statGrid" id="stats"></div></div></div>
+  <div class="section" data-panel="navigation"><div class="sectionToggle"><span class="chev">▾</span><h3>Навигация и вид</h3></div><div class="sectionBody"><div class="scopeBtns"><button class="scopeBtn active" id="localBtn" aria-pressed="true" title="Local — содержимое текущего пространства, включая «Содержит»"><strong>Local</strong><span>содержимое текущего пространства, включая «Содержит»</span></button><button class="scopeBtn" id="linksBtn" aria-pressed="false" title="Links — добавить внешние прямые связи"><strong>Links</strong><span>добавить внешние прямые связи</span></button></div><div class="toolGrid" style="margin-top:10px">
+      <button class="toolBtn" title="Войти — открыть пространство" id="enterBtn"><span class="toolIcon">◎</span><span><b>Войти</b><small>открыть пространство</small></span></button>
+      <button class="toolBtn" title="Вверх — к родителю" id="upBtn"><span class="toolIcon">↑</span><span><b>Вверх</b><small>к родителю</small></span></button>
+      <button class="toolBtn" title="Вселенная — к корню" id="homeBtn"><span class="toolIcon">⌂</span><span><b>Вселенная</b><small>к корню</small></span></button>
+      <button class="toolBtn" title="Показать всё — вписать все сущности в экран" id="fitBtn"><span class="toolIcon">▣</span><span><b>Показать всё</b><small>вписать граф</small></span></button>
+      <button class="toolBtn" title="Разложить — расставить сущности заново (авто-раскладка)" id="autoLayoutBtn"><span class="toolIcon">✦</span><span><b>Разложить</b><small>перестроить узлы</small></span></button>
+      <button class="toolBtn" title="Сбросить вид — масштаб 100% и центр" id="resetViewBtn"><span class="toolIcon">⊙</span><span><b>Сбросить вид</b><small>zoom и центр</small></span></button>
+      <button class="toolBtn" title="Изолировать — связи вокруг выбора" id="isolateBtn" aria-pressed="false"><span class="toolIcon">◌</span><span><b>Изолировать</b><small>связи вокруг выбора</small></span></button>
+      <button class="toolBtn" title="Показать сущности, убранные с доски" id="hiddenBtn" aria-pressed="false" hidden><span class="toolIcon">◍</span><span><b>Скрытые</b><small>показать (0)</small></span></button>
+      
+      <button class="toolBtn" title="Теги — все теги со счётчиком: переименовать, слить, удалить, цвет" id="tagsBtn" aria-label="Теги"><span class="toolIcon">🏷</span><span><b>Теги</b><small class="tagsN"></small></span></button>
+      
+    </div></div></div>
+  <div class="section" data-panel="entityTypes"><div class="sectionToggle"><span class="chev">▾</span><h3>Типы сущностей</h3><span class="secTools"><button type="button" class="secTool" data-rules-new="entity" title="Новый тип сущности">＋</button><button type="button" class="secTool" data-rules-open="types" title="Все типы сущностей — открыть в «Правилах» (правая кнопка по пункту ниже — изменить его)">✎</button></span></div><div class="sectionBody"><div class="filter" id="entityFilters"></div></div></div>
+  <div class="section" data-panel="statusFilters"><div class="sectionToggle"><span class="chev">▾</span><h3>Статусы</h3><span class="secTools"><button type="button" class="secTool" data-rules-new="status" title="Новая группа статусов">＋</button><button type="button" class="secTool" data-rules-open="statuses" title="Все статусы — открыть в «Правилах» (правая кнопка по пункту ниже — изменить его)">✎</button></span></div><div class="sectionBody"><div class="filter statusFilters" id="statusFilters"></div></div></div>
+  <div class="section" data-panel="relationTypes"><div class="sectionToggle"><span class="chev">▾</span><h3>Типы связей</h3><span class="secTools"><button type="button" class="secTool" data-rules-new="relation" title="Новый тип связи">＋</button><button type="button" class="secTool" data-rules-open="relations" title="Все типы связей — открыть в «Правилах» (правая кнопка по пункту ниже — изменить его)">✎</button></span></div><div class="sectionBody"><div class="tierFilters" id="tierFilters"></div><div class="filter" id="relationFilters"></div></div></div>
+  <div class="section" data-panel="focus"><div class="sectionToggle"><span class="chev">▾</span><h3>Фокус</h3></div><div class="sectionBody"><div class="inline"><span class="subtle">Радиус связей</span><input id="focusRadius" aria-label="Радиус связей" type="range" min="1" max="4" step="1" value="2"></div><div class="switch"><span>Скрывать дальние узлы</span><input id="hideFar" aria-label="Скрывать дальние узлы" class="checkbox" type="checkbox"></div></div></div>
+</aside>
+<main class="main">
+  <div class="viewAsBanner" id="viewAsBanner" hidden></div>
+  <div class="udTop" id="udTop"><div class="udLeft"><span class="udBrand" title="Universe Detective">UD</span><button class="iconBtn tiny" id="scopeBack" title="Назад по пространствам">←</button><div class="breadcrumbs" id="breadcrumbs"></div></div><div class="udRight"><button class="saveStatus" id="saveStatus" type="button" data-kind="idle" aria-live="polite"><span class="saveStatusIcon">○</span><span class="saveStatusText"></span></button><div class="topsearch">
+    <span class="searchIcon">⌕</span>
+    <input id="globalSearch" placeholder="Поиск…  Ctrl+K" title="Поиск по вселенной (Ctrl+K)" autocomplete="off">
+    <div id="searchResults" class="searchResults"></div></div><button class="iconBtn" id="undoBtn" title="Отменить изменение (Ctrl+Z)" aria-label="Отменить">↶</button><button class="iconBtn" id="redoBtn" title="Повторить изменение (Ctrl+Y)" aria-label="Повторить">↷</button><button class="btn topTool primary" id="createEntityBtn" title="Новая бумажка (N)">＋<span class="tlabel"> Бумажка</span></button><div class="udFile" id="udFile"><button type="button" class="iconBtn udFileBtn" id="udFileBtn" title="Файл: сохранить, перенести мир, резервные копии, корзина" aria-label="Файл" aria-haspopup="menu" aria-expanded="false">≡</button><div class="udMenu" id="udMenu" role="menu" hidden><button class="udMenuItem" id="saveBtn" title="Сохранить мир"><span class="udMi">✓ Сохранить сейчас</span></button><button class="udMenuItem" id="exportBtn" title="Экспорт JSON" aria-label="Экспорт JSON"><span class="udMi">↓ Сохранить мир в файл</span></button><button class="udMenuItem" id="importBtn" title="Импорт JSON" aria-label="Импорт JSON"><span class="udMi">↑ Открыть мир из файла</span></button><button class="udMenuItem" id="udMergeBtn" type="button"><span class="udMi">⇄ Объединить с миром из файла</span></button><button class="udMenuItem" id="backupBtn" title="Создать резервную копию SQLite" aria-label="Создать резервную копию"><span class="udMi">▣ Резервная копия</span></button><button class="udMenuItem" id="restoreBackupBtn" title="Восстановить из резервной копии" aria-label="Восстановить из резервной копии"><span class="udMi">⟳ Вернуть из резервной копии</span></button><button class="udMenuItem" title="Корзина — удалённые сущности можно вернуть" id="trashBtn" aria-label="Корзина"><span class="udMi">🗑 Корзина <small class="trashN"></small></span></button></div></div><div class="rolePicker" id="rolePicker"><button class="btn topTool" id="roleBtn" type="button" aria-haspopup="menu" aria-expanded="false">👑<span class="tlabel"> Мастер</span> ▾</button><div class="roleMenu" id="roleMenu" role="menu" aria-label="Чьими глазами смотреть"></div></div></div></div>
+  <div class="udDock" id="udDock" role="toolbar" aria-label="Настройки"><button type="button" class="udDockBtn" data-ud-rules="types" aria-controls="udSet" aria-expanded="false" title="Типы сущностей: свои типы, значки, цвета, анкета">◆<span> Типы</span></button><button type="button" class="udDockBtn" data-ud-rules="relations" aria-controls="udSet" aria-expanded="false" title="Типы связей: свои нитки — название, цвет, вид">↔<span> Связи</span></button><button type="button" class="udDockBtn" data-ud-rules="statuses" aria-controls="udSet" aria-expanded="false" title="Статусы: «Жив», «Пропал», «Утерян»… — штампы на бумажках">◉<span> Статусы</span></button><button type="button" class="udDockBtn" data-ud-rules="tags" aria-controls="udSet" aria-expanded="false" title="Теги: все теги со счётчиком — переименовать, слить, удалить, цвет">#<span> Теги</span></button><span class="udDockSep"></span><button type="button" class="udDockBtn" id="udPeopleBtn" title="Игроки" aria-label="Игроки" aria-controls="udPeople" aria-expanded="false">👥<span> Игроки</span></button><button class="udDockBtn" id="workspaceBtn" aria-controls="workspacePop" aria-expanded="false" title="Рабочие зоны">▦<span> Зоны</span></button><button type="button" class="udDockBtn" id="udNetBtn" title="Игра по сети: открыть доску игрокам">📡<span> Сеть</span></button></div>
+  <section class="udSet" id="udSet" aria-labelledby="udSetTitle" hidden>
+    <header><h2 id="udSetTitle"></h2><button type="button" class="iconBtn" id="udSetClose" aria-label="Закрыть настройки">×</button></header>
+    <div class="udSetActions"><input id="udSetSearch" type="search" placeholder="Найти…" aria-label="Поиск в настройках"><button type="button" class="btn tiny" id="udSetAdd"></button><button type="button" class="btn tiny" id="udSetAddGroup" hidden>＋ Группа</button></div>
+    <form id="udSetGroupForm" hidden><label>Название группы <input name="groupName" maxlength="40" required></label><button class="btn tiny" type="submit">Создать</button></form>
+    <div class="udSetScroll"><form id="udSetForm" hidden></form><div id="udSetList"></div></div>
+    <footer><button type="button" class="linkBtn" id="udSetPresets">Готовые наборы…</button></footer>
+  </section>
+  <section class="udPeople" id="udPeople" aria-label="Игроки" hidden>
+    <h2>Игроки</h2>
+    <ul id="udPeopleList"></ul>
+    <div class="udPeopleActions">
+      <label class="btn udPeopleUpload" id="udPeopleUpload">📷 Картинка моего аватара<input id="udPeopleFile" type="file" accept="image/*" aria-label="Картинка моего аватара"></label>
+      <button type="button" class="btn" id="udPeopleManage">Аватары…</button>
+    </div>
+  </section>
+  <button type="button" class="myNotesBtn boardBtn" id="boardBtn" title="Доска — рисовать вместе: схемы, планы, бой (видна и игрокам)" aria-label="Рисовальная доска"><svg class="myNotesIcon boardIcon" viewBox="0 0 28 28" aria-hidden="true"><path class="scroll" d="M5 7.5h18v13H5z"/><path class="quill" d="M9 17.5c1.6-3.2 3.4-4.6 5-4.2 1.3.3 1.2 2 2.6 2.2 1.4.2 2.4-1.8 3.4-3.3l.9.6c-1.1 1.8-2.4 4.2-4.5 3.9-1.6-.2-1.6-1.9-2.6-2.1-1-.2-2.4 1.1-3.8 3.4z"/></svg></button>
+  <button type="button" class="myNotesBtn" id="myNotesBtn" title="Мои заметки — чатик с самим собой" aria-label="Мои заметки" aria-expanded="false"><svg class="myNotesIcon" viewBox="0 0 28 28" aria-hidden="true"><path d="M6 6.5h11.5a2.5 2.5 0 0 1 0 5H8.5v8.5a2.5 2.5 0 0 1-5 0V9a2.5 2.5 0 0 1 2.5-2.5Z" class="scroll"/><path d="M8.5 11.5h9.5v9a2.5 2.5 0 0 1-2.5 2.5H6" class="scroll"/><path d="M25 3.5c-4.2 1-7.4 4.4-9.2 9.4l1.6 1.2c3.2-3.8 6.2-6.7 7.6-10.6Z" class="quill"/><path d="M15.8 12.9l-1.6 4" class="quill-line"/></svg></button>
+  <section class="myNotes" id="myNotes" hidden aria-label="Мои заметки"><div class="myNotesOwners" id="myNotesOwners"></div><div class="myNotesMain"><div class="myNotesHead"><b>Мои заметки</b><input id="myNotesSearch" type="search" placeholder="Найти…" aria-label="Поиск по заметкам" autocomplete="off"><button type="button" class="iconBtn tiny arClose" id="myNotesClose" title="Закрыть" aria-label="Закрыть">×</button></div><div class="myNotesList" id="myNotesList"></div><div class="myNotesInput"><textarea id="myNoteInput" rows="2" placeholder="Заметка для себя… (Enter — записать, Shift+Enter — новая строка)" aria-label="Новая заметка"></textarea><button type="button" class="btn primary" id="myNoteSend" title="Записать (Enter)">➤</button></div></div></section>
+  <div class="panelResizer leftResizer" id="leftResizer" title="Изменить ширину левой панели"></div>
+  <div class="panelResizer rightResizer" id="rightResizer" title="Изменить ширину правой панели"></div>
+  <button class="sideRail leftRail" id="leftRail" title="Свернуть левую панель" aria-label="Свернуть левую панель">‹</button>
+  <button class="sideRail rightRail" id="rightRail" title="Свернуть инспектор" aria-label="Свернуть инспектор">›</button>
+  <button class="topRail" id="topRail" title="Спрятать верхнюю панель" aria-label="Спрятать верхнюю панель">▴</button>
+  <div class="modeBar cleanExit"><button class="modeBtn" id="cleanExit" title="Вернуть панели и кнопки (Esc)">⛶ Вернуть панели</button></div>
+  <div class="canvasWrap"><canvas id="graphCanvas"></canvas><div class="dropTarget" id="dropTarget"></div><div class="dropPreviewHalo" id="dropPreviewHalo"></div><div class="dragHint" id="dragHint">Отпустите над узлом — поместить внутрь</div></div>
+  <div class="stars"></div><div class="vignette"></div>
+  <div class="hud">
+    <div class="pill" id="centerPill">Контекст: <strong>Вселенная</strong></div>
+    <div class="pill" id="selectionPill">Выбрано: <strong>—</strong></div>
+    <div class="hudSpacer"></div>
+    <div class="modeBar">
+      <button class="modeBtn active" data-mode="explore">Explore</button>
+      <button class="modeBtn" data-mode="dive">Dive</button>
+      <button class="modeBtn" data-mode="trace">Trace</button>
+    </div>
+    <div class="viewBar" aria-label="Представление">
+      <button class="viewBtn active" id="graphViewBtn" data-view="graph" aria-pressed="true" title="Свободный граф">Graph</button>
+      <button class="viewBtn" id="outlineViewBtn" data-view="outline" aria-pressed="false" title="Лесенка-список по иерархии">Outline</button>
+      <button class="viewBtn" id="treeViewBtn" data-view="tree" aria-pressed="false" title="Генеалогическое дерево по вложенности">Tree</button>
+      <button class="viewBtn" id="galaxyViewBtn" data-view="galaxy" aria-pressed="false" title="Орбитальное представление сущностей и связей">Galaxy</button>
+      <button class="viewBtn" id="detectiveViewBtn" data-view="detective" aria-pressed="false" title="Детективная доска: сущности — бумажки на кнопках, связи — нитки">Detective</button>
+      <button class="viewBtn" id="tableViewBtn" data-view="table" aria-pressed="false" title="Таблица: все сущности одного типа, поля и статусы — колонками">Table</button>
+      <button class="viewBtn" id="kanbanViewBtn" data-view="kanban" aria-pressed="false" title="Канбан: карточки сущностей по колонкам статуса, перетаскиваются мышью">Kanban</button>
+      <button class="viewBtn relationToggle" id="relationVisibilityBtn" type="button" aria-pressed="true" title="Показывать или скрывать линии обычных связей. «Содержит» отображается только в иерархии">↔<span class="vlabel"> Обычные связи</span></button><span class="tierBar" id="tierBar" aria-label="Важность связей"></span>
+    </div>
+    <div class="zoomCluster"><button class="modeBtn" id="zoomOut" aria-label="Уменьшить" title="Уменьшить">−</button><div class="pill" id="zoomText">100%</div><button class="modeBtn" id="zoomIn" aria-label="Увеличить" title="Увеличить">＋</button><span class="view3dCluster" id="view3dCluster" hidden></span></div><button type="button" class="modeBtn cleanBtn" id="cleanBtn" title="Чистый холст: спрятать все панели и кнопки (Esc — вернуть)" aria-label="Чистый холст">⛶</button><div class="modeBar viewStrip" id="viewStrip" aria-label="Кнопки режима" hidden></div>
+  </div>
+  <div class="contextBar"><div class="pill" id="connectionPill">Local space</div><div class="pill" id="multiSelectionPill" style="display:none"></div></div>
+   <div class="selectionBox" id="selectionBox"></div>
+  <div class="hint" id="hint">ЛКМ — выбрать · drag — переместить · колесо — zoom · «Содержит» — иерархическая связь · Esc — назад</div>
+  <div class="miniMap"><canvas id="miniMapCanvas"></canvas></div>
+  <div class="outlineView" id="outlineView" aria-label="Иерархический список">
+    <div class="outlineInner">
+      <svg class="outlineRelationLayer" id="outlineRelationLayer" aria-hidden="true"></svg>
+      <div class="outlineHead">
+        <div class="outlineHeadMain"><div class="outlineKicker">Hierarchy view</div><div class="outlineTitle" id="outlineTitle">Вселенная</div><div class="outlineMeta" id="outlineMeta">0 объектов</div></div>
+        <div class="outlineLegend"><span class="outlineLegendItem">⌄ Вложенность</span><span class="outlineLegendItem">↔ Связи</span><span class="outlineLegendItem">Ctrl+клик — мультивыбор</span></div>
+      </div>
+      <div class="outlineTree" id="outlineTree"></div>
+      <div class="outlineExternal" id="outlineExternal"></div>
+      <div class="outlineHint">В этом режиме меняется только представление. Данные, типы, связи, выбор, фильтры, поиск и рабочие зоны остаются теми же. Переключение обратно возвращает обычный свободный граф.</div>
+    </div>
+  </div>
+  <div class="treeView" id="treeView" aria-label="Генеалогическое дерево"></div>
+  <div class="galaxyView" id="galaxyView" aria-label="Галактическое представление"></div>
+  <div class="detectiveView" id="detectiveView" aria-label="Детективная доска"></div>
+  <aside class="allRecords" id="allRecords" hidden aria-label="Все сущности"><div class="arHead"><b>Все сущности</b><button type="button" class="iconBtn tiny arDup" id="allRecDup" title="Найти двойников — сущности с похожими именами" aria-label="Найти двойников">⧉</button><button type="button" class="iconBtn tiny arClose" id="allRecClose" title="Закрыть" aria-label="Закрыть">×</button></div><input id="allRecSearch" type="search" placeholder="Найти сущность…" autocomplete="off" aria-label="Поиск сущности"><div class="arFilters"><select id="allRecType" aria-label="Тип сущностей"></select><select id="allRecVisibility" aria-label="Видимость сущностей"><option value="">Любая видимость</option><option value="gm">Только Мастер</option><option value="off">Не на доске</option><option value="hidden">Все скрытые</option></select></div><div class="arHint">Перетащите сущность на доску или нажмите ＋</div><div class="arList" id="allRecList"></div></aside>
+  <div class="tableView" id="tableView" aria-label="Таблица и канбан"></div>
+</main>
+<aside class="right">
+  <div class="section articlePanel articleHost" id="articlePanel" aria-label="Статья" hidden></div>
+  <div class="section" id="entityPanel"></div>
+  <div class="section" id="relationPanel"></div>
+  <div class="section" id="selectionActions"></div>
+</aside>
+</div>
+<div class="modalBack" id="modalBack"><div class="modal"><div class="modalHead"><h2 id="modalTitle"></h2><button class="iconBtn" id="modalClose" title="Закрыть (Esc)" aria-label="Закрыть">×</button></div><div class="modalBody" id="modalBody"></div><div class="modalFoot" id="modalFoot"></div></div></div>
+<section class="workspacePop udZones" id="workspacePop" aria-labelledby="wsTitle"></section>
+<div class="contextMenu" id="contextMenu"></div>
+<div class="toastWrap" id="toastWrap"></div>
+
+
+<script src="./stable-config.js"></script>
+<script src="./js/features/onlinedetect.js"></script>
+<script src="./storage-adapter.js"></script>
+<script src="./js/core/safety.js"></script>
+<script src="./js/core/utils.js"></script>
+<script src="./js/vendor/online-crypto.js"></script>
+<script src="./js/core/presets.js"></script>
+<script src="./js/core/model.js"></script>
+<script src="./js/data/media.js"></script>
+<script src="./js/core/normalize.js"></script>
+<script src="./js/core/graph.js"></script>
+<script src="./js/data/storage.js"></script>
+<script src="./js/data/history.js"></script>
+<script src="./js/features/entities.js"></script>
+<script src="./js/features/visibility.js"></script>
+<script src="./js/features/playerview.js"></script>
+<script src="./js/features/participants.js"></script>
+<script src="./js/features/online.js"></script>
+<script src="./js/features/onlinehost.js"></script>
+<script src="./js/features/onlinereview.js"></script>
+<script src="./js/features/workspaces.js"></script>
+<script src="./js/features/rules.js"></script>
+<script src="./js/features/wiki.js"></script>
+<script src="./js/ui/rgb.js"></script>
+<script src="./js/ui/shell.js"></script>
+<script src="./js/ui/themes.js"></script>
+<script src="./js/ui/navigation.js"></script>
+<script src="./js/ui/inspector.js"></script>
+<script src="./js/ui/editors.js"></script>
+<script src="./js/ui/sections.js"></script>
+<script src="./js/features/article-wiki.js"></script>
+<script src="./js/features/articles.js"></script>
+<script src="./js/features/tiers.js"></script>
+<script src="./js/features/maps.js"></script>
+<script src="./js/features/trash.js"></script>
+<script src="./js/features/merge.js"></script>
+<script src="./js/features/tags.js"></script>
+<script src="./js/features/snapshot.js"></script>
+<script src="./js/features/draw.js"></script>
+<script src="./js/features/board.js"></script>
+<script src="./js/ud/udviews.js"></script>
+<script src="./js/ud/udthreadroutes.js"></script>
+<script src="./js/ud/udplacements.js"></script>
+<script src="./js/ud/udphotolod.js"></script>
+<script src="./js/ud/udthreadink.js"></script>
+<script src="./js/ud/udcardplate.js"></script>
+<script src="./js/views/detective.js"></script>
+<script src="./js/ui/views.js"></script>
+<script src="./js/ui/zoomfocus.js"></script>
+<script src="./js/ui/viewstrip.js"></script>
+<script src="./js/ui/linkpick.js"></script>
+<script src="./js/bindings/graph-input.js"></script>
+<script src="./js/bindings/ui.js"></script>
+<script src="./js/ud/uddrag.js"></script>
+<script src="./js/bindings/views.js"></script>
+<script src="./js/data/worldjson.js"></script>
+<script src="./js/features/transfer.js"></script>
+<script src="./js/ui/allrecords.js"></script>
+<script src="./js/features/mynotes.js"></script>
+<script src="./js/ud/udnetmedia.js"></script>
+<script src="./js/features/onlineplayer.js"></script>
+<script src="./js/ud/udonlinezones.js"></script>
+<script src="./js/ud/udonlineedit.js"></script>
+<script src="./js/features/presence.js"></script>
+<script src="./js/ud/udcard.js"></script>
+<script src="./js/ud/udpeople.js"></script>
+<script src="./js/ud/udrules.js"></script>
+<script src="./js/ud/udthreadfilter.js"></script>
+<script src="./js/ud/udmerge.js"></script>
+<script src="./js/ud/udshell.js"></script>
+<script src="./js/features/updates.js"></script>
+<script src="./js/app.js"></script>
+</body>
+</html>
+

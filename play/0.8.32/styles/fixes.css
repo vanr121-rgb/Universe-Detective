@@ -1,0 +1,692 @@
+/* Universe Graph — Поздние исправления читаемости, слоёв и раскладки (0.15.20–0.16). */
+/* 0.16 design QA: relation visibility must be unambiguous in every skin. */
+#relationVisibilityBtn{position:relative;padding-right:56px!important;text-decoration:none!important}
+#relationVisibilityBtn::after{content:"ВКЛ";position:absolute;right:8px;top:50%;transform:translateY(-50%);min-width:28px;padding:3px 5px;border-radius:999px;background:rgba(87,223,179,.14);border:1px solid rgba(87,223,179,.52);color:#57dfb3;font:800 10px/1 system-ui,sans-serif;letter-spacing:.06em;text-align:center}
+#relationVisibilityBtn:not(.active){background:rgba(255,255,255,.025)!important;color:var(--muted)!important}
+#relationVisibilityBtn:not(.active)::after{content:"ВЫКЛ";background:rgba(255,107,136,.10);border-color:rgba(255,107,136,.46);color:#ff8ea7}
+:is(.app,body)[data-visual-style="modern"] #relationVisibilityBtn::after{background:#dbe7dc;border-color:#6d8d72;color:#2f5a36}
+:is(.app,body)[data-visual-style="modern"] #relationVisibilityBtn:not(.active)::after{background:#eee1e1;border-color:#9a6767;color:#6d3535}
+/* Forest had a real skin gap: Outline/Tree were falling back to the generic dark surface. */
+:is(.app,body)[data-visual-style="forest"] .outlineView,:is(.app,body)[data-visual-style="forest"] .treeView{background:radial-gradient(circle at 48% 35%,rgba(137,165,93,.10),transparent 32%),radial-gradient(circle at 24% 78%,rgba(87,126,73,.08),transparent 27%),repeating-linear-gradient(18deg,rgba(211,199,156,.012) 0 1px,transparent 1px 11px),linear-gradient(180deg,#10170f,#0a1009);color:#efe7cb}
+:is(.app,body)[data-visual-style="forest"] .outlineView .subtle,:is(.app,body)[data-visual-style="forest"] .treeView .subtle,:is(.app,body)[data-visual-style="forest"] .treeNodeType{color:#b7ad8b}
+/* 0.16 design QA: outside Meh help mode the native pointer stays native. */
+.app:not(.mehHelpMode),
+.app:not(.mehHelpMode) .main,
+.app:not(.mehHelpMode) .left,
+.app:not(.mehHelpMode) .right,
+.app:not(.mehHelpMode) .topbar,
+.app:not(.mehHelpMode) .panel,
+.app:not(.mehHelpMode) .canvasWrap,
+.app:not(.mehHelpMode) .outlineView,
+.app:not(.mehHelpMode) .treeView,
+.app:not(.mehHelpMode) .galaxyView,
+.app:not(.mehHelpMode) .galaxyViewport{cursor:default!important}
+.app:not(.mehHelpMode) button,
+.app:not(.mehHelpMode) [role="button"],
+.app:not(.mehHelpMode) a,
+.app:not(.mehHelpMode) label,
+.app:not(.mehHelpMode) select,
+.app:not(.mehHelpMode) input[type="checkbox"],
+.app:not(.mehHelpMode) input[type="radio"],
+.app:not(.mehHelpMode) .treeNode,
+.app:not(.mehHelpMode) .outlineNode,
+.app:not(.mehHelpMode) .treeExternalItem,
+.app:not(.mehHelpMode) .workspaceItem,
+.app:not(.mehHelpMode) .styleMenu button,
+.app:not(.mehHelpMode) .galaxyStar{cursor:pointer!important}
+.app:not(.mehHelpMode) input[type="text"],
+.app:not(.mehHelpMode) input[type="search"],
+.app:not(.mehHelpMode) input[type="number"],
+.app:not(.mehHelpMode) textarea{cursor:text!important}
+/* 0.16 design QA: widget editors remain readable in dark skins and intentionally compact in Modern. */
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder,
+:is(.app,body)[data-visual-style="medieval"] .widgetBuilder,
+:is(.app,body)[data-visual-style="high-fantasy"] .widgetBuilder,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder,
+:is(.app,body)[data-visual-style="forest"] .widgetBuilder,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder{color:var(--skin-text)}
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder .customizerSection,
+:is(.app,body)[data-visual-style="medieval"] .widgetBuilder .customizerSection,
+:is(.app,body)[data-visual-style="high-fantasy"] .widgetBuilder .customizerSection,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder .customizerSection,
+:is(.app,body)[data-visual-style="forest"] .widgetBuilder .customizerSection,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder .customizerSection,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder .customizerSection{background:rgba(0,0,0,.16);border-color:var(--line2)}
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder textarea,
+:is(.app,body)[data-visual-style="medieval"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="medieval"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="medieval"] .widgetBuilder textarea,
+:is(.app,body)[data-visual-style="high-fantasy"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="high-fantasy"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="high-fantasy"] .widgetBuilder textarea,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder textarea,
+:is(.app,body)[data-visual-style="forest"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="forest"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="forest"] .widgetBuilder textarea,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder textarea,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder textarea{color:#f1f5ff;background:rgba(5,10,20,.86);border-color:var(--line2)}
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder input::placeholder,
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder textarea::placeholder,
+:is(.app,body)[data-visual-style="medieval"] .widgetBuilder input::placeholder,
+:is(.app,body)[data-visual-style="medieval"] .widgetBuilder textarea::placeholder,
+:is(.app,body)[data-visual-style="high-fantasy"] .widgetBuilder input::placeholder,
+:is(.app,body)[data-visual-style="high-fantasy"] .widgetBuilder textarea::placeholder,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder input::placeholder,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder textarea::placeholder,
+:is(.app,body)[data-visual-style="forest"] .widgetBuilder input::placeholder,
+:is(.app,body)[data-visual-style="forest"] .widgetBuilder textarea::placeholder,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder input::placeholder,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder textarea::placeholder,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder input::placeholder,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder textarea::placeholder{color:#91a5c8}
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder .customizerSection{background:#e9ebeb;border-color:#a9adaf;border-radius:4px}
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder input,
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder select,
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder textarea{color:#17191c;background:#fff;border:1px solid #888d91;border-radius:2px;box-shadow:inset 1px 1px 0 rgba(0,0,0,.06)}
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder input:focus,
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder select:focus,
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder textarea:focus{outline:2px solid #5a5e62;outline-offset:1px}
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder .widgetListItem{background:#f5f5f4;border-color:#a1a5a8;border-radius:2px;color:#202326}
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder .widgetListItem.active{background:#e0e2e2;border-color:#666b70}
+/* 0.16 design QA: all view modes inherit the same skin background logic. */
+:is(.app,body)[data-visual-style="modern"] .outlineView,
+:is(.app,body)[data-visual-style="modern"] .treeView{background:linear-gradient(90deg,rgba(16,17,19,.025) 1px,transparent 1px) 0 0/64px 64px,linear-gradient(rgba(16,17,19,.025) 1px,transparent 1px) 0 0/64px 64px,linear-gradient(135deg,#f5f5f4,#dfe1e1);color:#17191c}
+:is(.app,body)[data-visual-style="modern"] .outlineView,:is(.app,body)[data-visual-style="modern"] .treeView{color:#17191c}
+:is(.app,body)[data-visual-style="modern"] .outlineView .subtle,:is(.app,body)[data-visual-style="modern"] .treeView .subtle,:is(.app,body)[data-visual-style="modern"] .outlineView .treeNodeType,:is(.app,body)[data-visual-style="modern"] .treeView .treeNodeType{color:#5d6266}
+:is(.app,body)[data-visual-style="modern"] .treeNodeName,:is(.app,body)[data-visual-style="modern"] .outlineName{color:#111316}
+/* Tree drag feedback: containment and reorder are intentionally unambiguous. */
+.treeDropInside{outline:2px solid var(--skin-accent)!important;outline-offset:-3px!important;box-shadow:inset 0 0 0 3px rgba(67,217,143,.18),0 0 0 3px rgba(67,217,143,.08)!important}
+.treeDropInside::after{content:"ВНУТРЬ · ВЛОЖИТЬ";position:absolute;left:50%;bottom:5px;transform:translateX(-50%);padding:3px 7px;border-radius:999px;background:color-mix(in srgb,var(--skin-accent) 18%,var(--skin-panel2));color:var(--skin-text);font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.04em;white-space:nowrap;pointer-events:none;z-index:8}
+.treeDropBefore,.treeDropAfter{position:relative}
+.treeDropBefore::before,.treeDropAfter::before{content:"";position:absolute;left:-5px;right:-5px;height:3px;border-radius:3px;background:#66b7ff;box-shadow:0 0 0 2px rgba(102,183,255,.12),0 0 12px rgba(102,183,255,.42);pointer-events:none;z-index:8}
+.treeDropBefore::after,.treeDropAfter::after{position:absolute;padding:3px 7px;border-radius:999px;background:#12314e;color:#d7eeff;font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.04em;white-space:nowrap;pointer-events:none;z-index:8}
+.treeDropBefore::before{top:-3px}.treeDropBefore::after{content:"ПЕРЕД";top:-18px;left:50%;transform:translateX(-50%)}
+.treeDropAfter::before{bottom:-3px}.treeDropAfter::after{content:"ПОСЛЕ";bottom:-18px;left:50%;transform:translateX(-50%)}
+/* Remove obsolete explanatory chrome that competed with the actual view. */
+.galaxyLegend{display:none!important}
+
+/* Strong Tree DnD feedback: containment vs reorder cannot be confused. */
+.treeNode.treeDropInside{border-color:#43d98f!important;outline:2px solid var(--skin-accent)!important;outline-offset:-3px!important;box-shadow:inset 0 0 0 3px rgba(67,217,143,.18),0 0 0 3px rgba(67,217,143,.08)!important}
+.treeNode.treeDropInside::after{content:"ВНУТРЬ · ВЛОЖИТЬ";position:absolute;left:50%;bottom:5px;transform:translateX(-50%);padding:3px 7px;border-radius:999px;background:color-mix(in srgb,var(--skin-accent) 18%,var(--skin-panel2));color:var(--skin-text);font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.04em;white-space:nowrap;pointer-events:none;z-index:30}
+.treeNode.treeDropBefore,.treeNode.treeDropAfter{position:relative}
+.treeNode.treeDropBefore::before,.treeNode.treeDropAfter::before{content:""!important;position:absolute;left:-5px!important;right:-5px!important;top:auto!important;bottom:auto!important;width:auto!important;height:3px!important;border-radius:3px;background:var(--skin-accent)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--skin-accent) 14%,transparent),0 0 12px color-mix(in srgb,var(--skin-accent) 42%,transparent)!important;pointer-events:none;z-index:30}
+.treeNode.treeDropBefore::before{top:-3px!important}
+.treeNode.treeDropAfter::before{bottom:-3px!important}
+.treeNode.treeDropBefore::after,.treeNode.treeDropAfter::after{position:absolute!important;padding:3px 7px!important;border-radius:999px!important;background:color-mix(in srgb,var(--skin-accent) 18%,var(--skin-panel2))!important;color:var(--skin-text)!important;font:800 10px/1.2 system-ui,sans-serif!important;letter-spacing:.04em!important;white-space:nowrap!important;pointer-events:none!important;z-index:30}
+.treeNode.treeDropBefore::after{content:"ПЕРЕД"!important;top:-18px!important;left:50%!important;right:auto!important;bottom:auto!important;transform:translateX(-50%)!important}
+.treeNode.treeDropAfter::after{content:"ПОСЛЕ"!important;bottom:-18px!important;left:50%!important;right:auto!important;top:auto!important;transform:translateX(-50%)!important}
+
+/* Structural-view drag feedback: same semantics in every skin. */
+.outlineDropInside{outline:2px solid var(--skin-accent)!important;outline-offset:-3px!important;box-shadow:inset 0 0 0 3px rgba(67,217,143,.18),0 0 0 3px rgba(67,217,143,.08)!important}
+.outlineDropInside::after{content:"ВНУТРИ · ВЛОЖИТЬ";position:absolute;right:10px;bottom:6px;padding:3px 7px;border-radius:999px;background:color-mix(in srgb,var(--skin-accent) 18%,var(--skin-panel2));color:var(--skin-text);font:800 10px/1.2 system-ui,sans-serif;letter-spacing:.04em;white-space:nowrap;pointer-events:none;z-index:30}
+.outlineNode.outlineDropBefore,.outlineNode.outlineDropAfter{position:relative}
+.outlineNode.outlineDropBefore::before,.outlineNode.outlineDropAfter::before{content:""!important;position:absolute;left:0!important;right:0!important;height:3px!important;border-radius:3px;background:var(--skin-accent)!important;box-shadow:0 0 0 2px color-mix(in srgb,var(--skin-accent) 14%,transparent),0 0 12px color-mix(in srgb,var(--skin-accent) 42%,transparent)!important;pointer-events:none;z-index:30}
+.outlineNode.outlineDropBefore::before{top:-2px!important}.outlineNode.outlineDropAfter::before{bottom:-2px!important}
+.outlineNode.outlineDropBefore::after,.outlineNode.outlineDropAfter::after{position:absolute!important;padding:3px 7px!important;border-radius:999px!important;background:color-mix(in srgb,var(--skin-accent) 18%,var(--skin-panel2))!important;color:var(--skin-text)!important;font:800 10px/1.2 system-ui,sans-serif!important;letter-spacing:.04em!important;white-space:nowrap!important;pointer-events:none!important;z-index:30}
+.outlineNode.outlineDropBefore::after{content:"ПЕРЕД"!important;top:-18px!important;left:50%!important;transform:translateX(-50%)!important}.outlineNode.outlineDropAfter::after{content:"ПОСЛЕ"!important;bottom:-18px!important;left:50%!important;transform:translateX(-50%)!important}
+/* Normal pointer outside Meh help mode: the themed question cursor is opt-in only. */
+.app[data-visual-style] { cursor: default; }
+.app[data-visual-style] button,
+.app[data-visual-style] [role="button"],
+.app[data-visual-style] a,
+.app[data-visual-style] label,
+.app[data-visual-style] [data-action],
+.app[data-visual-style] [data-related],
+.app[data-visual-style] [data-relation-id],
+.app[data-visual-style] [data-tree-toggle],
+.app[data-visual-style] [data-widget-id],
+.app[data-visual-style] .treeNode,
+.app[data-visual-style] .outlineNode,
+.app[data-visual-style] .treeExternalItem,
+.app[data-visual-style] .workspaceItem,
+.app[data-visual-style] .styleMenu button,
+.app[data-visual-style] .galaxyStar { cursor: pointer; }
+.app[data-visual-style] input,
+.app[data-visual-style] textarea,
+.app[data-visual-style] select { cursor: text; }
+.app[data-visual-style] .mehDock,
+.app[data-visual-style] .mehDock * { cursor: default; }
+/* Help mode cursor is defined per visual style above; do not override it here. */
+#relationPanel:empty { display: none; }
+
+
+/* 0.15.20 theme consistency / Modern context menu hardening. */
+:is(.app,body)[data-visual-style="modern"] .contextMenu,
+:is(.app,body)[data-visual-style="modern"] .styleMenu,
+:is(.app,body)[data-visual-style="modern"] .workspacePop{
+  background:#fbfbfa!important;
+  color:#17191c!important;
+  border-color:#8f9397!important;
+  box-shadow:0 16px 38px rgba(0,0,0,.16)!important;
+}
+:is(.app,body)[data-visual-style="modern"] .contextMenu button,
+:is(.app,body)[data-visual-style="modern"] .styleMenu button,
+:is(.app,body)[data-visual-style="modern"] .workspacePop button,
+:is(.app,body)[data-visual-style="modern"] .contextMenu button.dangerItem{
+  color:#202327!important;
+  background:#f7f7f6!important;
+  border-color:#a4a7aa!important;
+  text-shadow:none!important;
+}
+:is(.app,body)[data-visual-style="modern"] .contextMenu button:hover,
+:is(.app,body)[data-visual-style="modern"] .styleMenu button:hover,
+:is(.app,body)[data-visual-style="modern"] .workspacePop button:hover,
+:is(.app,body)[data-visual-style="modern"] .styleMenu button.active{
+  color:#111316!important;
+  background:#e7e8e7!important;
+  border-color:#6e7276!important;
+}
+:is(.app,body)[data-visual-style="modern"] .contextMenu .cmIcon{color:#4a4f55!important}
+:is(.app,body)[data-visual-style="modern"] .contextMenu .dangerItem{color:#8e2438!important}
+:is(.app,body)[data-visual-style="modern"] .contextMenu .menuDivider{background:#c0c3c6!important}
+
+/* Modern inspector/list text: remove inherited blue secondary ink from light surfaces. */
+:is(.app,body)[data-visual-style="modern"] .outlineType,:is(.app,body)[data-visual-style="modern"] .outlineStats,:is(.app,body)[data-visual-style="modern"] .outlineChip,:is(.app,body)[data-visual-style="modern"] .outlineRelChip,:is(.app,body)[data-visual-style="modern"] .outlineLegendItem,:is(.app,body)[data-visual-style="modern"] .outlineExternalTitle,:is(.app,body)[data-visual-style="modern"] .outlineEmpty,:is(.app,body)[data-visual-style="modern"] .outlineHint,:is(.app,body)[data-visual-style="modern"] .treeNodeType,:is(.app,body)[data-visual-style="modern"] .treeHint,:is(.app,body)[data-visual-style="modern"] .listMeta,:is(.app,body)[data-visual-style="modern"] .listMeta b,:is(.app,body)[data-visual-style="modern"] .listMeta small,:is(.app,body)[data-visual-style="modern"] .kvItem,:is(.app,body)[data-visual-style="modern"] .kvItem span,:is(.app,body)[data-visual-style="modern"] .kvItem small,:is(.app,body)[data-visual-style="modern"] .relationTreeItem,:is(.app,body)[data-visual-style="modern"] .treeRow,:is(.app,body)[data-visual-style="modern"] .infoFoldBody,:is(.app,body)[data-visual-style="modern"] .inlineHelp,:is(.app,body)[data-visual-style="modern"] .empty,:is(.app,body)[data-visual-style="modern"] .count,:is(.app,body)[data-visual-style="modern"] .treeHelp{
+  color:#454a50!important;
+  text-shadow:none!important;
+}
+:is(.app,body)[data-visual-style="modern"] .outlineName,
+:is(.app,body)[data-visual-style="modern"] .treeNodeName,
+:is(.app,body)[data-visual-style="modern"] .section h3,
+:is(.app,body)[data-visual-style="modern"] .infoFoldHead span,
+:is(.app,body)[data-visual-style="modern"] .infoFoldHead b,
+:is(.app,body)[data-visual-style="modern"] .infoFoldHead i{
+  color:#17191c!important;
+  text-shadow:none!important;
+}
+:is(.app,body)[data-visual-style="modern"] .outlineChip,
+:is(.app,body)[data-visual-style="modern"] .outlineRelChip,
+:is(.app,body)[data-visual-style="modern"] .tagChip{
+  background:#eef0f1!important;
+  border-color:#b5b9bd!important;
+  color:#3e444a!important;
+}
+
+/* Outline high-zoom layout: relation badges move below the name instead of squeezing it. */
+.outlineView.outlineZoomTight .outlineNode{
+  grid-template-columns:34px minmax(0,1fr);
+  grid-template-rows:auto auto;
+  align-items:start;
+}
+.outlineView.outlineZoomTight .outlineNodeMain{grid-column:1 / -1;grid-row:1;min-width:0}
+.outlineView.outlineZoomTight .outlineStats{grid-column:2;grid-row:2;justify-content:flex-start;min-width:0;padding-top:3px;overflow-wrap:anywhere}
+.outlineView.outlineZoomTight .outlineNode{padding-bottom:8px}
+.outlineView.outlineZoomTight .outlineRelChip{white-space:normal;max-width:100%;text-overflow:clip;overflow-wrap:anywhere}
+@media(max-width:740px){
+  .outlineView.outlineZoomTight .outlineNode{grid-template-columns:30px minmax(0,1fr)}
+}
+
+/* Preserve the shared widget-builder and Tree spacing contracts from 0.15.16. */
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder .widgetBuilderToolbar .btn,
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder .iconBtn{color:#202327!important;background:#f7f7f6;border-color:#a4a7aa;}
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder .widgetBuilderToolbar .btn:hover,
+:is(.app,body)[data-visual-style="modern"] .widgetBuilder .iconBtn:hover{color:#111316!important;background:#e7e8e7;border-color:#6e7276;}
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder button,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder button,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder button,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder button{color:#edf4ff;background:rgba(5,10,20,.78);border-color:var(--line2);}
+:is(.app,body)[data-visual-style="classic"] .widgetBuilder button:hover,
+:is(.app,body)[data-visual-style="dark-fantasy"] .widgetBuilder button:hover,
+:is(.app,body)[data-visual-style="sci-fi"] .widgetBuilder button:hover,
+:is(.app,body)[data-visual-style="space"] .widgetBuilder button:hover{background:color-mix(in srgb,var(--skin-accent) 12%,rgba(5,10,20,.86));color:#fff;}
+.treeViewport{padding:24px 22px 54px!important}
+
+
+/* ==================== THEME CONSISTENCY PATCH 0.15.20 ====================
+   Keep one style-owned workspace background across Graph / Outline / Tree / Galaxy.
+   The individual mode containers inherit the active skin's root canvas instead of
+   replacing it with a second, conflicting background recipe.
+   0.25.5: Galaxy is NOT in this list any more — «inherit» gave every style Classic's navy night sky and hid the
+   skies the styles had drawn for Galaxy (High Fantasy, Modern, Forest…). Each style has its own sky (galaxy-skies.css). */
+:is(.app,body)[data-visual-style="classic"] .main,
+:is(.app,body)[data-visual-style="classic"] .canvasWrap,
+:is(.app,body)[data-visual-style="classic"] .outlineView,
+:is(.app,body)[data-visual-style="classic"] .treeView,
+:is(.app,body)[data-visual-style="medieval"] .main,
+:is(.app,body)[data-visual-style="medieval"] .canvasWrap,
+:is(.app,body)[data-visual-style="medieval"] .outlineView,
+:is(.app,body)[data-visual-style="medieval"] .treeView,
+:is(.app,body)[data-visual-style="high-fantasy"] .main,
+:is(.app,body)[data-visual-style="high-fantasy"] .canvasWrap,
+:is(.app,body)[data-visual-style="high-fantasy"] .outlineView,
+:is(.app,body)[data-visual-style="high-fantasy"] .treeView,
+:is(.app,body)[data-visual-style="dark-fantasy"] .main,
+:is(.app,body)[data-visual-style="dark-fantasy"] .canvasWrap,
+:is(.app,body)[data-visual-style="dark-fantasy"] .outlineView,
+:is(.app,body)[data-visual-style="dark-fantasy"] .treeView,
+:is(.app,body)[data-visual-style="forest"] .main,
+:is(.app,body)[data-visual-style="forest"] .canvasWrap,
+:is(.app,body)[data-visual-style="forest"] .outlineView,
+:is(.app,body)[data-visual-style="forest"] .treeView,
+:is(.app,body)[data-visual-style="modern"] .main,
+:is(.app,body)[data-visual-style="modern"] .canvasWrap,
+:is(.app,body)[data-visual-style="modern"] .outlineView,
+:is(.app,body)[data-visual-style="modern"] .treeView,
+:is(.app,body)[data-visual-style="sci-fi"] .main,
+:is(.app,body)[data-visual-style="sci-fi"] .canvasWrap,
+:is(.app,body)[data-visual-style="sci-fi"] .outlineView,
+:is(.app,body)[data-visual-style="sci-fi"] .treeView,
+:is(.app,body)[data-visual-style="space"] .main,
+:is(.app,body)[data-visual-style="space"] .canvasWrap,
+:is(.app,body)[data-visual-style="space"] .outlineView,
+:is(.app,body)[data-visual-style="space"] .treeView{
+  background:inherit !important;
+}
+
+/* Modern context menu must be a light surface with dark text everywhere,
+   including buttons/icons that were previously recolored by legacy body rules. */
+:is(.app,body)[data-visual-style="modern"] .contextMenu{
+  background:#fbfbfa !important;
+  color:#17191c !important;
+  border-color:#8f9397 !important;
+  box-shadow:0 16px 38px rgba(0,0,0,.16) !important;
+  backdrop-filter:none !important;
+}
+:is(.app,body)[data-visual-style="modern"] .contextMenu button,
+:is(.app,body)[data-visual-style="modern"] .contextMenu button .cmIcon{
+  color:#17191c !important;
+}
+:is(.app,body)[data-visual-style="modern"] .contextMenu button:hover{
+  background:#e9eaeb !important;
+  color:#101113 !important;
+}
+:is(.app,body)[data-visual-style="modern"] .contextMenu button:focus-visible{
+  outline:2px solid #4c5055 !important;
+  outline-offset:-2px;
+}
+
+
+/* ===== 0.15.21: layout & layering fixes ===================================== */
+/* Native controls follow the skin's light/dark mode (select popups, scrollbars). */
+:root{color-scheme:dark}
+/* 0.28.2: light or dark — from the brightness of the style's panels (applyVisualStyle sets data-tone), not a hand list of 3 styles */
+:root[data-tone="light"]{color-scheme:light}
+/* Layers: dialogs above the Мех overlay (it used to cover the dialog corner),
+   toasts above everything, popups above the canvas but below dialogs. */
+body .modalBack{z-index:2700}
+body .toastWrap{z-index:2800}
+body .contextMenu,body .workspacePop{z-index:2650}
+/* Dialogs: header and footer stay put, only the body scrolls. Before, a tall
+   dialog scrolled as a whole and the Save button was below the window edge. */
+body .modal{display:flex;flex-direction:column;overflow:hidden;max-height:calc(calc(100vh / var(--zf,1)) - 32px)}
+body .modalHead,body .modalFoot{flex:0 0 auto}
+body .modalBody{flex:1 1 auto;min-height:0;overflow:auto}
+body .modalFoot{flex-wrap:wrap}
+/* Editor fields: labels and inputs inside dialog sections were unstyled
+   (16px labels, white native inputs) next to styled ones. */
+.customizerSection label:not(.toggleRow){display:block;font-size:10px;margin-bottom:4px;opacity:.85}
+.customizerSection input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not([type=color]),
+.customizerSection select,.customizerSection textarea{width:100%;box-sizing:border-box;border:1px solid var(--line);border-radius:9px;background:rgba(255,255,255,.04);color:var(--text);padding:8px 10px;outline:none;font:inherit;font-size:12px}
+.customizerSection input[type=range]{width:100%}
+.customizerSection input[type=color]{width:100%;height:36px;padding:3px;border:1px solid var(--line);border-radius:9px;background:transparent}
+.customizerSection input:focus,.customizerSection select:focus,.customizerSection textarea:focus{border-color:var(--accent)}
+.customizerSection input[type=file]{font-size:11px;color:var(--muted);max-width:100%}
+:is(.app,body)[data-visual-style="modern"] .customizerSection :is(input:not([type=checkbox]):not([type=range]):not([type=file]),select,textarea){background:#fff;color:#17191c;border-color:#9fa3a7}
+/* Toolbar: the search box keeps a usable width; on narrow windows buttons
+   collapse to their icons (full names stay in the tooltip). Before, at the
+   minimum window size of 1024 px the last six buttons were off-screen. */
+.topbar{min-width:0}
+.topsearch{flex:1 1 180px;min-width:150px}
+.topActions{flex:0 1 auto;min-width:0}
+@media (max-width:1480px){.badge{display:none}}
+@media (max-width:1360px){.topActions .tlabel{display:none}.topTool{padding-left:11px;padding-right:11px}.stylePickerBtn{min-width:0!important}}
+@media (max-width:1180px){.logoText{display:none}.topbar{gap:8px}}
+/* HUD over the canvas wraps onto two rows instead of sliding under the side panels. */
+.hud{flex-wrap:wrap;row-gap:6px}
+/* 0.24: the pills and the «Обычные связи» caption hide by the work area's width (viewBarFit), not the window's */
+.main.hudNoPills :is(#centerPill,#selectionPill){display:none}
+.hint{overflow:hidden;text-overflow:ellipsis;max-width:calc(100% - 28px)}
+/* Galaxy toolbar: the viewport is 120px larger than the visible area on every
+   side (room for panning), so the toolbar sat above the window edge. */
+.galaxyViewport>.galaxyToolbar{top:calc(120px + var(--galaxy-toolbar-top,120px))!important;left:134px!important;right:134px!important}
+/* Tree: content starts below the floating HUD instead of under it. */
+#treeView .treeViewport{padding-top:var(--tree-hud-top,130px)!important}
+/* Blocks (widgets) follow the skin's text colours unless a colour was set by hand. */
+.widget{--widget-title:var(--text);--widget-bg:color-mix(in srgb,var(--text) 3%,transparent);--widget-border:var(--line)}
+.widgetFieldValue,.widgetMetricValue,.widgetNotebook{color:var(--text)}
+.widgetFieldLabel,.widgetSubtitle,.widgetEmpty,.widgetHint,.widgetMetricUnit{color:var(--muted)}
+.widgetNotebook{background:color-mix(in srgb,var(--text) 2%,transparent);border-color:var(--line)}
+/* Dialog fields take the dialog's own text colour in every skin. Skins used to
+   mix a dark background from one rule with dark text from another (Medieval). */
+body .modal :is(input:not([type=checkbox]):not([type=radio]):not([type=range]):not([type=file]):not([type=color]),select,textarea){color:inherit!important;background:color-mix(in srgb,currentColor 7%,transparent)!important;border-color:color-mix(in srgb,currentColor 24%,transparent)!important}
+body .modal :is(input,textarea)::placeholder{color:currentColor;opacity:.5}
+/* 0.28.2: the opened list of choices — solid panel colour and the style's text in every style (it was «initial»: white letters on a light list) */
+body select :is(option,optgroup){color:var(--skin-option-text,#16263b)!important;background-color:var(--skin-option-bg,#f4f6fa)!important}
+body .modal .customizerSection label:not(.toggleRow),body .modal .toggleRow{color:inherit}
+/* Medieval: the dialog is dark wood, so its text must be light parchment. */
+:is(.app,body)[data-visual-style="medieval"] .modal :is(.modalBody,.customizerSection,.customizerSection label,.form label,.toggleRow,.widgetHint,.inlineHelp,.massSummary){color:#ecd9ae!important}
+:is(.app,body)[data-visual-style="medieval"] .modal .customizerSection h4{color:#d4b36b!important}
+/* Light skins: a few left-panel texts and icons kept dark-theme light colours. */
+:is(.app,body):is([data-visual-style="high-fantasy"],[data-visual-style="modern"]) :is(.breadcrumbs .crumb,#entityFilters label,#relationFilters label){color:var(--text)!important}
+:is(.app,body):is([data-visual-style="high-fantasy"],[data-visual-style="modern"]) .scopeMeta span{color:var(--muted)!important}
+:is(.app,body):is([data-visual-style="high-fantasy"],[data-visual-style="modern"]) .toolBtn .toolIcon{color:var(--accent)!important;opacity:1!important}
+:is(.app,body)[data-visual-style="high-fantasy"] .workspaceItem :is(b,small){color:var(--text)!important}
+.workspacePopHead small{display:block}
+/* 0.19: the top bar measures itself (fitTopbar in shell.js) instead of trusting fixed widths:
+   new buttons used to push Backup/Restore/Reset off-screen at 1536–1600 px. */
+.topbar.tbMeasure,.topbar.tbMeasure *{transition:none!important;animation-play-state:paused!important} /* 0.29.9: measured without animation */
+.topbar.tbFit1 .badge{display:none}
+.topbar.tbFit2 .topActions .tlabel{display:none}.topbar.tbFit2 .topTool{padding-left:11px;padding-right:11px}.topbar.tbFit2 .stylePickerBtn{min-width:0!important}
+.topbar.tbFit3 .logoText{display:none}.topbar.tbFit3{gap:8px}
+.topbar.tbFit4 .topTool{padding-left:7px;padding-right:7px}.topbar.tbFit4 .topActions{gap:3px}.topbar.tbFit4 .topSep{margin:0}.topbar.tbFit4{gap:6px} /* 0.30.9: the smallest window */
+.topbar.tbFit5 .topsearch{min-width:72px;flex-basis:72px}.topbar.tbFit5 .topsearch input{padding-left:26px}
+/* Nothing may scroll the whole window sideways (a focused off-screen button used to shift the app). */
+html,body{overflow:clip}
+/* 0.19: the pointer ring lives in the Meh dock (outside .app), so its styles never applied and a bare «?»
+   sat in the top-left corner. Now it is styled, and shown only in Meh's help mode, where it means «click to ask». */
+body .mehCursorGlow{display:none}
+.mehDock.mehHelpMode .mehCursorGlow{display:block}
+
+/* 0.23.6: запись, скрытая фильтром, но содержащая видимые записи, остаётся в Tree и Galaxy бледной «опорой» —
+   иначе её содержимое повиснет без родителя. Выбрать и открыть её можно, но она не спорит с отобранными. */
+.treeNode.structOnly{opacity:.42;filter:grayscale(.7);border-style:dashed}
+.treeNode.structOnly:hover,.treeNode.structOnly.isSelected{opacity:.8}
+.galaxyStar.structOnly{opacity:.32;filter:grayscale(.8)}
+.galaxyStar.structOnly:hover,.galaxyStar.structOnly.selected{opacity:.75}
+
+/* 0.23.7: полоса кнопок режима — одно место и один вид во всех режимах (под переключателем видов).
+   Внешний вид берёт у группы Explore/Dive/Trace (.modeBar/.modeBtn), поэтому каждый стиль её одевает сам. */
+.viewStrip{position:absolute;right:0;top:96px;z-index:13;align-items:center;max-width:100%;flex-wrap:nowrap;pointer-events:auto}
+.viewStrip[hidden]{display:none}
+.viewStrip .vsTitle{display:flex;align-items:baseline;gap:7px;white-space:nowrap;cursor:default}
+.viewStrip .vsTitle b{font-weight:700}
+.viewStrip .vsTitle small,.vsTab small{font-size:10px;opacity:.8}
+.viewStrip .modeBtn{font-size:11px;padding:6px 10px;white-space:nowrap}
+.viewStrip .vsFold{padding:6px 9px;font-size:12px;line-height:1}
+.vsMore{position:relative;display:flex}
+.vsMenu{position:absolute;right:0;top:calc(100% + 8px);min-width:230px;flex-direction:column;align-items:stretch;gap:2px;padding:6px;box-shadow:0 14px 34px rgba(0,0,0,.35);z-index:40}
+.vsMenu[hidden]{display:none!important}
+.vsMenu .vsItem{display:block;width:100%;text-align:left;font-size:12px;white-space:nowrap}
+.vsMenu .vsRange{display:flex;align-items:center;gap:8px;font-size:12px;margin-top:4px}
+.vsRange input{flex:1;min-width:80px;accent-color:var(--skin-accent,#78b8ff)}
+.vsRange output{min-width:32px;text-align:right;font-variant-numeric:tabular-nums}
+.viewStrip.closed{padding:3px}
+.vsTab{display:inline-flex;align-items:baseline;gap:6px;white-space:nowrap}
+/* Table/Kanban: та же ▴ в их строке настроек; строка не переносится — поиск сжимается первым */
+.tvBar{flex-wrap:nowrap;min-width:0}
+.tvBar .tvSearch{flex:1 1 150px;min-width:70px;width:auto}
+.tvBar .tvCount{white-space:nowrap}
+.tvBar .tvGrow{flex:0 1 0}
+.tvBarClosed{padding-bottom:6px}
+.main.outlineMode .outlineView{padding-top:max(108px,var(--strip-bottom,108px))}
+.tableView .tvBar{flex-wrap:nowrap;min-width:0}
+.tableView .tvBar .tvSearch{flex:1 1 150px;min-width:70px;width:auto}
+.tableView .tvBar .tvGrow{flex:0 1 0}
+.tableView .tvBar .tvPick select{max-width:190px}
+.viewStrip .modeBtn,.vsTab{font-size:12px}
+.tableView{container-type:inline-size}
+.tableView .tvBar .btn,.tableView .tvBar .tvSeg button{white-space:nowrap;flex:0 0 auto}
+.tableView .tvBar .tvPick{min-width:0;flex:0 1 auto}
+.tableView .tvBar .tvPick select{min-width:90px}
+.tableView .tvBar .tvSeg{flex:0 1 auto;min-width:0}
+@container (max-width:860px){.tableView .tvBar{flex-wrap:wrap;row-gap:6px}.tableView .tvBar .tvPick>span{display:none}}
+
+/* 0.23.7: верхнюю панель прячет своя стрелка (как боковые); «Чистый холст» прячет всё сразу. */
+.app.topCollapsed,.app.cleanMode{grid-template-rows:0 minmax(0,1fr)!important}
+.app.topCollapsed .topbar,.app.cleanMode .topbar{height:0;min-height:0;padding-top:0;padding-bottom:0;border-bottom:0;overflow:hidden;opacity:0;pointer-events:none}
+.topRail{position:absolute;z-index:110;top:0;left:50%;transform:translateX(-50%);width:76px;height:18px;padding:0;border:1px solid var(--skin-border,var(--line));border-top:0;border-radius:0 0 10px 10px;background:var(--skin-panel,rgba(6,11,22,.86));color:var(--skin-muted,#a9bad8);font-size:11px;line-height:1;cursor:pointer;box-shadow:0 6px 18px rgba(0,0,0,.2);opacity:.75;transition:opacity .15s,color .15s,border-color .15s}
+.topRail:hover,.sideRail:hover{opacity:1;color:var(--skin-text,#eaf3ff);border-color:var(--skin-accent,#78b8ff)}
+/* боковые стрелки — заметнее, чем были */
+.sideRail{color:var(--skin-text,#cfdaf0);border-color:color-mix(in srgb,var(--skin-accent,#78b8ff) 35%,var(--skin-border,#24324d));font-size:15px}
+.cleanBtn{flex:0 0 auto;pointer-events:auto;font-size:13px;padding:6px 9px}
+.cleanExit{display:none;position:absolute;z-index:120;left:50%;bottom:12px;transform:translateX(-50%);opacity:.7;transition:opacity .15s}
+.cleanExit:hover{opacity:1}
+.app.cleanMode .cleanExit{display:flex}
+.cleanExit .modeBtn{font-size:12px;white-space:nowrap}
+.app.cleanMode .left,.app.cleanMode .right{transform:none;opacity:0;pointer-events:none;visibility:hidden}
+.app.cleanMode :is(.hud,.contextBar,.hint,.sideRail,.topRail,.panelResizer,.viewStrip){display:none!important}
+
+/* 0.23.9: «＋» и «✎» в заголовках блоков слева — создать или изменить тип, статус, тип связи прямо отсюда */
+.sectionToggle .secTools{margin-left:auto;display:inline-flex;gap:3px;opacity:.55;transition:opacity .12s}
+.section:hover .sectionToggle .secTools,.sectionToggle .secTools:focus-within{opacity:1}
+.secTool{width:22px;height:22px;display:grid;place-items:center;padding:0;border:1px solid var(--skin-border,var(--line));border-radius:7px;background:transparent;color:inherit;font-size:12px;line-height:1;cursor:pointer}
+.secTool:hover{border-color:var(--skin-accent,#78b8ff);background:color-mix(in srgb,var(--skin-accent,#78b8ff) 16%,transparent)}
+
+/* 0.23.10: быстрый выбор типа связи — маленькое окошко у мыши */
+.linkPicker{position:fixed;z-index:3000;width:330px;max-width:calc(calc(100vw / var(--zf,1)) - 16px);max-height:min(470px,calc(calc(100vh / var(--zf,1)) - 16px));display:flex;flex-direction:column;gap:8px;padding:10px;border:1px solid var(--skin-border,var(--line));border-radius:14px;background:linear-gradient(var(--skin-panel,#0b1222),var(--skin-panel,#0b1222)),var(--skin-bg,#0b1222);backdrop-filter:blur(16px);color:var(--skin-text,#eaf3ff);box-shadow:0 18px 44px rgba(0,0,0,.45);font-size:13px}
+.lpHead{display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:6px;align-items:center}
+.lpEnd{min-width:0;padding:6px 9px;border:1px solid var(--skin-border,var(--line));border-radius:9px;background:transparent;color:inherit;font:inherit;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;cursor:default}
+.lpSwap{width:32px;height:32px;border:1px solid var(--skin-border,var(--line));border-radius:9px;background:transparent;color:inherit;font-size:15px;cursor:pointer}
+.lpSwap:hover{border-color:var(--skin-accent,#78b8ff)}
+.lpSearch{width:100%;box-sizing:border-box;padding:8px 10px;border-radius:9px;font:inherit}
+.lpList{overflow:auto;min-height:60px;display:flex;flex-direction:column;gap:2px;padding-right:2px}
+.lpSec{margin:6px 2px 2px;font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.lpGroup{display:flex;flex-direction:column;gap:1px}
+.lpItem{display:grid;grid-template-columns:12px minmax(0,1fr);column-gap:8px;align-items:center;text-align:left;padding:6px 8px;border:1px solid transparent;border-radius:8px;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.lpItem small{grid-column:2;font-size:10.5px;opacity:.65}
+.lpItem .lpName{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lpItem:hover,.lpItem.active{background:color-mix(in srgb,var(--skin-accent,#78b8ff) 18%,transparent);border-color:color-mix(in srgb,var(--skin-accent,#78b8ff) 45%,transparent)}
+.lpItem.lpNo{opacity:.45;cursor:not-allowed}
+.lpDot{width:10px;height:10px;border-radius:50%}
+.lpTier{display:flex;justify-content:space-between;align-items:center;padding:7px 8px;margin-top:2px;border:1px solid var(--skin-border,var(--line));border-radius:8px;background:transparent;color:inherit;font:inherit;font-weight:600;cursor:pointer}
+.lpTier small{opacity:.85;font-weight:400} /* 0.29.9: было .65 — цифра терялась на «Средневековье» */
+.lpTier:hover{border-color:var(--skin-accent,#78b8ff)}
+.lpHint{padding:6px 4px;font-size:11.5px;opacity:.75}
+.lpFoot{display:flex;justify-content:space-between;align-items:center;gap:8px;font-size:11px}
+.lpFoot>span{opacity:.85}
+/* the skin's link colour is made for its panels, not for this window: in Medieval, High and Dark Fantasy it was unreadable here */
+.linkPicker .linkBtn{color:inherit;font-weight:700}
+.lpEnd{cursor:pointer}.lpEnd:hover{border-color:var(--skin-accent,#78b8ff)}
+.lpEnd.editing{border-style:dashed;border-color:var(--skin-accent,#78b8ff);text-align:center}
+.lpArrow{text-align:center;opacity:.7}
+/* 0.23.10: «потянуть связь» — линия за мышью, подпись «A → B», кружок «⟶» у выбранной записи в Graph */
+.linkDragLayer{position:fixed;inset:0;width:calc(100vw / var(--zf,1));height:calc(100vh / var(--zf,1));z-index:2900;pointer-events:none}
+.linkDragLine{stroke:var(--skin-accent,#78b8ff);stroke-width:2.5;stroke-dasharray:7 6;stroke-linecap:round}
+.linkDragDot{fill:var(--skin-accent,#78b8ff)}
+.linkDragLayer.onTarget .linkDragLine{stroke-dasharray:none;stroke-width:3.5}
+.linkDragTip{position:fixed;z-index:2950;pointer-events:none;padding:4px 9px;border-radius:999px;background:var(--skin-accent,#78b8ff);color:#06101f;font:600 12px/1.3 system-ui,sans-serif;white-space:nowrap;box-shadow:0 6px 16px rgba(0,0,0,.3)}
+body.linkDragging,body.linkDragging *{cursor:crosshair!important}
+.linkKnob{position:absolute;z-index:11;width:26px;height:26px;padding:0;border:1px solid var(--skin-accent,#78b8ff);border-radius:50%;background:var(--skin-panel,rgba(6,11,22,.9));color:var(--skin-text,#eaf3ff);font-size:13px;line-height:1;cursor:grab;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+.linkKnob:hover{background:var(--skin-accent,#78b8ff);color:#06101f}
+.linkKnob[hidden]{display:none}
+.app.cleanMode .linkKnob{display:none}
+/* 0.23.10: в окне связи A, B и тип выбираются поиском (как в быстром окошке), оформление свёрнуто */
+.relHiddenSelect{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}
+.relPick{display:flex;justify-content:space-between;align-items:center;gap:8px;width:100%;padding:9px 10px;border:1px solid var(--skin-border,var(--line));border-radius:9px;background:rgba(255,255,255,.04);color:inherit;font:inherit;text-align:left;cursor:pointer}
+.relPick span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.relPick i{font-style:normal;opacity:.6}
+.relPick:hover{border-color:var(--skin-accent,#78b8ff)}
+.relMore{margin-top:10px;border:1px solid var(--skin-border,var(--line));border-radius:12px;padding:8px 12px}
+.relMore>summary{cursor:pointer;font-weight:600;padding:4px 0}
+.relMoreBody{display:grid;gap:12px;margin-top:10px}
+.lpTitle{display:block;font-weight:700;padding:2px 2px 0}
+.customizerGrid.relSimple{grid-template-columns:1fr!important}
+
+/* 0.23.10: the view switcher fits the work area (viewBarFit): no caption → wraps */
+.viewBar.vbTight .vlabel{display:none}
+.viewBar.vbSmall>.viewBtn{font-size:14px;padding:6px 7px}
+.viewBar.vbSmall>#relationVisibilityBtn{padding-right:24px!important}
+.viewBar.vbSmall>#relationVisibilityBtn::after{content:"";min-width:0;width:8px;height:8px;padding:0;right:8px}
+.viewBar.vbWrap{max-width:100%;flex-wrap:wrap;justify-content:flex-end}
+/* the importance levels I–V and the relation lines switch change nothing in Table and Kanban */
+.main.recordsMode .viewBar>:is(.relationToggle,.tierBar){display:none}
+
+/* 0.24: panels without overload — the big two-line tiles («Навигация и вид» on the left, «Действия» on the right)
+   become one line: icon + name; the explanation moved into the tooltip (title). */
+.left .scopeBtns .scopeBtn{padding:7px 9px!important;min-height:0!important}
+.left .scopeBtns .scopeBtn>span{display:none}
+.left .toolGrid{gap:6px!important;margin-top:8px!important}
+.left .toolGrid .toolBtn,.actionCompact .actionBtn{min-height:34px!important;padding:6px 8px!important;grid-template-columns:22px minmax(0,1fr)!important;gap:7px!important;border-radius:9px}
+.left .toolGrid .toolBtn small,.actionCompact .actionBtn small{display:none!important}
+.left .toolGrid .toolBtn b,.actionCompact .actionBtn b{font-size:12px!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.left .toolGrid .toolIcon,.actionCompact .actionIcon{width:22px!important;height:22px!important;font-size:13px}
+.actionCompact{gap:6px!important;margin-top:8px}
+.actionCompact~.dangerWide{min-height:34px;padding:6px 10px;font-size:13px;margin-top:8px}
+
+/* 0.24: the record's name never loses to its relations — Outline keeps the name at least ~200 px (the relations wrap),
+   Tree gives each relation its own line */
+.outlineNode{grid-template-columns:34px minmax(min(200px,45%),1fr) minmax(0,auto)}
+.treeNodeMeta .treeRelChip{flex:1 1 100%;max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.outlineView.outlineZoomTight .outlineNode>.outlineToggle{grid-column:1;grid-row:1;align-self:center}
+.outlineView.outlineZoomTight .outlineNode>.outlineNodeMain{grid-column:2 / -1}
+/* 0.25.1: icon buttons never shrink — otherwise a wider style font squeezed them to half (Sci-Fi: «↶» in 18 px)
+   instead of letting the top bar notice the lack of room and switch to its compact steps (fitTopbar) */
+.topbar .iconBtn,.topbar .topActions>*{flex-shrink:0}
+.styleRow{display:flex;align-items:center;gap:6px}.styleRow>[data-style]{flex:1;min-width:0}
+.styleVariants{display:inline-flex;gap:2px;padding:2px;border:1px solid var(--skin-border-strong,var(--line2));border-radius:999px}
+.styleVariant{font:600 11px/1 var(--skin-font);padding:4px 8px;border:0;border-radius:999px;background:transparent;color:inherit;cursor:pointer}
+.styleVariant.active{background:var(--skin-accent);color:var(--skin-on,#081018)}
+/* 0.25.3: with 20 styles the one-column menu was 1000 px tall and went off a 768 px laptop screen. Two columns,
+   the scale row across both, and a scroll as the last resort on very low windows. */
+:is(.app,body) .styleMenu.open{grid-template-columns:repeat(2,minmax(196px,1fr));gap:3px 6px;max-height:calc(calc(100vh / var(--zf,1)) - 70px);overflow-y:auto}
+:is(.app,body) .styleMenu .scaleRow{grid-column:1/-1}
+/* 0.25.3: «Закрепить стиль для этого мира» — across both columns of the style menu */
+:is(.app,body) .styleMenu .styleLockRow{grid-column:1/-1;display:grid;gap:3px;padding:7px 8px 5px;margin-top:3px;border-top:1px solid color-mix(in srgb,currentColor 22%,transparent)}
+:is(.app,body) .styleMenu .styleLockRow label{display:flex;align-items:center;gap:7px;font-size:11px;color:inherit;cursor:pointer}
+:is(.app,body) .styleMenu .styleLockRow small{font-size:10px;line-height:1.35;color:inherit;opacity:.82}
+/* the menu's own text colour is right in every style; the style's --skin-text is not (Medieval's menu is dark on a light page) */
+/* 0.25.5: interface scale in a browser tab (CSS zoom on the page). The map, Galaxy, the Detective board and the selection box
+   keep their own zoom (− 100% +) and all their pointer maths in screen pixels, so they are counter-zoomed back to 1:1;
+   viewport units above are divided by the same factor (calc(… / var(--zf,1))) so windows still fit the screen. */
+html[data-css-zoom] :is(.canvasWrap,.galaxyView,.detectiveView,#selectionBox){zoom:calc(1 / var(--zf,1))}
+html[data-css-zoom] :is(.canvasWrap,.galaxyView,.detectiveView) > *{--zf:1} /* inside them the page is 1:1 again */
+/* 0.29 (находка 2а): ошибка в тексте настроек карточки видна на самом поле */
+#wbJson[aria-invalid="true"]{outline:2px solid #d9534f;outline-offset:1px}
+/* 0.29.2: корзина */
+.trashHead{margin:-4px 0 10px;color:var(--skin-muted,#8fa3c7)}
+.trashBar{display:flex;gap:10px;align-items:center;margin-bottom:10px}
+.trashBar input{flex:1;min-width:0}
+.trashDays{display:flex;gap:6px;align-items:center;white-space:nowrap;font-size:12px}
+.trashList{display:flex;flex-direction:column;gap:6px;max-height:min(60vh,520px);overflow:auto}
+.trashRow{display:flex;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--skin-border,rgba(140,170,220,.2));border-radius:10px}
+.trashIcon{font-size:18px;width:22px;text-align:center;flex:none}
+.trashMain{flex:1;min-width:0;display:flex;flex-direction:column}
+.trashMain small{color:var(--skin-muted,#8fa3c7);font-size:11px;line-height:1.4}
+.trashActs{display:flex;gap:6px;flex:none;flex-wrap:wrap;justify-content:flex-end}
+.trashN:empty{display:none}
+#trashBtn[hidden]{display:none!important}
+/* 0.29.3: объединить двойников */
+.mergeHead{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:start}
+.mergeSide{display:flex;flex-direction:column;gap:4px;min-width:0}
+.mergeSide small{color:var(--skin-muted,#8fa3c7);font-size:11px}
+.mergeArrow{font-size:20px;opacity:.6;padding-top:4px}
+.mergeRow{display:grid;grid-template-columns:120px 1fr 1fr;gap:8px;align-items:start;padding:6px 0;border-top:1px solid var(--skin-border,rgba(140,170,220,.15))}
+.mergeRow .mergeBoth{grid-column:2 / span 2}
+.mergeLabel{font-weight:600;font-size:12px;padding-top:3px}
+.mergeOpt{display:flex;gap:6px;align-items:flex-start;font-size:12px;line-height:1.4;cursor:pointer;min-width:0}
+.mergeOpt span{overflow-wrap:anywhere;max-height:5.6em;overflow:hidden}
+.dupRow{display:flex;justify-content:space-between;gap:10px;align-items:center;padding:8px 10px;border:1px solid var(--skin-border,rgba(140,170,220,.2));border-radius:10px}
+.dupRow small{color:var(--skin-muted,#8fa3c7)}
+.dupActs{display:flex;gap:6px;flex:none}
+.allRecords .arHead b{flex:1}
+.allRecords .arHead .arDup{width:28px;height:28px;min-width:28px;min-height:28px;padding:0;font-size:14px;line-height:1}
+/* 0.29.4: теги */
+.tagChip[style*="--tag-color"]{border-color:var(--tag-color)!important;box-shadow:inset 3px 0 0 var(--tag-color)}
+button.tagChip{cursor:pointer;font:inherit}
+.tagsList{display:flex;flex-direction:column;gap:6px;margin-top:10px}
+.tmRow{display:grid;grid-template-columns:28px 1fr auto auto;gap:8px;align-items:center;padding:6px 8px;border:1px solid var(--skin-border,rgba(140,170,220,.18));border-radius:10px}
+.tmRow .tagColor{width:26px;height:26px;padding:0;border:none;background:none;cursor:pointer}
+.tmRow .tagName{display:flex;gap:10px;align-items:center;background:none;border:none;color:inherit;text-align:left;cursor:pointer;min-width:0;padding:0}
+.tmRow .tagName small{color:var(--skin-muted,#8fa3c7);font-size:11px}
+.tagEnts{grid-column:1 / -1;display:flex;flex-wrap:wrap;gap:6px 12px;padding:4px 0 2px 36px}
+.tagSuggest{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px;align-items:center}
+.tagSuggest[hidden]{display:none}
+.tagSuggest small{color:var(--skin-muted,#8fa3c7)}
+/* 0.29.4: генераторы */
+.genWrap{display:grid;grid-template-columns:170px 1fr;gap:14px;min-height:300px}
+.genList{display:flex;flex-direction:column;gap:4px;max-height:60vh;overflow:auto}
+.genPick{display:flex;gap:8px;align-items:center;text-align:left;padding:7px 10px;border-radius:9px;border:1px solid transparent;background:none;color:inherit;cursor:pointer;font:inherit}
+.genPick:hover{border-color:var(--skin-border,rgba(140,170,220,.25))}
+.genPick.active{border-color:var(--skin-accent,#7aa7ff);background:color-mix(in srgb,var(--skin-accent,#7aa7ff) 14%,transparent)}
+.genSep{font-size:11px;opacity:.7;margin:8px 0 2px 4px}
+.genNew{opacity:.85}
+.genResult{display:flex;flex-direction:column;gap:6px}
+.genField{display:grid;grid-template-columns:22px 120px 1fr;gap:8px;align-items:start;padding:7px 9px;border:1px solid var(--skin-border,rgba(140,170,220,.18));border-radius:9px;cursor:pointer}
+.genField.locked{border-color:var(--skin-accent,#7aa7ff)}
+.genLabel{font-size:12px;opacity:.75;padding-top:1px}
+.genVal{font-size:14px;line-height:1.4}
+.genOwnRes{font-size:16px;line-height:1.5;padding:14px;border:1px solid var(--skin-border,rgba(140,170,220,.2));border-radius:10px}
+@media (max-width:700px){.genWrap{grid-template-columns:1fr}.genList{flex-direction:row;flex-wrap:wrap;max-height:none}}
+/* 0.29.5: сохранить картинкой */
+.snapForm>div{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.snapForm>div>label:first-child{width:70px;font-weight:600}
+.snapOpt{display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+/* 0.29.5: сохранить картинкой */
+.snapForm>div{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center}
+.snapForm>div>label:first-child{width:70px;font-weight:600}
+.snapOpt{display:flex;gap:6px;align-items:center;font-size:13px;cursor:pointer}
+.tagRenameBox{display:flex;gap:6px;align-items:center;min-width:0}.tagRenameInput{flex:1;min-width:0}
+/* 0.29.6: рисовальная доска (и движок рисования) */
+.myNotesBtn.boardBtn{bottom:60px;font-size:18px} /* 0.29.9: значок доски — рисунком, как у заметок (смайлик 🖌 терялся на светлых стилях) */
+.drawBoard{position:absolute;inset:8px;z-index:45;display:flex;flex-direction:column;border-radius:14px;overflow:hidden;border:1px solid var(--skin-border-strong,rgba(140,170,220,.4));background:var(--skin-panel,#121826);box-shadow:var(--skin-shadow,0 10px 40px rgba(0,0,0,.4))}
+.drawBoard[hidden]{display:none}
+.drawBoard.drwFull{position:fixed;inset:0;border-radius:0;z-index:300}
+.drwHead{display:flex;align-items:center;gap:10px;padding:6px 10px;border-bottom:1px solid var(--skin-border,rgba(140,170,220,.2))}
+.drwSheets{display:flex;gap:4px;flex:1;min-width:0;overflow-x:auto;align-items:center}
+.drwSheet{padding:4px 10px;border-radius:8px;border:1px solid var(--skin-border,rgba(140,170,220,.25));background:none;color:inherit;cursor:pointer;white-space:nowrap;font:inherit;font-size:12px}
+.drwSheet.on{border-color:var(--skin-accent,#7aa7ff);background:color-mix(in srgb,var(--skin-accent,#7aa7ff) 16%,transparent)}
+.drwHeadActs{display:flex;gap:4px}
+.drwBody{flex:1;min-height:0;display:flex;flex-direction:column;outline:none}
+.drwHost{position:relative}
+.drwBar{display:flex;flex-wrap:wrap;gap:4px;align-items:center;padding:6px 8px;border-bottom:1px solid var(--skin-border,rgba(140,170,220,.15))}
+.drwTool{min-width:32px;height:32px;border-radius:8px;border:1px solid transparent;background:none;color:inherit;cursor:pointer;font-size:15px}
+.drwTool:hover{border-color:var(--skin-border,rgba(140,170,220,.3))}
+.drwTool.on{border-color:var(--skin-accent,#7aa7ff);background:color-mix(in srgb,var(--skin-accent,#7aa7ff) 18%,transparent)}
+.drwColorAny{width:28px;height:26px;border:none;background:none;padding:0;cursor:pointer}
+.drwWidth input{width:90px}
+.drwFill{display:flex;gap:4px;align-items:center;font-size:12px}
+.drwSep{width:1px;height:24px;background:var(--skin-border,rgba(140,170,220,.25));margin:0 4px}
+.drwStage{position:relative;flex:1;min-height:0;background:#fbfaf6;touch-action:none;cursor:crosshair;overflow:hidden}
+.drwRO .drwStage{cursor:grab}.drwRO .drwBar [data-drw-tool]:not([data-drw-tool="select"]),.drwRO .drwColorAny,.drwRO .drwWidth,.drwRO .drwFill{display:none}
+.drwSvg{position:absolute;inset:0;width:100%;height:100%;display:block;user-select:none}
+.drwErasing{opacity:.25}
+.drwTextBox{position:absolute;z-index:3}.drwTextBox textarea,.drwTextBox input{min-width:240px;font:16px/1.3 inherit;padding:6px 8px;border-radius:8px;border:2px solid #1e88e5;background:#fff;color:#1b1f2a}
+.drwHint{position:absolute;left:10px;bottom:10px;padding:4px 10px;border-radius:8px;background:rgba(27,31,42,.75);color:#fff;font-size:12px;pointer-events:none}
+.drwHint[hidden]{display:none}
+.drwRename{max-width:220px}
+/* 0.29.7: рисование карт */
+.mapDrawBoard{z-index:46}
+.mapDrawBoard .drwStage{background:#d7cdb5}
+.drwOpt{display:flex;gap:4px;align-items:center;font-size:12px;white-space:nowrap}
+.drwOpt select,.drwOpt input{font-size:12px}
+.mapFog{fill:var(--skin-panel,#1b2232);fill-opacity:.96;stroke:none;pointer-events:all}
+/* 0.29.4: «🎲 Генераторы» в верхней панели — на узком окне (1024) имя программы уступает место кнопкам */
+@media (max-width:1180px){:is(.app,body) .topbar .logo .logoText{display:none}}
+@media (max-width:1100px){.topsearch{min-width:110px}.topbar .topActions{flex-shrink:0}}
+
+/* 0.29.9: значки типов в «Наборе правил» окрашены цветом типа; светлые (сталь, пергамент) терялись на светлых стилях — тёмная обводка */
+.typeList .listIcon{text-shadow:0 0 1px rgba(10,8,6,.95),0 0 2px rgba(10,8,6,.9),0 0 3px rgba(10,8,6,.55)}
+/* 0.29.9: значки-смайлики «Корзины» и «Тегов» слева — цветом надписи кнопки (золотом на светлом «Высоком фэнтези» не читались) */
+:is(#trashBtn,#tagsBtn,#tutorialBtn) .toolIcon{color:inherit!important}
+/* 0.30.9: a narrow left panel (the smallest window gives it 240 px; it can also be dragged narrow) — buttons in one column with whole
+   labels, smaller «back / forward» arrows, the space name may take two lines (was «Все…», «Вселе…», «Показ…») */
+.left{container-type:inline-size;container-name:leftpanel}
+@container leftpanel (max-width:290px){
+  .toolGrid{grid-template-columns:minmax(0,1fr)}
+  .scopeNav .iconBtn.tiny{width:44px;height:44px;font-size:22px;border-radius:10px}
+  .scopeHead .scopeTitle{white-space:normal;overflow-wrap:anywhere;line-height:1.2;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+}
+@media (max-width:1100px){.hint{display:none}} /* 0.30.9: a narrow canvas — the hint line hid behind the mini-map and the corner buttons, cut on both sides */
+/* 0.30.9: a field nobody styled (Trash search, «С какой сущностью объединить…», article search) looked like the browser's own —
+   square, grey frame. A zero-weight default for fields in windows and in the right panel: any rule of a field's own still wins. */
+:where(.modalBack,aside.right) :where(input:not([type]),input[type=text],input[type=search],input[type=number],select,textarea){border:1px solid var(--skin-border-strong,var(--line));border-radius:9px;background:var(--skin-panel,rgba(255,255,255,.04));color:var(--skin-text,var(--text));font:inherit;padding:6px 10px}
+:where(.modalBack,aside.right) :where(input:not([type]),input[type=text],input[type=search],input[type=number],select,textarea):focus-visible{outline:2px solid color-mix(in srgb,var(--skin-accent,#78b8ff) 55%,transparent);outline-offset:1px}
+/* 0.30.9: «.form input» stretched radio buttons and check boxes to the full width too — in «Сохранить картинкой» every choice sat
+   on a line of its own, the box «для игроков» hung in the middle. They keep their own size; the snapshot window — one row per question */
+.form input:is([type=checkbox],[type=radio]){width:auto;padding:0;margin:0;flex:0 0 auto}
+.snapForm{display:flex;flex-direction:column;gap:10px}
+.snapForm>div{display:flex;align-items:center;flex-wrap:wrap;gap:6px 18px}
+.snapForm>div>label:first-child{min-width:64px;margin:0}
+.snapForm .snapOpt{display:inline-flex;margin:0;font-size:13px;color:inherit}
+.form .row.tierNameRow{grid-template-columns:40px minmax(0,1fr)} /* 0.30.9: «Уровни важности»: the numeral next to its name (a two-equal-columns row put it half a window away) */
+/* 0.30.9: the «Space · Old / New» row: the switch stuck out of the menu and the dot jumped above the name */
+.styleRow{min-width:0}
+.styleRow>[data-style]{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.styleRow .styleVariants{flex:0 0 auto}
+.styleRow .styleVariant{padding:4px 6px}
+/* 0.30.9: in Table / Kanban on a low window (the smallest is 600) the side «‹ ›» rails in the middle of the edge stood right on
+   the row of settings («Весь мир», «4 сущности»). There they go lower — above the corner buttons, away from settings and buttons. */
+@media (max-height:700px){.main.recordsMode .sideRail{top:auto;bottom:112px;transform:none;height:52px}}
+
+/* 0.30.9: «пусто» in windows («Корзина пуста…») had the fixed grey-blue #7287ad — 2,3–2,9:1 on light windows (Noir, Eastern, Desert…)
+   and on some dark ones; in windows it takes the window's text colour, a little quieter (the same was fixed in «Новое от игроков») */
+.modal .empty{color:inherit;opacity:.82}

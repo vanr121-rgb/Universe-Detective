@@ -1,0 +1,49 @@
+/* Universe Graph — стиль True Medieval (0.25.4, просьба 14.10.2026).
+   Не палитра, а свой облик: пергаментная книга записей в резной дубовой раме, тёмный камень кладки за рабочей областью,
+   фреска-фриз сверху, каменные рыцари в нишах по углам, розетка-витраж, гравюрная штриховка, красная восковая печать.
+   Основа — общий слой (skins-tokens.css) по палитре; здесь только лицо стиля. Картинки — styles/true-medieval/*.svg.
+   Тёмные зоны (верхняя панель, переключатели над холстом, шапка Меха) задают СВОИ значения переменных — общий слой
+   красит их как тёмные сам, без сотни отдельных правил. */
+:is(.app,body)[data-visual-style="true-medieval"]{--tm-gold:#b8862b;--tm-gold-hi:#e7c97a;--tm-ink:#24170b;--tm-madder:#7d2410;--tm-oak:#2b1d12}
+
+/* ---- тёмные зоны: резной дуб, золото, светлый текст ---- */
+:is(.app,body)[data-visual-style="true-medieval"] :is(.topbar,.viewBar,.modeBar,.zoomCluster,.mehDock .mehHead,.sideRail,.topRail,.viewStrip){
+  --skin-text:#f1e4c6;--skin-muted:#d6c39c;--skin-panel:#22170e;--skin-panel2:#2b1d12;--skin-input:#1a120b;
+  --skin-border:rgba(184,134,43,.38);--skin-border-strong:rgba(184,134,43,.72);--skin-accent:#b8862b;--skin-on:#1a1108;color:var(--skin-text)}
+:is(.app,body)[data-visual-style="true-medieval"] .topbar{background:url(true-medieval/wood.svg) 0 0/400px 80px,var(--tm-oak);border-bottom:2px solid var(--tm-gold);box-shadow:0 2px 0 #120c07,0 4px 0 rgba(184,134,43,.45),0 10px 24px rgba(0,0,0,.45)}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.viewBar,.modeBar,.zoomCluster){background:url(true-medieval/wood.svg) 0 0/400px 80px,var(--tm-oak);border:1px solid var(--tm-gold);box-shadow:inset 0 0 0 2px #120c07,inset 0 0 0 3px rgba(184,134,43,.35),0 6px 18px rgba(0,0,0,.5)}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.topbar,.viewBar,.modeBar,.zoomCluster) :is(.btn,.iconBtn,.topTool,.modeBtn,.viewBtn){background:linear-gradient(180deg,rgba(255,230,180,.06),rgba(0,0,0,.18)),#23170d;border-color:rgba(184,134,43,.55)}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.topbar,.viewBar,.modeBar,.zoomCluster) :is(.modeBtn.active,.viewBtn.active,.topTool.primary,.topTool.newEntity){background:linear-gradient(180deg,#e7c97a,#b8862b 60%,#8a6420);color:#1a1108;border-color:#e7c97a;text-shadow:0 1px 0 rgba(255,240,200,.4)}
+:is(.app,body)[data-visual-style="true-medieval"] .logoMark{background:url(true-medieval/rose.svg) center/contain no-repeat;border-radius:50%;box-shadow:0 0 0 2px var(--tm-gold),0 0 12px rgba(231,201,122,.35)}
+:is(.app,body)[data-visual-style="true-medieval"] .logoText{color:var(--tm-gold-hi);letter-spacing:.06em}
+
+/* ---- книга записей: пергамент в дубовой раме с золотой нитью и уголками ---- */
+:is(.app,body)[data-visual-style="true-medieval"] :is(.left,.right){
+  background:url(true-medieval/corner.svg) left 3px top 3px/24px no-repeat,url(true-medieval/corner-tr.svg) right 3px top 3px/24px no-repeat,url(true-medieval/parchment.svg) 0 0/420px,var(--skin-panel);
+  border:6px solid var(--tm-oak);box-shadow:inset 0 0 0 1px var(--tm-gold),inset 0 0 0 3px rgba(43,29,18,.55),inset 0 0 26px rgba(110,70,25,.2)}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.section h3,.actionGroupTitle){font-family:var(--skin-head);font-size:13px;letter-spacing:.04em;text-transform:none;color:var(--tm-madder)}
+/* буквица: первая буква заголовка раздела — киноварью, как в рукописях */
+:is(.app,body)[data-visual-style="true-medieval"] :is(.infoFoldHead span,.secHead strong,.section h3)::first-letter{color:var(--tm-madder);font-family:var(--skin-head);font-size:1.25em}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.customizerSection,.infoFold,.secBlock,.card,.listItem){background:rgba(255,246,222,.32);border-color:rgba(60,35,15,.35);box-shadow:inset 0 0 18px rgba(120,80,30,.12)}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.left,.right) :is(.btn,.toolBtn,.scopeBtn,.actionBtn,.secTool,.pageTool,.pill){background:rgba(255,246,222,.45);border-color:rgba(60,35,15,.45)}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.left,.right) :is(.btn.primary,.actionBtn.primary,.scopeBtn.active,.toolBtn.active){background:var(--tm-madder);color:#f6ead0;border-color:#4a140a;box-shadow:inset 0 0 0 1px rgba(231,201,122,.55)}
+
+/* ---- рабочая область: спокойный тёмный камень и тонкий фриз (0.25.5: статуи, витражи и розетка убраны — было пёстро) ---- */
+:is(.app,body)[data-visual-style="true-medieval"] .main{background:url(true-medieval/frieze.svg) 0 0/120px 34px repeat-x,radial-gradient(ellipse at 50% 45%,transparent 40%,rgba(0,0,0,.5) 100%),url(true-medieval/stone.svg) 0 0/360px 180px,var(--skin-bg)}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.cardTitle h2,.scopeTitle){color:var(--tm-madder)}
+:is(.app,body)[data-visual-style="true-medieval"] #modalTitle{color:var(--tm-madder)} /* an id inside :is() would outweigh the rules next to it (lesson 0.24) */
+:is(.app,body)[data-visual-style="true-medieval"] .main .galaxyToolbarTitle strong{color:var(--tm-gold-hi)}
+:is(.app,body)[data-visual-style="true-medieval"] #outlineView .outlineTitle{color:var(--tm-gold-hi)}
+
+/* ---- окна: свиток с печатью ---- */
+:is(.app,body)[data-visual-style="true-medieval"] .modal{background:url(true-medieval/parchment.svg) 0 0/420px,var(--skin-panel);border:3px double var(--tm-madder);box-shadow:0 0 0 6px var(--tm-oak),0 0 0 7px var(--tm-gold),0 24px 60px rgba(0,0,0,.6)}
+:is(.app,body)[data-visual-style="true-medieval"] .modal .modalHead{padding-left:58px;background:url(true-medieval/seal.svg) 12px center/38px no-repeat}
+:is(.app,body)[data-visual-style="true-medieval"] .modal .modalFoot{background:url(true-medieval/tracery.svg) left bottom/56px 26px repeat-x}
+:is(.app,body)[data-visual-style="true-medieval"] :is(.styleMenu,.contextMenu,.workspacePop,.searchResults){background:url(true-medieval/parchment.svg) 0 0/420px,var(--skin-panel);border:2px solid var(--tm-oak);box-shadow:inset 0 0 0 1px var(--tm-gold),0 18px 40px rgba(0,0,0,.55)}
+
+/* ---- доска Detective: листы пергамента на дубовом столе ---- */
+:is(.app,body)[data-visual-style="true-medieval"] .detectiveView{--note:#efe0bd;--folder:#e4cc98;--case:#d8b97c;--board-a:#2b1d12;--board-b:#1a1109;--board-frame:#2b1d12;--board-frame2:#b8862b;--board-pattern:url(true-medieval/wood.svg) var(--board-bg-x,0) var(--board-bg-y,0)/400px 80px}
+
+/* ---- Outline и Tree (0.25.5): тот же камень, что в Graph, а не голый тёмный фон ---- */
+:is(.app,body)[data-visual-style="true-medieval"] .treeView{background:transparent}
+:is(.app,body)[data-visual-style="true-medieval"] #outlineView{background:linear-gradient(180deg,rgba(27,19,12,.86),rgba(27,19,12,.72))}
