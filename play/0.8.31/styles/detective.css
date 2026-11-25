@@ -1,0 +1,190 @@
+/* Universe Graph — Detective: детективная доска (0.17.5).
+   С 0.23.5 у каждого стиля свой «материал» доски (styles/detective-skins.css): поверхность, бумага, булавки, нитки, шрифты.
+   Здесь — общая форма и значения по умолчанию (пробковая доска). Селекторы через #detectiveView, чтобы общие правила
+   скинов для button/div не перекрашивали бумагу. */
+
+.detectiveView{position:absolute;inset:0;display:none;overflow:hidden;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;
+  --board-a:#c99a64;--board-b:#a2703c;--board-dark:rgba(84,50,20,.26);--board-light:rgba(255,236,200,.2);--board-frame:#4e3019;--board-frame2:#2e1b0d}
+.main.detectiveMode .detectiveView{display:block}
+.main.detectiveMode .canvasWrap,.main.detectiveMode .stars,.main.detectiveMode .vignette{display:none}
+.main.detectiveMode .hud{z-index:12}
+.detectiveView.panning{cursor:grabbing}
+
+/* Поверхность: пробка из градиентов, едет вместе с панорамой; деревянная рамка по краю. */
+#detectiveView .boardSurface{position:absolute;inset:0;pointer-events:none;overflow:hidden;isolation:isolate;
+  background:var(--board-pattern,linear-gradient(transparent,transparent)),
+    radial-gradient(ellipse at 50% 40%,var(--board-a),var(--board-b) 85%)}
+#detectiveView .boardSurface::after{content:"";position:absolute;inset:0;z-index:7;
+  box-shadow:inset 0 0 0 10px var(--board-frame),inset 0 0 0 12px var(--board-frame2),inset 0 0 150px rgba(20,10,0,.5)}
+/* One bounded layer for all moving motifs. Their paint order is unchanged. */
+#detectiveView .boardSurfaceTexture{position:absolute;inset:calc(-1 * var(--board-texture-pad));will-change:transform;
+  background:
+    radial-gradient(circle at 20% 30%,var(--board-dark) 0 1.2px,transparent 1.7px) var(--tile-x0,0px) var(--tile-y0,0px)/23px 19px,
+    radial-gradient(circle at 70% 60%,var(--board-light) 0 1px,transparent 1.5px) var(--tile-x1,0px) var(--tile-y1,0px)/17px 29px,
+    radial-gradient(circle at 40% 80%,var(--board-dark) 0 1.7px,transparent 2.2px) var(--tile-x2,0px) var(--tile-y2,0px)/37px 31px,
+    radial-gradient(circle at 85% 15%,var(--board-light) 0 1.4px,transparent 1.9px) var(--tile-x3,0px) var(--tile-y3,0px)/41px 43px,
+    radial-gradient(ellipse 9px 6px at 30% 40%,var(--board-dark),transparent 70%) var(--tile-x4,0px) var(--tile-y4,0px)/71px 53px,
+    radial-gradient(ellipse 7px 10px at 60% 70%,var(--board-light),transparent 70%) var(--tile-x5,0px) var(--tile-y5,0px)/59px 83px}
+
+#detectiveView .boardStage{position:absolute;left:50%;top:50%;width:0;height:0;transform-origin:0 0}
+
+/* ——— Бумажка ——— */
+#detectiveView .boardCard{position:absolute;box-sizing:border-box;margin-top:-12px;padding:22px 14px 12px;transform:translate(-50%,0) rotate(var(--rot,0deg));transform-origin:50% 12px;
+  --board-paper-fill:var(--paper,#fdfbf4);background:var(--board-paper-fill);color:var(--paper-ink,#2a2620);border-radius:var(--paper-radius,2px);border:var(--paper-border,0 solid transparent);text-align:left;cursor:grab;
+  font-family:var(--paper-font,Georgia,"Times New Roman",serif);font-size:12px;line-height:1.35;
+  box-shadow:var(--paper-shadow,0 1px 1px rgba(0,0,0,.22),0 8px 16px rgba(30,15,0,.34));transition:box-shadow .15s ease,opacity .15s ease}
+/* 0.28.2: the index-card line stood at a fixed 44 px and cut the name (the «strange yellow line» of High Fantasy, screenshot 9);
+   now it is drawn under the type label, above the name, whatever the size of the card */
+#detectiveView .boardCard.k-card{background-image:repeating-linear-gradient(to bottom,transparent 0 19px,var(--paper-line,rgba(84,124,196,.2)) 19px 20px);background-position:0 45px}
+#detectiveView .boardCard.k-card .boardKind{padding-bottom:4px;margin-bottom:5px;border-bottom:1px solid var(--paper-margin,rgba(206,72,72,.45))}
+#detectiveView .boardCard.k-note{--board-paper-fill:var(--note,#f9e776);color:var(--note-ink,var(--paper-ink,#2a2620));background-image:linear-gradient(170deg,rgba(255,255,255,.35),transparent 40%);box-shadow:0 1px 1px rgba(0,0,0,.2),2px 10px 14px rgba(30,15,0,.3)}
+#detectiveView .boardCard.k-photo{--board-paper-fill:var(--paper,#fbfaf6);padding:22px 10px 12px}
+#detectiveView .boardCard.k-folder,#detectiveView .boardCard.k-case{--board-paper-fill:var(--folder,#e8cd96);color:var(--folder-ink,var(--paper-ink,#2a2620));background-image:linear-gradient(180deg,rgba(255,255,255,.18),transparent 50%);border-radius:0 4px 4px 4px}
+#detectiveView .boardCard.k-case{--board-paper-fill:var(--case,#e2c084);padding:26px 18px 16px}
+
+/* Mix the base pigment. The existing paper texture and foreground stay layered above it. */
+#detectiveView .boardCard.statusTint{--board-tinted-fill:color-mix(in srgb,var(--board-paper-fill) 84%,var(--status-tint));background-color:var(--board-tinted-fill)}
+
+#detectiveView .boardPin{position:absolute;left:50%;top:var(--pin-top,3px);width:var(--pin-size,18px);height:var(--pin-size,18px);margin-left:calc(var(--pin-size,18px) / -2);border-radius:var(--pin-radius,50%);z-index:3;
+  background:var(--pin-bg,radial-gradient(circle at 34% 30%,rgba(255,255,255,.85) 0 2px,var(--accent,#c62f2f) 3.2px,color-mix(in srgb,var(--accent,#c62f2f) 55%,#000) 100%));
+  box-shadow:var(--pin-shadow,2px 4px 3px rgba(0,0,0,.45));border:var(--pin-border,0 solid transparent)}
+#detectiveView .boardFolderTab{position:absolute;left:-1px;top:-17px;padding:2px 12px 1px;border-radius:5px 5px 0 0;background:inherit;background-color:var(--folder,#e8cd96);color:var(--folder-tab-ink,#5a4220);font:700 10px/14px var(--paper-mono,"Courier New",monospace);letter-spacing:.12em}
+#detectiveView .k-case .boardFolderTab{background-color:var(--case,#e2c084);color:var(--case-tab-ink,#8a1f1f)}
+
+#detectiveView .boardPhoto{width:100%;height:150px;margin-bottom:8px;background:#2b2b2b;display:grid;place-items:center;overflow:hidden;box-shadow:inset 0 0 0 1px rgba(0,0,0,.2)}
+#detectiveView .boardPhoto img{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.85) contrast(1.03);pointer-events:none}
+#detectiveView .boardPhoto span{color:#d8d2c4;font:11px "Courier New",monospace}
+
+#detectiveView .boardKind{display:flex;align-items:center;gap:5px;margin:0 0 3px;color:var(--paper-kind,#5b5143);font:700 10px/1.2 var(--paper-mono,"Courier New",monospace);letter-spacing:.08em;text-transform:uppercase;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+#detectiveView .boardKind i{font-style:normal;font-size:12px;letter-spacing:0}
+#detectiveView .boardName{color:var(--paper-name,#16264a);font-family:var(--paper-hand,"Segoe Print","Ink Free","Bradley Hand","Comic Sans MS",cursive);font-size:17px;font-weight:700;line-height:1.18;overflow-wrap:anywhere}
+#detectiveView .k-case .boardName{font-size:22px;color:var(--case-name,#3a1d0c)}
+#detectiveView .boardText{margin-top:5px;color:var(--paper-text,#3b352b);font-size:11.5px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+#detectiveView .boardInside{margin-top:6px;color:var(--paper-kind,#5f4a2a);font:700 10px var(--paper-mono,"Courier New",monospace);letter-spacing:.04em}
+#detectiveView .boardChips{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}
+#detectiveView .boardChips .statusChip{color:#2a2620;font-size:10px;line-height:16px;background:color-mix(in srgb,var(--status) 20%,#fffdf6);border-color:color-mix(in srgb,var(--status) 70%,#000)}
+
+/* Штамп статуса («Мёртв», «Пропал»…) — как резиновая печать поверх бумажки. */
+#detectiveView .boardStamp{position:absolute;right:10px;bottom:26px;transform:rotate(-14deg);padding:1px 9px;border:2.5px solid color-mix(in srgb,var(--status) 70%,#5a0000);border-radius:5px;
+  color:color-mix(in srgb,var(--status) 65%,#4a0000);font:800 15px/1.2 "Courier New",monospace;letter-spacing:.12em;text-transform:uppercase;opacity:.82;pointer-events:none;background:rgba(255,250,240,.35)}
+
+/* Состояния */
+#detectiveView .boardCard.gray{filter:grayscale(1)}
+/* «Полупрозрачный» статус на доске — выцветшая бумага с пунктиром: доска сквозь бумагу не просвечивает, текст читается. */
+#detectiveView .boardCard.fade{filter:saturate(.4) contrast(.9);outline:1.5px dashed rgba(60,40,20,.5);outline-offset:-6px}
+#detectiveView .boardCard.fade.gray{filter:grayscale(1) contrast(.9)}
+#detectiveView .boardCard[style*="--glow"]{box-shadow:0 0 0 2px var(--glow),0 0 22px var(--glow),0 8px 16px rgba(30,15,0,.34)}
+#detectiveView .boardCard.selected{box-shadow:0 0 0 3px #ffcf3f,0 0 18px rgba(255,207,63,.55),0 14px 26px rgba(20,10,0,.45);z-index:20}
+#detectiveView .boardCard.traceEnd{box-shadow:0 0 0 3px #3fd2ff,0 14px 26px rgba(20,10,0,.45)}
+#detectiveView .boardCard.dim{opacity:.32}
+#detectiveView .boardCard.dragging{cursor:grabbing;z-index:60;transition:none;box-shadow:0 0 0 3px #ffcf3f,0 22px 34px rgba(20,10,0,.5)}
+#detectiveView .boardCard.dragging .boardPin{box-shadow:4px 8px 5px rgba(0,0,0,.4)}
+
+/* ——— Нитки ——— */
+#detectiveView .boardStrings,#detectiveView .boardStringHits{position:absolute;left:0;top:0;width:1px;height:1px;overflow:visible;z-index:30;pointer-events:none}
+#detectiveView .boardStringHits{z-index:31}
+/* 0.28.2: threads under the cards — the text of every card stays readable; the selected record's threads over the other cards */
+#detectiveView .boardStrings,#detectiveView .boardStringHits{z-index:-1}
+#detectiveView .udBoardInk{position:absolute;z-index:-1;pointer-events:none;transform-origin:0 0}
+#detectiveView .boardStage.udRasterInk>.boardStrings:not(.boardStringsTop){display:none}
+#detectiveView .boardStrings.boardStringsTop{z-index:15}
+#detectiveView .boardStringHits.boardStringHitsTop{z-index:16}
+#detectiveView .boardString,#detectiveView .boardStringShadow{fill:none;stroke-linecap:round}
+#detectiveView .boardStringShadow{stroke:var(--string-shadow,rgba(0,0,0,.28))}
+#detectiveView .boardString{opacity:.92;filter:var(--string-filter,none)}
+#detectiveView .boardString:not(.contain){stroke-dasharray:var(--string-dash,none)}
+#detectiveView .boardString.selected{opacity:1;filter:drop-shadow(0 0 3px rgba(255,255,255,.8))}
+#detectiveView :is(.boardString,.boardStringArrow,.boardStringMotion).dim{opacity:.14}
+#detectiveView .boardStringMotion{fill:none;stroke-linecap:round;stroke-dasharray:.45 99.55;animation:boardThreadTravel var(--thread-duration) linear var(--thread-delay) infinite}
+#detectiveView .boardStringMotion.reverse{animation-direction:reverse}
+#detectiveView .boardStringMotion.comet{stroke-dasharray:1.2 98.8}
+#detectiveView .boardStringMotion.trail{stroke-dasharray:.8 99.2}
+#detectiveView .boardStringMotion.pulse{stroke-dasharray:3 97;stroke-dashoffset:-48.5;animation-name:boardThreadPulse}
+#detectiveView .boardStringMotion.spark{stroke-dasharray:.25 1 .25 98.5;animation:boardThreadTravel var(--thread-duration) linear var(--thread-delay) infinite,boardThreadPulse .23s ease-in-out infinite}
+@keyframes boardThreadTravel{from{stroke-dashoffset:0}to{stroke-dashoffset:-100}}
+@keyframes boardThreadPulse{0%,100%{opacity:.25}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){#detectiveView .boardStringMotion{display:none}}
+#detectiveView .boardStringHit{fill:none;stroke:transparent;stroke-width:var(--thread-hit,12px);pointer-events:stroke;cursor:pointer}
+#detectiveView .boardStringLabel{position:absolute;z-index:-1;transform:translate(-50%,-50%) rotate(-2deg);padding:2px 8px;width:max-content;max-width:230px;overflow-wrap:anywhere;text-align:center;pointer-events:none;
+  background:linear-gradient(var(--label-bg,#fffdf3),var(--label-bg,#fffdf3)),var(--skin-bg2,#fffdf3);
+  color:var(--label-ink,#2a2620);border:1px solid var(--label-border,rgba(0,0,0,.18));border-left:4px solid var(--string,#c62f2f);font:700 var(--thread-label-size,11px)/1.3 var(--paper-font,Georgia,serif);box-shadow:0 3px 6px rgba(0,0,0,.3)}
+/* Raised threads must paint under every visible caption they can cross. Selected and open papers still win. */
+#detectiveView:not(.bBig) .boardStage.boardRaisedThreads>.boardStringLabel{z-index:17}
+#detectiveView .boardStringLabel.hoverOnly:not(.threadHovered){display:none}
+#detectiveView .boardStringLabel.selected{transform:translate(-50%,-50%) rotate(0deg) scale(1.08)}
+
+/* ——— Табличка с кнопками ——— */
+#detectiveView .boardToolbar{position:absolute;left:50%;top:var(--board-toolbar-top,110px);transform:translateX(-50%);z-index:40;display:flex;flex-wrap:nowrap;justify-content:center;align-items:center;gap:6px;max-width:calc(100% - 40px);padding:6px 8px;
+  background:var(--tb-bg,linear-gradient(180deg,#5a3a20,#3e2713));border:1px solid var(--tb-border,#2a180a);border-radius:10px;box-shadow:0 8px 20px rgba(0,0,0,.4),inset 0 1px 0 rgba(255,230,190,.25);cursor:default}
+#detectiveView .boardToolbarTitle{display:flex;flex-direction:column;white-space:nowrap;padding:0 8px 0 4px;color:var(--tb-ink,#f7e9cf);line-height:1.15}
+#detectiveView .boardToolbarTitle strong{font:700 13px var(--paper-font,Georgia,serif);letter-spacing:.06em;color:var(--tb-ink,#f7e9cf)}
+#detectiveView .boardToolbarTitle span{font:11px var(--paper-mono,"Courier New",monospace);color:var(--tb-ink2,#e6d2ad)}
+#detectiveView .boardToolbar .btn{padding:5px 10px;border-radius:7px;border:1px solid var(--tb-btn-border,rgba(255,230,190,.35));background:var(--tb-btn,rgba(255,240,215,.12));color:var(--tb-ink,#fbefd8);font-family:var(--paper-font,Georgia,serif);font-size:12px;font-weight:600;line-height:1.2;white-space:nowrap;text-shadow:none;box-shadow:none;cursor:pointer}
+#detectiveView .boardToolbar .btn:hover{background:var(--tb-btn-hover,rgba(255,240,215,.24))}
+#detectiveView .boardToolbar .btn.active{background:var(--tb-active,#b8322f);border-color:var(--tb-active-border,#ff9a8c);color:var(--tb-active-ink,#fff)}
+
+/* 0.28.2: the note sat in the middle — right on the only card (the case of an empty board); now below it */
+#detectiveView .boardEmpty{position:absolute;left:50%;top:auto;bottom:56px;transform:translateX(-50%) rotate(-1.5deg);max-width:360px;padding:16px 18px;background:var(--note,#f9e776);color:var(--note-ink,#2a2620);font:16px/1.35 var(--paper-hand,"Segoe Print","Ink Free","Comic Sans MS",cursive);box-shadow:0 10px 18px rgba(30,15,0,.35);pointer-events:none}
+
+/* Поверхность, бумага, булавки и нитки под стили — в styles/detective-skins.css (0.23.5). */
+
+@media (max-width:1100px){#detectiveView .boardToolbar{flex-wrap:wrap}#detectiveView .boardToolbarTitle span{display:none}}
+
+/* ——— 0.23.6: дела на доске ——— */
+#detectiveView .boardCaseBar{display:flex;flex-wrap:wrap;gap:4px;margin-top:8px}
+#detectiveView .boardCaseBtn{border:1px solid color-mix(in srgb,var(--paper-ink,#2a2620) 30%,transparent);background:color-mix(in srgb,var(--paper-ink,#2a2620) 6%,transparent);color:inherit;border-radius:5px;padding:2px 7px;font:700 10px/1.5 var(--paper-mono,"Courier New",monospace);cursor:pointer}
+#detectiveView .boardCaseBtn:hover{background:color-mix(in srgb,var(--paper-ink,#2a2620) 14%,transparent)}
+#detectiveView .boardCaseBtn.on{background:color-mix(in srgb,var(--board-red,#c62f2f) 25%,transparent);border-color:var(--board-red,#c62f2f)}
+#detectiveView .boardFrom{margin:-1px 0 3px;color:var(--paper-kind,#5b5143);font:700 10px/1.3 var(--paper-mono,"Courier New",monospace)}
+/* Нитка «содержит» — у каждого стиля своя (скрепка, пунктир, лоза…). */
+#detectiveView .boardString.contain{stroke:var(--string-contain,#8d8f93);stroke-dasharray:var(--contain-dash,5 5);opacity:.85}
+.boardPinList{display:grid;gap:3px;max-height:calc(46vh / var(--zf,1));overflow:auto;margin-top:8px}
+.boardPinItem{width:100%;text-align:left;background:transparent;border:1px solid transparent;color:inherit}
+.udCompositionRow{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:6px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.udCompositionRow[hidden]{display:none}
+.udCompositionRow>div:first-child{min-width:0;flex:1 1 145px;overflow-wrap:anywhere}
+.udCompositionRow small{display:block;opacity:.75;margin-top:2px}
+.udCompositionActions{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;max-width:100%}
+#detectiveView .boardCard.nestTarget{outline:3px dashed var(--board-red,#c62f2f);outline-offset:6px}
+
+/* 0.23.8: издалека доска показывает меньше — как карта. «Далеко» (масштаб < 0,5): только название, крупнее (--bname),
+   без описания, кнопок дела, значков; «очень далеко» (< 0,2): ещё и без ярлыков и булавок — просто бумажки цвета типа. */
+#detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)) :is(.boardText,.boardCaseBar,.boardChips,.boardInside,.boardFrom,.boardKind,.boardStamp,.boardPhoto){display:none}
+#detectiveView.bFar :where(.boardCard:not(.boardMeasuringNear)) .boardName{font-size:calc(17px * var(--bname,1));line-height:1.05;overflow-wrap:anywhere}
+#detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)){box-shadow:none}
+#detectiveView.bTiny .boardCard:where(:not(.boardMeasuringNear)) :is(.boardFolderTab,.boardPin){display:none}
+#detectiveView.bTiny .boardStringLabel,#detectiveView.bFar .boardStringLabel{display:none}
+/* 0.23.8: большая доска (250+ бумажек) — без теней у ниток и бумажек: каждая тень — полная перерисовка доски при движении */
+#detectiveView.bBig .boardStringShadow{display:none}
+#detectiveView.bBig .boardCard{box-shadow:none;filter:none}
+#detectiveView.bBig .boardString{filter:none}
+/* 0.23.8: нитка при приближении не толще, чем на 100% (--bk = 1/масштаб, ставится, когда доска остановилась) */
+#detectiveView .boardStrings :is(.boardString,.boardStringShadow,.boardStringMotion){stroke-width:calc(var(--sw,2.4) * var(--bk,1) * 1px)}
+/* на большой доске нитки под бумажками и бледнее — читается текст; нитки выбранной бумажки — яркие и поверх */
+#detectiveView.bBig .boardStrings{z-index:-1}
+#detectiveView.bBig .boardString{opacity:.28}
+#detectiveView.bBig .boardString.mine,#detectiveView.bBig .boardString.selected{opacity:1}
+/* издалека выбранная бумажка видна рамкой цвета её типа */
+#detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).selected{outline:calc(3px * var(--bname,1)) solid var(--accent,#ffd15c);outline-offset:2px}
+/* 0.23.8: вложение понятно: под перетаскиваемой бумажкой цель показывает кольцо, которое сходится за 0,4 с, и подсказку */
+#detectiveView .boardCard.nestArming{outline:3px dashed var(--board-red,#c62f2f);outline-offset:6px;animation:boardNestFill .4s linear both}
+@keyframes boardNestFill{from{outline-offset:26px;outline-color:transparent}to{outline-offset:6px}}
+#detectiveView .boardCard:is(.nestArming,.nestTarget)::after{content:'Держите — положу внутрь · Shift — сразу';position:absolute;left:50%;bottom:calc(100% + 26px);transform:translateX(-50%) rotate(calc(-1 * var(--rot,0deg)));white-space:nowrap;padding:4px 10px;border-radius:999px;background:var(--board-red,#c62f2f);color:#fff;font:600 12px/1.3 system-ui,sans-serif;z-index:5;pointer-events:none;box-shadow:0 4px 12px rgba(0,0,0,.3)}
+#detectiveView .boardCard.nestTarget::after{content:'Отпустите — положу внутрь'}
+/* 0.23.8: уголок размера — виден при наведении и у выбранной бумажки; маленькая бумажка — только значок и название */
+#detectiveView .boardResize{position:absolute;right:-2px;bottom:-2px;width:18px;height:18px;cursor:nwse-resize;opacity:0;transition:opacity .12s;z-index:4;background:linear-gradient(135deg,transparent 0 45%,color-mix(in srgb,var(--paper-ink,#2a2620) 55%,transparent) 45% 52%,transparent 52% 64%,color-mix(in srgb,var(--paper-ink,#2a2620) 55%,transparent) 64% 71%,transparent 71%)}
+#detectiveView .boardCard:hover .boardResize,#detectiveView .boardCard.selected .boardResize,#detectiveView .boardCard.resizing .boardResize{opacity:.9}
+#detectiveView.bFar :where(.boardCard:not(.boardMeasuringNear)) .boardResize{display:none}
+#detectiveView .boardCard.small :is(.boardText,.boardCaseBar,.boardChips,.boardInside,.boardFrom,.boardStamp){display:none}
+#detectiveView .boardCard.small .boardKind{margin-bottom:1px}
+#detectiveView .boardCard.sized .boardText{-webkit-line-clamp:12}
+#detectiveView .boardCard.resizing{outline:2px dashed color-mix(in srgb,var(--paper-ink,#2a2620) 45%,transparent);outline-offset:3px}
+
+/* 0.28.3: colour of a paper — a small marker on the card (shown on the selected one and on hover) and a row of colours */
+#detectiveView .boardMarker{position:absolute;right:6px;top:4px;width:18px;height:18px;padding:0;border-radius:50%;border:1px solid rgba(40,30,20,.35);background:conic-gradient(#f9e776 0 25%,#f7bfd0 0 50%,#bcdcf6 0 75%,#c6e8b4 0);opacity:0;cursor:pointer;z-index:5;transition:opacity .12s;box-shadow:0 1px 2px rgba(0,0,0,.25)}
+#detectiveView .boardCard:hover .boardMarker,#detectiveView .boardCard.selected .boardMarker,#detectiveView .boardMarker:focus-visible{opacity:1}
+#detectiveView.bFar :where(.boardCard:not(.boardMeasuringNear)) .boardMarker{display:none}
+.paperRow{display:flex;align-items:center;gap:4px;margin:2px 6px 4px;padding-bottom:4px;border-bottom:1px solid rgba(127,127,127,.25)}
+.paperPop{position:fixed;z-index:3000;padding:6px 4px 2px;border-radius:10px;background:var(--skin-panel,#0b1222);color:var(--skin-text,#eaf3ff);border:1px solid var(--skin-border,rgba(150,170,220,.3));box-shadow:0 10px 26px rgba(0,0,0,.35)}
+.paperPop .paperRow{border-bottom:0;padding-bottom:2px}
+

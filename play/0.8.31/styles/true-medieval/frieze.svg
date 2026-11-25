@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="34" viewBox="0 0 120 34"><!-- True Medieval: painted fresco frieze with a vine (0.25.4) -->
+<rect width="120" height="34" fill="#6e1f16"/><rect y="0" width="120" height="3" fill="#c9a24a"/><rect y="31" width="120" height="3" fill="#c9a24a"/>
+<path d="M0 17 C15 5 30 5 45 17 S75 29 90 17 S110 7 120 17" fill="none" stroke="#e7c97a" stroke-width="2"/>
+<g fill="#4f7a3a" stroke="#e7c97a" stroke-width=".6"><path d="M22 9 q6 -6 10 0 q-5 4 -10 0z"/><path d="M68 25 q6 6 10 0 q-5 -4 -10 0z"/><path d="M100 10 q5 -6 9 0 q-5 4 -9 0z"/></g>
+<g fill="#e7c97a"><circle cx="45" cy="17" r="2.4"/><circle cx="90" cy="17" r="2.4"/><circle cx="7" cy="12" r="1.4"/><circle cx="57" cy="23" r="1.4"/></g>
+</svg>

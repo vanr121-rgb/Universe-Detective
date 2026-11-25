@@ -1,0 +1,219 @@
+/* Universe Graph — общий слой оформления по палитре стиля (0.25.1).
+   Стиль с tokens:true в VISUAL_STYLES не пишет сотни своих правил: все экраны одеваются здесь по его переменным.
+   --skin-bg / --skin-bg2      — фон рабочей области и холста;
+   --skin-panel / --skin-panel2 — панели и всплывающие окна (panel2 — «поднятые» карточки и поля);
+   --skin-text / --skin-muted  — текст на панелях; --skin-canvas-text — текст прямо на фоне (подписи на холсте);
+   --skin-accent / --skin-accent2, --skin-on (текст на акценте), --skin-border / --skin-border-strong;
+   --skin-head / --skin-font   — шрифты заголовков и текста; --skin-radius — скругление.
+   Своё лицо стиля (узор фона, бумага на доске, рамки) — короткий блок в конце, по одному на стиль. */
+
+:is(.app,body)[data-skin-kind="tokens"]{color:var(--skin-text)}
+.app[data-skin-kind="tokens"]{background:var(--skin-bg)}
+:is(.app,body)[data-skin-kind="tokens"] .main{background:var(--skin-bg)}
+/* the work area: Classic draws its own night sky on .canvasWrap, .stars and .vignette — a token style shows its own background */
+:is(.app,body)[data-skin-kind="tokens"] .canvasWrap{background:transparent}
+:is(.app,body)[data-skin-kind="tokens"]:not([data-visual-style^="space"]) :is(.stars,.vignette){display:none}
+
+/* ---- поверхности ---- */
+:is(.app,body)[data-skin-kind="tokens"] .topbar{background:var(--skin-panel2);color:var(--skin-text);border-bottom:1px solid var(--skin-border-strong);box-shadow:none;backdrop-filter:none}
+:is(.app,body)[data-skin-kind="tokens"] :is(.left,.right){background:var(--skin-panel);color:var(--skin-text);border-color:var(--skin-border);backdrop-filter:none}
+:is(.app,body)[data-skin-kind="tokens"] .section{border-color:var(--skin-border);background:transparent}
+:is(.app,body)[data-skin-kind="tokens"] .section::before{display:none}
+:is(.app,body)[data-skin-kind="tokens"] :is(.section h3,.actionGroupTitle,.workspaceGroupTitle,.outlineKicker,.secTitle small){color:var(--skin-muted)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.left,.right,.modal,.searchResults,.workspacePop,.contextMenu) :is(small,.infoModeLabel,.searchGroup){color:var(--skin-muted)}
+:is(.app,body)[data-skin-kind="tokens"] .mehStatus span{background:var(--skin-panel2);color:var(--skin-muted);border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.subtle,.muted,.scopeMeta,.breadcrumbs,.crumb,.stat span,.searchItem small,.workspaceItem small,.workspacePopHead small,.listMeta small,.cardTitle .subtle){color:var(--skin-muted)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.scopeTitle,.crumb:last-child,.stat,.stat b,.cardTitle h2,.logoText){color:var(--skin-text)}
+
+/* ---- кнопки ---- */
+:is(.app,body)[data-skin-kind="tokens"] :is(.btn,.iconBtn,.toolBtn,.scopeBtn,.modeBtn,.viewBtn,.topTool,.pill,.secTool,.actionBtn,.pageTool,.scaleBtn){
+  background:color-mix(in srgb,var(--skin-text) 5%,var(--skin-panel2));color:var(--skin-text);border-color:var(--skin-border-strong);border-radius:var(--skin-radius,8px);box-shadow:none;text-shadow:none}
+:is(.app,body)[data-skin-kind="tokens"] :is(.btn,.iconBtn,.toolBtn,.scopeBtn,.modeBtn,.viewBtn,.topTool,.secTool,.actionBtn,.pageTool):hover{border-color:var(--skin-accent);background:color-mix(in srgb,var(--skin-accent) 12%,var(--skin-panel2))}
+:is(.app,body)[data-skin-kind="tokens"] :is(.btn.primary,.actionBtn.primary,.modeBtn.active,.viewBtn.active,.scopeBtn.active,.toolBtn.active,.scaleBtn.active,.topTool.primary,.topTool.newEntity){
+  background:var(--skin-accent);color:var(--skin-on);border-color:var(--skin-accent)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.btn.primary,.actionBtn.primary,.modeBtn.active,.viewBtn.active,.scopeBtn.active,.toolBtn.active) :is(small,span,b,strong){color:inherit}
+:is(.app,body)[data-skin-kind="tokens"] :is(.toolBtn small,.actionBtn small,.scopeBtn span){color:var(--skin-muted)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.toolIcon,.actionIcon){background:color-mix(in srgb,var(--skin-accent) 14%,transparent);color:var(--skin-text)}
+:is(.app,body)[data-skin-kind="tokens"] .btn.danger{color:var(--skin-danger,#c0392b);border-color:color-mix(in srgb,var(--skin-danger,#c0392b) 60%,transparent);background:transparent}
+:is(.app,body)[data-skin-kind="tokens"] :is(.modeBar,.viewBar,.zoomCluster){background:var(--skin-panel2);border-color:var(--skin-border-strong);box-shadow:none;backdrop-filter:none}
+:is(.app,body)[data-skin-kind="tokens"] .sideRail,:is(.app,body)[data-skin-kind="tokens"] .topRail{background:var(--skin-panel2);color:var(--skin-text);border-color:var(--skin-border-strong)}
+
+/* ---- поля ввода ---- */
+:is(.app,body)[data-skin-kind="tokens"] :is(.form input,.form select,.form textarea,.topsearch input,input[type="text"],input[type="search"],input[type="number"],select,textarea){
+  background:var(--skin-input,var(--skin-panel2));color:var(--skin-text);border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] :is(input,textarea)::placeholder{color:var(--skin-muted);opacity:1}
+:is(.app,body)[data-skin-kind="tokens"] :is(.form label,.filter label){color:var(--skin-muted)}
+
+/* ---- окна, меню, всплывающее ---- */
+:is(.app,body)[data-skin-kind="tokens"] .modalBack{background:color-mix(in srgb,var(--skin-bg) 70%,transparent)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.modal,.contextMenu,.styleMenu,.workspacePop,.searchResults,.toast,.linkPicker,#linkPicker){background:var(--skin-panel);color:var(--skin-text);border-color:var(--skin-border-strong);backdrop-filter:none}
+:is(.app,body)[data-skin-kind="tokens"] :is(.modalHead,.modalFoot){border-color:var(--skin-border);background:transparent}
+:is(.app,body)[data-skin-kind="tokens"] :is(.contextMenu button,.styleMenu button,.searchItem,.workspaceItem){color:var(--skin-text);background:transparent}
+:is(.app,body)[data-skin-kind="tokens"] :is(.contextMenu button:hover,.styleMenu button:hover,.searchItem:hover,.searchItem.active,.workspaceItem:hover){background:color-mix(in srgb,var(--skin-accent) 14%,transparent)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.styleMenu button.active,.workspaceItem.active){background:color-mix(in srgb,var(--skin-accent) 22%,transparent);color:var(--skin-text)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.customizerSection,.infoFold,.secBlock,.card,.listItem){background:color-mix(in srgb,var(--skin-text) 3%,var(--skin-panel2));border-color:var(--skin-border)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.customizerSection h4,.infoFoldHead,.secHead){color:var(--skin-text)}
+:is(.app,body)[data-skin-kind="tokens"] .infoFoldHead span{color:var(--skin-text)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.infoFoldHead b,.infoFoldHead i){color:var(--skin-muted)}
+:is(.app,body)[data-skin-kind="tokens"] .infoFoldHead:hover{background:color-mix(in srgb,var(--skin-accent) 8%,transparent)}
+
+/* ---- метки, чипы ---- */
+:is(.app,body)[data-skin-kind="tokens"] :is(.tag,.badge,.tagChip,.scopeChip,.chip,.statusChip){background:color-mix(in srgb,var(--skin-text) 6%,transparent);color:var(--skin-text);border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] .badge{color:var(--skin-muted)}
+
+/* ---- подписи прямо на фоне рабочей области ---- */
+:is(.app,body)[data-skin-kind="tokens"] .pill strong{color:var(--skin-text)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.hint,.dragHint,.contextBar .pill,.hud>.pill){background:var(--skin-panel2);color:var(--skin-text);border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] .miniMap{background:var(--skin-panel2);border-color:var(--skin-border-strong)}
+
+/* ---- Outline ---- */
+:is(.app,body)[data-skin-kind="tokens"] .outlineView{background:var(--skin-bg)}
+:is(.app,body)[data-skin-kind="tokens"] .outlineInner{color:var(--skin-canvas-text)}
+:is(.app,body)[data-skin-kind="tokens"] .outlineNode{color:var(--skin-canvas-text);border-bottom-color:var(--skin-border)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.outlineNode:hover,.outlineNode.selected){background:color-mix(in srgb,var(--skin-accent) 12%,transparent);border-color:color-mix(in srgb,var(--skin-accent) 45%,transparent)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.outlineName,.outlineTitle){color:var(--skin-canvas-text)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.outlineType,.outlineHint,.outlineToggle,.outlineView .outlineKicker){color:var(--skin-canvas-muted)}
+:is(.app,body)[data-skin-kind="tokens"] #outlineMeta{color:var(--skin-canvas-muted)} /* separate: an id inside :is() would make the whole list stronger than the chip rule below */
+:is(.app,body)[data-skin-kind="tokens"] :is(.outlineChip,.outlineRelChip,.outlineLegendItem){background:var(--skin-panel2);color:var(--skin-text);border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] .outlineIcon{background:var(--skin-panel2);color:var(--skin-text)}
+
+/* the hint above the list stands on its own little card */
+:is(.app,body)[data-skin-kind="tokens"] #outlineView .outlineHint{background:var(--skin-panel2)!important;color:var(--skin-muted);border-color:var(--skin-border-strong)}
+
+/* «уже есть на странице»: an unavailable section is shown with a dashed frame, its words stay readable (half transparency made them 2.4:1) */
+:is(.app,body)[data-skin-kind="tokens"] .secPick[disabled]{opacity:1;border-style:dashed;background:transparent}
+:is(.app,body)[data-skin-kind="tokens"] .secPick[disabled] :is(b,small,.secPickIcon){color:var(--skin-muted)}
+
+/* ---- Tree ---- */
+:is(.app,body)[data-skin-kind="tokens"] .treeView{background:var(--skin-bg)}
+:is(.app,body)[data-skin-kind="tokens"] .treeNode{background:var(--skin-panel2);color:var(--skin-text);border-color:var(--skin-border-strong);box-shadow:0 8px 20px color-mix(in srgb,var(--skin-bg) 60%,transparent);filter:none}
+:is(.app,body)[data-skin-kind="tokens"] .treeNode.isSelected{border-color:var(--skin-accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--skin-accent) 40%,transparent)}
+:is(.app,body)[data-skin-kind="tokens"] .treeNodeName{color:var(--skin-text)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.treeNodeType,.treeHint){color:var(--skin-muted)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.treeChip,.treeRelChip){background:color-mix(in srgb,var(--skin-text) 5%,transparent);color:var(--skin-text);border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.treeNodeIcon,.treeNodeToggle){background:var(--skin-panel);color:var(--skin-text);border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] .treeConnector{stroke:var(--skin-border-strong)}
+
+/* ---- Galaxy ---- */
+:is(.app,body)[data-skin-kind="tokens"] .galaxyView{background:radial-gradient(circle at 50% 45%,var(--skin-bg2),var(--skin-bg) 70%)}
+:is(.app,body)[data-skin-kind="tokens"] .galaxyName{fill:var(--skin-canvas-text);stroke:var(--skin-bg);paint-order:stroke}
+:is(.app,body)[data-skin-kind="tokens"] .galaxyType{fill:var(--skin-canvas-muted);stroke:var(--skin-bg);paint-order:stroke} /* 0.25.5: the type line kept the dark outline of the night sky — on a light sky it became a black smear */
+:is(.app,body)[data-skin-kind="tokens"] :is(.galaxyOrbit,.galaxyOrbitInner){stroke:var(--skin-canvas-muted)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.galaxyLegend,.galaxyStatus){background:var(--skin-panel2);color:var(--skin-text);border-color:var(--skin-border-strong)}
+
+/* ---- Detective: доска из палитры стиля (своя бумага — в блоке стиля) ---- */
+:is(.app,body)[data-skin-kind="tokens"] .detectiveView{
+  --string-contain:var(--skin-canvas-muted);--contain-dash:6 5;
+  --board-a:var(--skin-bg2);--board-b:var(--skin-bg);--board-dark:rgba(0,0,0,.18);--board-light:color-mix(in srgb,var(--skin-canvas-text) 6%,transparent);
+  --board-frame:var(--skin-border-strong);--board-frame2:var(--skin-accent);
+  --board-pattern:linear-gradient(color-mix(in srgb,var(--skin-canvas-text) 6%,transparent) 1px,transparent 1px) var(--board-bg-x,0) var(--board-bg-y,0)/48px 48px,linear-gradient(90deg,color-mix(in srgb,var(--skin-canvas-text) 6%,transparent) 1px,transparent 1px) var(--board-bg-x,0) var(--board-bg-y,0)/48px 48px;
+  --paper:var(--skin-paper,#fbfaf6);--paper-ink:var(--skin-paper-ink,#1d1d1d);--paper-text:var(--skin-paper-ink,#1d1d1d);--paper-name:var(--skin-paper-name,var(--skin-paper-ink,#1d1d1d));--paper-kind:var(--skin-paper-kind,#4a4a4a);
+  --paper-line:transparent;--paper-margin:transparent;--paper-font:var(--skin-font);--paper-hand:var(--skin-head);--paper-mono:var(--skin-font);
+  --note:color-mix(in srgb,var(--skin-accent2) 18%,var(--skin-paper,#fbfaf6));--folder:color-mix(in srgb,var(--skin-accent) 14%,var(--skin-paper,#fbfaf6));--case:color-mix(in srgb,var(--skin-accent) 24%,var(--skin-paper,#fbfaf6));
+  --folder-tab-ink:var(--skin-paper-ink,#1d1d1d);--case-tab-ink:var(--skin-paper-ink,#1d1d1d);--case-name:var(--skin-paper-name,var(--skin-paper-ink,#1d1d1d));
+  --pin-bg:radial-gradient(circle at 35% 30%,#fff 0 2px,var(--skin-accent) 3.5px,color-mix(in srgb,var(--skin-accent) 50%,#000) 100%);
+  --board-red:var(--skin-accent);--string-shadow:rgba(0,0,0,.35);--string-filter:none;
+  --label-bg:var(--skin-panel2);--label-ink:var(--skin-text);--label-border:var(--skin-border-strong)}
+
+/* ---- Table, Kanban ---- */
+:is(.app,body)[data-skin-kind="tokens"] :is(.tvBar,.kbCol){border-color:var(--skin-border-strong)}
+:is(.app,body)[data-skin-kind="tokens"] :is(.kbCard,.tvTable td,.tvTable th){border-color:var(--skin-border)}
+:is(.app,body)[data-skin-kind="tokens"] .kbCard{background:var(--skin-panel2);color:var(--skin-text)}
+
+/* filters that are «on» by default (importance levels I–V, the relation lines switch) are outlined, not filled —
+   five filled accent chips side by side shouted louder than the view that is actually chosen */
+:is(.app,body)[data-skin-kind="tokens"] .viewBar>:is(.relationToggle.active,.tierBar .tierChip.active){background:color-mix(in srgb,var(--skin-accent) 16%,transparent);color:var(--skin-text);border-color:color-mix(in srgb,var(--skin-accent) 55%,transparent)}
+:is(.app,body)[data-skin-kind="tokens"] .viewBar .tierBar .tierChip.active{background:color-mix(in srgb,var(--skin-accent) 16%,transparent);color:var(--skin-text);border-color:color-mix(in srgb,var(--skin-accent) 55%,transparent)}
+
+/* ================== Своё лицо каждого стиля ================== */
+
+/* Space New — туманность: фиолетовые облака и звёздная пыль за рабочей областью, золотые акценты. */
+:is(.app,body)[data-visual-style="space-new"] .main{background:
+  radial-gradient(1px 1px at 12% 18%,#fff8,transparent 60%),radial-gradient(1px 1px at 68% 32%,#fff9,transparent 60%),radial-gradient(1.5px 1.5px at 38% 74%,#ffe9a8aa,transparent 60%),radial-gradient(1px 1px at 86% 82%,#fff7,transparent 60%),
+  radial-gradient(60% 50% at 30% 30%,#3a1d7a66,transparent 70%),radial-gradient(50% 45% at 75% 70%,#5a1f6a55,transparent 70%),var(--skin-bg)}
+
+/* Parchment — бумага с волокнами, чернильные рамки, заголовки от руки. */
+:is(.app,body)[data-visual-style="parchment"] .main{background:radial-gradient(ellipse at 50% 40%,transparent 55%,rgba(120,90,40,.16) 100%),repeating-linear-gradient(8deg,rgba(120,90,40,.035) 0 1px,transparent 1px 5px),var(--skin-bg)}
+:is(.app,body)[data-visual-style="parchment"] :is(.left,.right){background:linear-gradient(180deg,rgba(255,250,236,.6),transparent 30%),var(--skin-panel)}
+:is(.app,body)[data-visual-style="parchment"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent)}
+
+/* Minimal — ни теней, ни узоров; тонкие линии и одна оранжевая искра. */
+:is(.app,body)[data-visual-style="minimal"] *{box-shadow:none!important;text-shadow:none!important}
+:is(.app,body)[data-visual-style="minimal"] :is(.viewBtn.active,.modeBtn.active){box-shadow:inset 0 -2px 0 var(--skin-accent2)!important}
+:is(.app,body)[data-visual-style="minimal"] .logoMark{background:var(--skin-accent2);border-radius:50%}
+
+/* High Contrast — толстые жёлтые рамки фокуса и выбранного, подчёркнутые ссылки. */
+:is(.app,body)[data-visual-style="high-contrast"] :is(.btn,.iconBtn,.toolBtn,.scopeBtn,.modeBtn,.viewBtn,.topTool,.pill,.actionBtn){border-width:2px}
+:is(.app,body)[data-visual-style="high-contrast"] :focus-visible{outline:3px solid var(--skin-accent)!important;outline-offset:2px}
+:is(.app,body)[data-visual-style="high-contrast"] :is(.linkBtn,a){text-decoration:underline;color:var(--skin-accent)}
+:is(.app,body)[data-visual-style="high-contrast"] :is(.left,.right,.topbar){border-color:var(--skin-accent)}
+
+/* Noir — дождь за окном (наискосок), листы машинописи на графитовом фоне, красная печать. */
+:is(.app,body)[data-visual-style="noir"] .main{background:repeating-linear-gradient(105deg,rgba(255,255,255,.035) 0 1px,transparent 1px 9px),radial-gradient(ellipse at 50% 30%,#3a3a37,transparent 70%),var(--skin-bg)}
+:is(.app,body)[data-visual-style="noir"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){letter-spacing:.01em}
+:is(.app,body)[data-visual-style="noir"] .detectiveView{--paper-font:'PT Mono',ui-monospace,monospace;--paper-mono:'PT Mono',ui-monospace,monospace}
+:is(.app,body)[data-visual-style="noir"] .logoMark{background:radial-gradient(circle,#fff 0 18%,var(--skin-accent) 20% 46%,transparent 48%),#1c1c1a}
+
+/* boards: folders and case files of the style's own paper (a tint of the accent made Noir's sheets pink) */
+:is(.app,body)[data-visual-style="noir"] .detectiveView{--note:#f7f5ee;--folder:#e6e3d9;--case:#d8d4c8}
+:is(.app,body)[data-visual-style="parchment"] .detectiveView{--note:#fbf3df;--folder:#f1e4c3;--case:#e8d5ab}
+:is(.app,body)[data-visual-style="high-contrast"] .detectiveView{--note:#ffffff;--folder:#fff6cc;--case:#ffeb80}
+
+/* 0.25.2 — Gothic: бордовый мрак, свет свечи сверху, синие стрельчатые окна витража по краям. */
+:is(.app,body)[data-visual-style="gothic"] .main{background:radial-gradient(40% 30% at 50% 0%,rgba(232,149,46,.16),transparent 70%),radial-gradient(18% 60% at 0% 50%,rgba(79,99,217,.14),transparent 70%),radial-gradient(18% 60% at 100% 50%,rgba(79,99,217,.14),transparent 70%),radial-gradient(ellipse at 50% 50%,transparent 50%,rgba(0,0,0,.45) 100%),var(--skin-bg)}
+:is(.app,body)[data-visual-style="gothic"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent);letter-spacing:.03em}
+:is(.app,body)[data-visual-style="gothic"] .logoMark{background:radial-gradient(ellipse 30% 45% at 50% 40%,#ffd9a0,var(--skin-accent) 50%,transparent 75%),#1a0508}
+/* Nordic — стальная синь, иней по краям, огонь очага в выбранном. */
+:is(.app,body)[data-visual-style="nordic"] .main{background:linear-gradient(180deg,rgba(159,211,245,.10),transparent 25%),repeating-linear-gradient(135deg,rgba(238,246,251,.025) 0 2px,transparent 2px 14px),radial-gradient(ellipse at 50% 100%,rgba(217,130,74,.10),transparent 60%),var(--skin-bg)}
+:is(.app,body)[data-visual-style="nordic"] :is(.viewBtn.active,.modeBtn.active){box-shadow:inset 0 -2px 0 var(--skin-accent2)}
+:is(.app,body)[data-visual-style="nordic"] .logoMark{background:conic-gradient(from 45deg,var(--skin-accent) 0 25%,#eef6fb 0 50%,var(--skin-accent) 0 75%,#eef6fb 0);border-radius:2px;transform:rotate(45deg) scale(.8)}
+/* Eastern — чёрный лак с красным солнцем, панели рисовой бумаги с волокнами, киноварь в заголовках. */
+:is(.app,body)[data-visual-style="eastern"] .main{background:radial-gradient(circle at 82% 22%,rgba(200,50,31,.22) 0 9%,transparent 9.4%),linear-gradient(180deg,rgba(255,255,255,.03),transparent 40%),var(--skin-bg)}
+:is(.app,body)[data-visual-style="eastern"] :is(.left,.right){background:repeating-linear-gradient(90deg,rgba(120,90,60,.035) 0 1px,transparent 1px 7px),var(--skin-panel)}
+:is(.app,body)[data-visual-style="eastern"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent)}
+:is(.app,body)[data-visual-style="eastern"] .logoMark{background:radial-gradient(circle,var(--skin-accent) 0 42%,transparent 44%),#1a0c0c;border-radius:2px}
+/* Desert — песчаные дюны волнами, бирюзовые акценты, тёплые скругления. */
+:is(.app,body)[data-visual-style="desert"] .main{background:radial-gradient(120% 40% at 30% 110%,rgba(142,59,22,.16),transparent 60%),radial-gradient(120% 35% at 80% 105%,rgba(142,59,22,.12),transparent 60%),radial-gradient(40% 30% at 85% 10%,rgba(255,240,200,.45),transparent 70%),var(--skin-bg)}
+:is(.app,body)[data-visual-style="desert"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent2)}
+:is(.app,body)[data-visual-style="desert"] .logoMark{background:radial-gradient(circle at 50% 40%,#fff2cf 0 30%,var(--skin-accent2) 32% 60%,transparent 62%),var(--skin-accent);border-radius:50%}
+:is(.app,body)[data-visual-style="gothic"] .detectiveView{--note:#efe3cf;--folder:#e3d2b8;--case:#d6bf9c}
+:is(.app,body)[data-visual-style="nordic"] .detectiveView{--note:#eef3f6;--folder:#dde7ee;--case:#cbd9e3}
+:is(.app,body)[data-visual-style="eastern"] .detectiveView{--note:#faf3e6;--folder:#f1e5cd;--case:#e6d4b2}
+:is(.app,body)[data-visual-style="desert"] .detectiveView{--note:#fdf1dc;--folder:#f6e0bb;--case:#ecc994}
+
+/* 0.25.3 — Nautical: глубокая синь, волны у нижнего края, латунный компас в углу. */
+:is(.app,body)[data-visual-style="nautical"] .main{background:radial-gradient(circle at 88% 14%,transparent 0 5%,rgba(224,179,84,.22) 5.2% 5.6%,transparent 5.8% 8%,rgba(224,179,84,.12) 8.2% 8.5%,transparent 8.7%),repeating-radial-gradient(ellipse 60px 14px at 50% 108%,rgba(238,246,250,.05) 0 2px,transparent 2px 16px),linear-gradient(180deg,transparent 55%,rgba(2,14,24,.35)),var(--skin-bg)}
+:is(.app,body)[data-visual-style="nautical"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent2)}
+:is(.app,body)[data-visual-style="nautical"] .logoMark{background:conic-gradient(var(--skin-accent) 0 25%,#eef6fa 0 50%,var(--skin-accent) 0 75%,#eef6fa 0);border-radius:50%}
+/* Steampunk — кольца шестерёнок в полумраке, латунные заклёпки по краю панелей. */
+:is(.app,body)[data-visual-style="steampunk"] .main{background:radial-gradient(circle at 12% 82%,transparent 0 58px,rgba(201,147,59,.16) 59px 63px,transparent 64px 96px,rgba(201,147,59,.09) 97px 100px,transparent 101px),radial-gradient(circle at 86% 18%,transparent 0 36px,rgba(79,163,138,.16) 37px 40px,transparent 41px 62px,rgba(79,163,138,.09) 63px 65px,transparent 66px),radial-gradient(ellipse at 50% 50%,transparent 45%,rgba(0,0,0,.45)),var(--skin-bg)}
+:is(.app,body)[data-visual-style="steampunk"] :is(.left,.right){background:radial-gradient(circle at 8px 8px,var(--skin-accent) 0 2px,transparent 2.5px) 0 0/100% 40px no-repeat,radial-gradient(circle at calc(100% - 8px) 8px,var(--skin-accent) 0 2px,transparent 2.5px) 0 0/100% 40px no-repeat,var(--skin-panel)}
+:is(.app,body)[data-visual-style="steampunk"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent)}
+:is(.app,body)[data-visual-style="steampunk"] .logoMark{background:radial-gradient(circle,var(--skin-bg) 0 22%,var(--skin-accent) 24% 52%,transparent 54%),repeating-conic-gradient(var(--skin-accent) 0 15deg,transparent 15deg 30deg);border-radius:50%}
+/* Cyberpunk — неоновая сетка пола, строки развёртки, свечение выбранного. */
+:is(.app,body)[data-visual-style="cyberpunk"] .main{background:repeating-linear-gradient(0deg,rgba(255,255,255,.025) 0 1px,transparent 1px 3px),linear-gradient(rgba(255,47,166,.10) 1px,transparent 1px) 0 0/40px 40px,linear-gradient(90deg,rgba(57,255,136,.07) 1px,transparent 1px) 0 0/40px 40px,radial-gradient(ellipse at 50% 120%,rgba(255,47,166,.22),transparent 60%),var(--skin-bg)}
+:is(.app,body)[data-visual-style="cyberpunk"] :is(.viewBtn.active,.modeBtn.active,.toolBtn.active){box-shadow:0 0 12px rgba(255,47,166,.55)}
+:is(.app,body)[data-visual-style="cyberpunk"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent2);letter-spacing:.02em}
+:is(.app,body)[data-visual-style="cyberpunk"] .logoMark{background:linear-gradient(135deg,var(--skin-accent) 0 50%,var(--skin-accent2) 50%);border-radius:0;clip-path:polygon(0 0,100% 0,100% 70%,70% 100%,0 100%)}
+/* Wasteland — пыльная дымка, ржавые потёки, жёлто-чёрная полоса опасности под верхней панелью. */
+:is(.app,body)[data-visual-style="wasteland"] .main{background:radial-gradient(ellipse at 30% 0%,rgba(212,220,58,.08),transparent 55%),radial-gradient(ellipse at 70% 100%,rgba(201,107,44,.16),transparent 60%),repeating-linear-gradient(97deg,rgba(0,0,0,.05) 0 2px,transparent 2px 23px),var(--skin-bg)}
+:is(.app,body)[data-visual-style="wasteland"] .topbar{border-bottom:4px solid transparent;border-image:repeating-linear-gradient(135deg,var(--skin-accent2) 0 10px,#1a1408 10px 20px) 4}
+:is(.app,body)[data-visual-style="wasteland"] :is(.cardTitle h2,.scopeTitle,.outlineTitle){color:var(--skin-accent2)}
+:is(.app,body)[data-visual-style="wasteland"] .logoMark{background:radial-gradient(circle,#1a1408 0 14%,var(--skin-accent2) 16% 30%,transparent 32%),conic-gradient(var(--skin-accent2) 0 60deg,#1a1408 0 120deg,var(--skin-accent2) 0 180deg,#1a1408 0 240deg,var(--skin-accent2) 0 300deg,#1a1408 0);border-radius:50%}
+:is(.app,body)[data-visual-style="nautical"] .detectiveView{--note:#f4efe2;--folder:#e8e0cc;--case:#d9cdb0}
+:is(.app,body)[data-visual-style="steampunk"] .detectiveView{--note:#f2e6cc;--folder:#e6d4ae;--case:#d6be90}
+:is(.app,body)[data-visual-style="cyberpunk"] .detectiveView{--note:#f0ecff;--folder:#e2dcf7;--case:#d2c8f0}
+:is(.app,body)[data-visual-style="wasteland"] .detectiveView{--note:#e9e3cc;--folder:#dcd3b4;--case:#cbbf98}
+
+/* ---- Table и Kanban в тон остальным режимам (0.25.5) ----
+   Раньше вся рабочая область заливалась цветом панели: в стилях с тёмным фоном и светлыми панелями (Noir, Eastern,
+   True Medieval) переход Graph → Table был как из ночи в полдень. Теперь фон — как в Graph, а таблица и колонки канбана —
+   листы цвета панели поверх него; подписи прямо на фоне — цветом подписей холста. */
+:is(.app,body)[data-skin-kind="tokens"] .tableView,:is(.app,body)[data-visual-style="medieval"] .tableView{background:transparent;color:var(--skin-canvas-text,var(--skin-text))}
+:is(.app,body)[data-skin-kind="tokens"] .tableView .tvSeg,:is(.app,body)[data-visual-style="medieval"] .tableView .tvSeg{background:var(--skin-panel2)}
+:is(.app,body)[data-skin-kind="tokens"] .tableView :is(.tvScroll,.kbCol,.tvSearch,select),:is(.app,body)[data-visual-style="medieval"] .tableView :is(.tvScroll,.kbCol,.tvSearch,select){color:var(--skin-text)}
+:is(.app,body)[data-visual-style="medieval"] .tableView{color:#f1dfb5} /* Medieval has no canvas text colour of its own; its work area is dark brown */
+/* the sheet is as tall as its rows, the columns as tall as their cards — the rest is the work area's own background */
+:is(.app,body)[data-skin-kind="tokens"] .tableView .tvScroll,:is(.app,body)[data-visual-style="medieval"] .tableView .tvScroll{flex:0 1 auto}
+:is(.app,body)[data-skin-kind="tokens"] .tableView .kbBoard,:is(.app,body)[data-visual-style="medieval"] .tableView .kbBoard{align-items:flex-start}
+:is(.app,body)[data-skin-kind="tokens"] .tableView .kbCol,:is(.app,body)[data-visual-style="medieval"] .tableView .kbCol{max-height:100%}
