@@ -1,0 +1,91 @@
+/* 0.21 — карты записей. Окно карты стоит на месте рабочей зоны; подложка — пара --skin-panel + --skin-text (урок 0.20.5). */
+.mapView{position:absolute;inset:0;z-index:31;display:flex;flex-direction:column;background:linear-gradient(var(--skin-panel),var(--skin-panel)),var(--skin-bg);color:var(--skin-text);font-family:var(--skin-font)}
+.mapView[hidden]{display:none!important}
+.main.mapOpen .hud,.main.mapOpen .contextBar,.main.mapOpen .hint,.main.mapOpen .miniMap,.main.mapOpen .zoomCluster{visibility:hidden}
+.mapBar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 10px;padding:10px 14px;border-bottom:1px solid var(--skin-border-strong);flex:0 0 auto;min-width:0}
+.mapCrumbs{flex:1 1 180px;min-width:min(180px,100%);font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mapCrumbs b{font-size:14px}
+.mapTools{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;flex:0 1 auto;min-width:0} /* 0.29.7: with 📷 and ✏️ the tools no longer fit beside the path — they wrap, the path keeps its room */
+.mapTool{padding:6px 10px;font-size:11px}
+.mapTool.on{outline:2px solid color-mix(in srgb,var(--skin-accent) 70%,transparent);outline-offset:1px}
+.mapBody{flex:1;min-height:0;display:flex}
+.mapStage{position:relative;flex:1;min-width:0;overflow:hidden;cursor:grab;background:repeating-conic-gradient(color-mix(in srgb,currentColor 5%,transparent) 0 25%,transparent 0 50%) 0 0/24px 24px;touch-action:none}
+.mapStage:active{cursor:grabbing}
+.mapStage.drawing,.mapStage.placing{cursor:crosshair}
+.mapWorld{position:absolute;left:0;top:0;transform-origin:0 0;--mz:1}
+.mapImg{display:block;width:100%;height:100%;user-select:none;pointer-events:none;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+.mapSvg{position:absolute;left:0;top:0;overflow:visible;pointer-events:none}
+.mapArea polygon{fill:color-mix(in srgb,var(--area) 26%,transparent);stroke:var(--area);stroke-width:calc(2px / var(--mz));pointer-events:auto;cursor:pointer}
+.mapArea.sel polygon{stroke-width:calc(4px / var(--mz));fill:color-mix(in srgb,var(--area) 38%,transparent)}
+.mapAreaName{font:600 calc(15px / var(--mz)) var(--skin-font);fill:#fff;stroke:rgba(0,0,0,.75);stroke-width:calc(3px / var(--mz));paint-order:stroke;text-anchor:middle;pointer-events:none}
+.mapLink{stroke:var(--link);stroke-width:calc(var(--lw) * 1px / var(--mz));stroke-linecap:round;opacity:.85;pointer-events:auto}
+.mapDraft polyline{fill:none;stroke:#fff;stroke-width:calc(2px / var(--mz));stroke-dasharray:calc(6px / var(--mz)) calc(4px / var(--mz))}
+.mapDraft circle{fill:#fff;stroke:#111;stroke-width:calc(1.5px / var(--mz));r:calc(5px / var(--mz));pointer-events:auto}
+.mapDraft circle.first{fill:#ffd166;cursor:pointer}
+/* A pin keeps its size on screen whatever the zoom. */
+.mapPin{position:absolute;transform:translate(-50%,-17px) scale(calc(1 / var(--mz)));transform-origin:50% 17px;display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;user-select:none;z-index:2}
+.mapPin.dragging{cursor:grabbing;z-index:5}
+.mapPinDot{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;overflow:hidden;background:#141a26;border:3px solid var(--ring);box-shadow:0 2px 8px rgba(0,0,0,.5),0 0 0 2px rgba(255,255,255,.85);color:var(--pin);font-size:16px}
+.mapPinDot img{width:100%;height:100%;object-fit:cover}
+.mapPinDot b{font-weight:400}
+.mapPinLabel{max-width:180px;padding:2px 8px;border-radius:999px;background:rgba(10,14,24,.82);color:#fff;font:600 11px/1.3 var(--skin-font);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:flex;gap:4px;align-items:center}
+.mapPinBadges{display:inline-flex;gap:2px}
+.mapPinBadge{font-style:normal;font-size:10px;color:var(--status)}
+.mapPin.sel .mapPinDot,.mapPin.cur .mapPinDot{box-shadow:0 0 0 3px #fff,0 0 0 6px var(--ring),0 4px 14px rgba(0,0,0,.55)}
+.mapPin.fade{opacity:.55}
+.mapPin.gray .mapPinDot{filter:grayscale(1)}
+.mapPin[style*="--glow"] .mapPinDot{box-shadow:0 0 14px 4px var(--glow),0 0 0 2px rgba(255,255,255,.85)}
+.mapPinDive{position:absolute;right:-12px;top:-10px;width:22px;height:22px;border-radius:50%;border:1px solid rgba(255,255,255,.7);background:rgba(10,14,24,.9);color:#fff;font-size:11px;line-height:1;cursor:pointer;padding:0}
+.mapModeNote{position:absolute;left:50%;top:12px;transform:translateX(-50%);padding:7px 12px;border-radius:999px;background:rgba(10,14,24,.86);color:#fff;font-size:11px;pointer-events:none;max-width:90%;text-align:center}
+.mapEmpty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px;text-align:center}
+.mapEmptyIcon{font-size:46px}
+.mapEmpty h3{margin:0;font-size:16px}
+.mapEmpty p{margin:0;max-width:420px;opacity:.82;font-size:12px;line-height:1.5}
+.mapEmptyBtns{display:flex;gap:8px;margin-top:6px}
+.mapSide{flex:0 0 270px;display:flex;flex-direction:column;border-left:1px solid var(--skin-border-strong);min-height:0}
+.mapSideHead{padding:10px;flex:0 0 auto}
+.mapSearch{width:100%}
+.mapSideScroll{flex:1;min-height:0;overflow:auto;padding:0 10px 12px}
+.mapSub{margin:10px 0 5px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;opacity:.8}
+.mapHint{font-size:10px;opacity:.75;margin:-2px 0 6px;line-height:1.4}
+.mapRow{display:flex;align-items:center;gap:7px;padding:5px 7px;margin-bottom:3px;border:1px solid var(--skin-border);border-radius:8px;cursor:pointer;user-select:none;font-size:11px}
+.mapRow:hover,.mapRow.sel{border-color:var(--skin-border-strong);background:color-mix(in srgb,var(--skin-accent) 8%,transparent)}
+[data-map-cand]{cursor:grab;touch-action:none}
+.mapRowIcon{flex:0 0 auto}
+.mapRowMain{flex:1;min-width:0;display:flex;flex-direction:column}
+.mapRowMain b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mapRowMain small{font-size:10px;opacity:.75;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.mapRowNote{font-size:10px;font-weight:700;color:var(--skin-accent)}
+.mapRowDel{width:22px;height:22px;flex:0 0 auto}
+.mapAreaSwatch{width:14px;height:14px;border-radius:4px;background:color-mix(in srgb,var(--area) 50%,transparent);border:2px solid var(--area);flex:0 0 auto}
+.mapGhost{position:fixed;z-index:4000;transform:translate(-50%,-120%);padding:5px 10px;border-radius:999px;background:rgba(10,14,24,.9);color:#fff;font-size:11px;pointer-events:none;white-space:nowrap}
+.mapPickGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px}
+.mapPick{display:flex;flex-direction:column;gap:4px;padding:6px;border:1px solid var(--skin-border);border-radius:9px;background:transparent;color:inherit;cursor:pointer}
+.mapPick.on{border-color:var(--skin-accent);outline:2px solid color-mix(in srgb,var(--skin-accent) 50%,transparent)}
+.mapPick img{width:100%;height:84px;object-fit:cover;border-radius:6px}
+.mapPick small{font-size:10px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Раздел «Карта» на странице записи */
+.mapThumb{display:block;width:100%;padding:0;border:0;background:transparent;cursor:pointer}
+.mapThumbBox{position:relative;display:block;border-radius:9px;overflow:hidden;border:1px solid var(--skin-border)}
+.mapThumbBox img{display:block;width:100%;height:auto}
+.mapThumbDot{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%;background:var(--pin);box-shadow:0 0 0 2px #fff}
+.mapThumbFoot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px;font-size:11px}
+.mapThumbFoot span{opacity:.82}
+.mapRow,.mapRow b,.mapRow span{font-family:var(--skin-font)}
+.mapRow b{font-size:11px!important;font-weight:650;line-height:1.3}
+.mapRow small{font-size:10px!important}
+.mapSearch{box-sizing:border-box;padding:7px 9px;border-radius:8px;border:1px solid var(--skin-border-strong);background:color-mix(in srgb,currentColor 5%,transparent);color:inherit;font:12px var(--skin-font)}
+.mapSearch::placeholder{color:inherit;opacity:.6}
+/* The right panel's fold button sits on the edge of the work area: keep the list clear of it. */
+.main.mapOpen .mapSide{padding-right:26px}
+.main.mapOpen .mapStage{margin-left:0}
+.mapOnOther{display:flex;flex-wrap:wrap;gap:4px;align-items:center;margin-top:6px;font-size:11px}
+
+/* 0.23.9: линия связи на карте нажимается — открывает связь справа */
+.mapLink{cursor:pointer}
+.mapLink:hover{opacity:1;filter:drop-shadow(0 0 3px var(--link))}
+/* 0.30.9: a narrow work area (the smallest window): the side list went under the right panel — «Перетащите сущность на к…»,
+   cut cards. The empty-map block may shrink, the side list gets narrower */
+.mapEmpty{min-width:0}
+.mapView{container-type:inline-size}
+@container (max-width:640px){.mapSide{flex-basis:190px}.mapEmpty{padding:14px 10px 14px 60px}.mapEmpty :is(.btn,button){white-space:normal}.mapEmptyBtns{flex-direction:column;align-items:stretch;width:100%;max-width:220px}.mapEmptyBtns .btn{padding:8px 10px;font-size:13px}}

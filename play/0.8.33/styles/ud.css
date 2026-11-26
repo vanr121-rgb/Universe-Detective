@@ -1,0 +1,390 @@
+/* Universe Detective — свой каркас: на весь экран только доска.
+   Сверху слева — путь по делам, справа — сохранение, поиск, отмена, «＋ Бумажка», меню «Файл», роль; под ними — полоска кнопок доски;
+   внизу слева, рядом с рисовалкой и «Моими заметками», — маленькие кнопки настроек (Типы, Связи, Статусы, Теги, Зоны, Сеть).
+   Панели и кнопки Universe Graph, которых в UD нет, пока лежат в разметке спрятанными (код к ним привязан) — уйдут на шаге очистки. */
+.app.ud{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:minmax(0,1fr)!important}
+.app.ud>.topbar,.app.ud>aside.left,.app.ud>aside.right{display:none!important}
+.app.ud>.main{grid-column:1/-1;grid-row:1/-1}
+.app.ud :is(.sideRail,.topRail,.panelResizer,.viewBar,.hud>.modeBar:not(.viewStrip),.contextBar,.hint,.miniMap,.zoomCluster,.cleanBtn,.hud>.pill,.cleanExit){display:none!important}
+.app.ud :is(#graphCanvas,.stars,.vignette,#outlineView,#treeView,#galaxyView,#tableView){display:none!important}
+
+/* верх */
+.app.ud .udTop{position:absolute;left:12px;right:12px;top:10px;z-index:120;display:flex;align-items:center;justify-content:space-between;gap:10px;pointer-events:none}
+.app.ud .udTop>*{pointer-events:auto}
+.app.ud .udLeft,.app.ud .udRight{display:flex;align-items:center;gap:6px;min-width:0}
+.app.ud .udLeft{flex:1 1 auto;overflow:hidden}
+.app.ud .udBrand{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:10px;font:700 13px/1 var(--font-ui,system-ui);letter-spacing:.06em;color:var(--skin-accent,#78b8ff);border:1px solid var(--skin-border-strong,rgba(156,182,235,.24));background:color-mix(in srgb,var(--skin-panel2,#0e1526) 92%,transparent)}
+.app.ud .udLeft #scopeBack{flex:none;width:34px;height:34px}
+.app.ud .udLeft #scopeBack:disabled{opacity:.35}
+.app.ud .udLeft .breadcrumbs{display:flex;flex-wrap:nowrap;overflow:hidden;min-width:0;padding:6px 10px;border-radius:10px;background:color-mix(in srgb,var(--skin-panel2,#0e1526) 86%,transparent);border:1px solid var(--skin-border,rgba(156,182,235,.14))}
+.app.ud .udRight{flex:none}
+.app.ud .udRight .topsearch{flex:none;width:220px;min-width:0;max-width:none}
+.app.ud .udRight .topsearch input{height:34px}
+.app.ud .udRight .searchResults{top:40px;left:auto;right:0;width:360px}
+.app.ud .udRight :is(.iconBtn,.saveStatus,#createEntityBtn,#roleBtn){height:34px}
+.app.ud .udRight .saveStatus{max-width:170px;padding:0 10px;font-size:12px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+/* над светлыми бумажками кнопки верха не должны быть прозрачными */
+.app.ud .udTop :is(.iconBtn,.saveStatus,#roleBtn,.topsearch input,.breadcrumbs){background:color-mix(in srgb,var(--skin-panel2,#0e1526) 94%,transparent);border:1px solid var(--skin-border-strong,rgba(156,182,235,.24));border-radius:10px;color:var(--skin-text,#edf4ff)}
+.app.ud .udTop .iconBtn{width:34px;display:grid;place-items:center;padding:0;font-size:16px}
+.app.ud .udTop .iconBtn:disabled{color:color-mix(in srgb,var(--skin-text,#edf4ff) 35%,transparent)}
+.app.ud #createEntityBtn{padding:0 12px}
+.app.ud .udFile{position:relative}
+.app.ud .udMenu{position:absolute;right:0;top:40px;z-index:60;min-width:240px;display:flex;flex-direction:column;gap:2px;padding:6px;border-radius:12px;border:1px solid var(--skin-border-strong,rgba(156,182,235,.24));background:var(--skin-panel2,#0e1526);box-shadow:0 18px 40px rgba(0,0,0,.45)}
+.app.ud .udMenu[hidden]{display:none}
+.app.ud .udMenuItem{display:flex;align-items:center;width:100%;min-height:34px;padding:0 10px;border:0;border-radius:8px;background:transparent;color:var(--skin-text,#edf4ff);font:inherit;font-size:13px;text-align:left;cursor:pointer}
+.app.ud .udMenuItem:hover,.app.ud .udMenuItem:focus-visible{background:color-mix(in srgb,var(--skin-accent,#78b8ff) 16%,transparent)}
+.app.ud .udMenuItem[hidden]{display:none}
+.app.ud .udMenuItem small{opacity:.7;margin-left:4px}
+
+/* низ: настройки рядом с рисовалкой и заметками */
+.app.ud .udDock{position:absolute;left:62px;bottom:14px;z-index:120;display:flex;align-items:center;gap:4px;padding:3px;border-radius:12px;border:1px solid var(--skin-border-strong,rgba(156,182,235,.24));background:color-mix(in srgb,var(--skin-panel2,#0e1526) 92%,transparent);box-shadow:0 8px 22px rgba(0,0,0,.28)}
+.app.ud .udDockBtn{display:flex;align-items:center;gap:4px;height:30px;padding:0 9px;border:0;border-radius:9px;background:transparent;color:var(--skin-text,#edf4ff);font:inherit;font-size:12px;cursor:pointer;white-space:nowrap}
+.app.ud .udDockBtn:hover,.app.ud .udDockBtn:focus-visible,.app.ud .udDockBtn.active{background:color-mix(in srgb,var(--skin-accent,#78b8ff) 18%,transparent)}
+.app.ud .udDockSep{width:1px;height:20px;margin:0 3px;background:var(--skin-border,rgba(156,182,235,.18))}
+@media (max-width:1100px){.app.ud .udDockBtn>span{display:none}.app.ud .udDockBtn{padding:0 8px;font-size:14px}.app.ud .udRight .topsearch{width:150px}}
+@media (max-width:1000px){.app.ud #createEntityBtn .tlabel,.app.ud #roleBtn .tlabel{display:none}.app.ud .udRight .saveStatus .saveStatusText{display:none}}
+
+/* UD 0.2 — бумажка: правка на месте, картинка, статусы, «Подробнее» */
+/* UD 0.5 — четыре глаза на выбранной бумажке (кто её видит). */
+/* UD 0.5 — интерактивный глаз видимости в панели инструментов бумажки. */
+.app.ud .boardCard .udVisibility{margin-top:5px;max-width:100%}
+.app.ud .boardCard .udVisibility .visRow{display:flex;align-items:center;flex-wrap:wrap;gap:3px;margin:0}
+.app.ud .boardCard .udVisibility .visBtn{width:23px;height:22px;flex:0 0 23px;padding:0;border:1px solid color-mix(in srgb,var(--paper-text,#3b352b) 18%,transparent);border-radius:6px;background:rgba(255,255,255,.28)}
+.app.ud .boardCard .udVisibility .visBtn.on{border-color:currentColor;background:rgba(127,127,127,.2)}
+.app.ud .boardCard .udVisibility .visEye{width:15px;height:11px}
+.app.ud .boardCard .udVisibility .visRoot{font-size:10px}
+.app.ud .boardCard .udMore{display:block;width:100%;margin-top:7px;padding:3px 0 0;border:0;border-top:1px dashed color-mix(in srgb,var(--paper-text,#3b352b) 28%,transparent);background:none;color:var(--paper-text,#3b352b);font:600 11px/1.3 var(--font-ui,system-ui);text-align:left;opacity:.55;cursor:pointer}
+.app.ud .boardCard:hover .udMore,.app.ud .boardCard.selected .udMore,.app.ud .boardCard .udMore.open,.app.ud .boardCard .udMore:focus-visible{opacity:1}
+.app.ud .boardCard.udOpen{z-index:80}
+.app.ud .boardCard .udDetails{container:ud-details / inline-size;scrollbar-width:thin;margin-top:6px;max-height:520px;overflow:auto;cursor:auto;color:var(--paper-text,#2b2a26);font-size:12px;user-select:text}
+.app.ud .boardCard .udDetails .secPage{color:inherit}
+/* the page sections are drawn for the dark panel — on paper their colours become paper colours */
+.app.ud .boardCard .udDetails{--text:var(--paper-text,#2b2a26);--skin-text:var(--paper-text,#2b2a26);--muted:#5f584b;--skin-muted:#5f584b;--line:rgba(60,48,28,.2);--line2:rgba(60,48,28,.3);--skin-border:rgba(60,48,28,.22);--skin-border-strong:rgba(60,48,28,.34);--panel:rgba(255,255,255,.5);--skin-panel:rgba(255,255,255,.5);--skin-panel2:rgba(255,255,255,.35);--skin-accent:#2f5fb3;--sec-accent:#2f5fb3;--skin-shadow:none;--shadow:none}
+.app.ud .boardCard .udDetails :is(.infoFoldHead,.infoFoldHead span,.infoFoldHead b,.secText,.secKv,.kvItem,label,p,li,td,th,.relationTreeItem,input,textarea,select){color:var(--paper-text,#2b2a26)}
+.app.ud .boardCard .udDetails :is(input,textarea,select){background:rgba(255,255,255,.75);border-color:rgba(60,48,28,.3)}
+.app.ud .boardCard .udDetails :is(.infoFold,.secBlock){background:color-mix(in srgb,#fff 40%,transparent);border-color:color-mix(in srgb,var(--paper-text,#3b352b) 22%,transparent);color:inherit}
+.app.ud .boardCard .udDetails :is(.muted,small,.secHint){color:color-mix(in srgb,var(--paper-text,#3b352b) 70%,transparent)}
+.app.ud .boardCard .udDetails .btn{font-size:11px;padding:3px 8px}
+.app.ud .udDetails .infoFoldHead>span{min-width:0;overflow-wrap:anywhere}
+@container ud-details (max-width: 220px){
+  .app.ud .udDetails .secBlock{
+    display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;
+  }
+  .app.ud .udDetails .secBlock>.infoFoldHead{
+    grid-column:1/-1;grid-row:1;
+    grid-template-columns:minmax(0,1fr) auto 8px;gap:4px;padding:7px 8px;
+  }
+  .app.ud .udDetails .secBlock>.infoFoldHead .secIcon{min-width:0;margin-right:3px}
+  .app.ud .udDetails .secBlock>:is(.secVisBtn,.secMenuBtn){
+    position:static;grid-row:2;width:22px;height:22px;margin:0 4px 4px 0;
+  }
+  .app.ud .udDetails .secBlock>.secGrip{position:static;grid-column:1;grid-row:2}
+  .app.ud .udDetails .secBlock>.secVisBtn{grid-column:2}
+  .app.ud .udDetails .secBlock>.secMenuBtn{grid-column:3}
+  .app.ud .udDetails .secBlock>.infoFoldBody{grid-column:1/-1;min-width:0}
+}
+/* Selected captions remain above other captions and below the selected paper. */
+.app.ud #detectiveView .boardStage>.boardStringLabel.selected{z-index:18}
+.app.ud #detectiveView:is(.bFar,.bTiny) .boardStringLabel.selected{display:block;font-size:calc(var(--thread-label-size,11px) * var(--bname,1))}
+.app.ud #detectiveView.boardThreadFocus .boardStrings .boardString{
+  opacity:1;stroke-width:calc((var(--sw,2.4) + .9) * var(--bk,1) * 1px);
+}
+.app.ud #detectiveView.boardThreadFocus .boardStrings :is(.boardStringArrow,.boardStringMotion){opacity:1}
+.app.ud #detectiveView.boardThreadFocus .boardStage>.boardStringLabel{display:block}
+.app.ud #detectiveView.boardThreadFocus .boardStage>.boardStringLabel:not(.selected){z-index:17}
+.app.ud #detectiveView.boardThreadFocus.bFar .boardStage>.boardStringLabel{
+  font-size:var(--thread-label-size,11px);transform:translate(-50%,-50%) scale(var(--thread-caption-scale,1));
+}
+
+.app.ud .boardCard :is(.udAddDesc,.udAddStatus){margin-top:5px;padding:2px 7px;border:1px dashed color-mix(in srgb,var(--paper-text,#3b352b) 40%,transparent);border-radius:7px;background:none;color:var(--paper-text,#3b352b);font:600 11px/1.3 var(--font-ui,system-ui);opacity:.75;cursor:pointer}
+.app.ud .boardCard .udAddStatus{margin-top:0}
+.app.ud .boardCard :is(.udAddDesc,.udAddStatus):hover{opacity:1}
+.app.ud .boardCard .boardChips[data-ud-status]{cursor:pointer}
+.app.ud .boardCard.selected :is(.boardKind,.boardFolderTab){cursor:pointer}
+.app.ud #detectiveView .boardCard{display:flex;flex-direction:column}
+.app.ud #detectiveView .boardCard>*{flex-shrink:0}
+.app.ud #detectiveView .boardKind{margin-top:0}
+.app.ud #detectiveView .boardCard:not(.hasPhoto) .boardName{margin-top:0}
+.app.ud #detectiveView .boardInside{margin-top:auto;padding-top:5px}
+.app.ud #detectiveView .boardCard:has(.udCardTools) .boardPin{left:12px}
+.app.ud .udCardTools{display:flex;justify-content:flex-end;flex-wrap:wrap;gap:2px;margin:-17px -8px 4px 12px;padding-right:20px}
+.app.ud #detectiveView .udCardTools button{position:static;width:20px;height:22px;display:grid;place-items:center;padding:0;border:1px solid #0003;border-radius:6px;background:#ffffffe0;font-size:14px;cursor:pointer;color:#1d2433}
+.app.ud #detectiveView .udCardTools button:focus-visible{outline:2px solid #2f5fb3;outline-offset:1px}
+.app.ud #detectiveView .udFixCard[aria-pressed=true]{background:#ffdf85;border-color:#96741f}
+.app.ud #detectiveView .udFixedIndicator{position:absolute;left:7px;top:4px;font-size:11px;pointer-events:none}
+.app.ud .bFar .boardCard:where(:not(.boardMeasuringNear)) :is(.udMore,.udDetails,.udAddDesc,.udAddStatus,.udPhotoBtn,.udRenameBtn,.udVisibility){display:none}
+.udEditor{position:fixed;z-index:3000;padding:6px 8px;border:2px solid var(--skin-accent,#78b8ff);border-radius:8px;background:#fffdf6;color:#1d2433;font-family:var(--font-ui,system-ui);line-height:1.3;box-shadow:0 10px 30px rgba(0,0,0,.45);outline:none}
+.udEditor-name{font-weight:700}
+textarea.udEditor{resize:vertical}
+.udCardMenu{max-height:min(70vh,520px);overflow:auto;min-width:220px}
+.udCardMenu .udMenuHead{padding:6px 10px 4px;font-size:11px;opacity:.7}
+.udCardMenu button.active{background:color-mix(in srgb,var(--skin-accent,#78b8ff) 18%,transparent)}
+
+
+/* UD 0.5: in the Master's player-preview keep the tags and network controls, not world configuration. */
+body:is([data-view-as="player"],[data-view-as="viewer"]) #udDock :is([data-ud-rules="types"],[data-ud-rules="relations"],[data-ud-rules="statuses"],#workspaceBtn,.udDockSep){display:none!important}
+/* A real network player cannot configure the Master's world or open/close the server. */
+html.ugOnlinePlayer #udDock #udNetBtn{display:none!important}
+
+/* UD 0.5 — компактный список участников над нижней полосой */
+.udPeople{position:absolute;z-index:125;left:62px;bottom:57px;width:min(304px,calc(100% - 74px));padding:12px;border:1px solid var(--skin-border-strong,#3a5080);border-radius:12px;background:var(--skin-panel2,#13203a);color:var(--skin-text,#edf4ff);box-shadow:0 12px 30px #0006}
+.udPeople h2{margin:0 0 6px;font-size:15px}
+.udPeople ul{list-style:none;margin:0;padding:2px 3px;max-height:min(42vh,300px);overflow:auto}
+.udPeople li{display:flex;align-items:center;gap:10px;padding:7px 2px}
+.udPeople li b,.udPeople li small{display:block;overflow-wrap:anywhere}
+.udPeople li b{color:color-mix(in srgb,var(--part-c) 65%,var(--skin-text,#edf4ff))}
+.udPeopleActions{display:flex;flex-wrap:wrap;gap:6px}
+.udPeopleActions:has(> :not([hidden])){margin-top:8px}
+.udPeopleUpload{position:relative;cursor:pointer}
+.udPeopleUpload:focus-within{outline:2px solid var(--skin-accent,#78b8ff)}
+.udPeopleUpload input{position:absolute;inset:0;width:100%;opacity:0;cursor:pointer}
+.udPeopleUpload:has(input:disabled){opacity:.65;cursor:progress}
+.udPeople[hidden],.udPeople [hidden]{display:none}
+
+.udSet{position:absolute;left:62px;bottom:57px;z-index:125;display:flex;flex-direction:column;gap:7px;width:min(460px,calc(100% - 16px));max-height:min(550px,calc(100% - 80px));padding:10px;border:1px solid var(--skin-border-strong,#3a5080);border-radius:12px;background:linear-gradient(var(--skin-panel,#18243a),var(--skin-panel,#18243a)),#101726;color:var(--skin-text,#edf4ff);box-shadow:0 10px 28px #0007}
+.udSet[hidden],.udSet [hidden],.udSet footer:has(> [hidden]){display:none}
+.udSet header,.udSetActions,.udSetRow{display:flex;align-items:center;gap:6px}
+.udSet header{justify-content:space-between}
+.udSet h2{margin:0;font-size:15px}
+.udSetScroll{min-height:0;overflow:auto;overscroll-behavior:contain}
+.udSetRow+.udSetRow,.udSetTagCards+.udSetRow{border-top:1px solid var(--skin-border,#374867)}
+.udSetRowName{min-width:0;flex:1;display:grid;grid-template-columns:1.4em minmax(0,1fr) auto;align-items:center;gap:7px;padding:6px;border:0;border-radius:5px;background:transparent;color:inherit;text-align:left;font:inherit;cursor:pointer}
+.udSetRowName:hover,.udSetRowName[aria-expanded=true]{background:color-mix(in srgb,var(--skin-accent,#78b8ff) 16%,transparent)}
+.udSetRowName span:nth-child(2){overflow-wrap:anywhere}
+.udSet small{color:var(--skin-muted,#a9b7cf)}
+.udSetTagCards{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding:2px 6px 6px}
+.udSet form{padding:8px;margin:4px 0;border:1px solid var(--skin-border,#374867);border-radius:8px}
+.udSetFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-bottom:7px}
+.udSetFields>label{min-width:0;display:flex;flex-direction:column;gap:3px}
+.udSetFields>.udSetCheck{flex-direction:row;align-items:center;align-self:end;min-height:25px}
+.udSet input:not([type=checkbox]),.udSet select{min-width:0;max-width:100%}
+.udSet input[type=search]{flex:1}
+.udSet input[type=color]{width:34px;min-height:24px;padding:1px}
+.udSetDetails{grid-column:1/-1;min-width:0}
+.udSetDetails summary{cursor:pointer;padding:4px 0}
+.udThreadFields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+.udThreadFields>label{display:grid;gap:3px}
+.udThreadFields>.udSetCheck{display:flex;align-items:center}
+.udSet .customizerSection{padding:4px;background:transparent}
+.udSet .customizerSection h4,.udSet .customizerSection .inlineHelp{display:none}
+.udSetChecks{display:flex;flex-wrap:wrap;gap:4px 10px;margin-bottom:5px}
+.udSet .statusOptionRow{grid-template-columns:20px minmax(40px,2fr) 30px minmax(29px,1fr) minmax(48px,2fr) auto;gap:4px;margin:3px 0}
+.udSet footer{border-top:1px solid var(--skin-border,#374867);padding-top:5px}
+.udSet .fieldDefRow{grid-template-columns:minmax(60px,1fr) minmax(60px,1fr) minmax(60px,1fr) auto}
+.udSet .fieldDefRow .fdDel{width:28px;min-width:0;padding:0}
+
+.udZones.workspacePop.open{display:flex;flex-direction:column;gap:6px;width:min(385px,calc(100vw - 16px));max-height:min(520px,calc(100vh - 90px));overflow:hidden}
+.udZones .workspacePopHead{justify-content:space-between;padding:2px 3px}
+.udZones h2{margin:0;font-size:15px}
+.udZoneList{min-height:0;overflow:auto;overscroll-behavior:contain}
+.udZoneRow,.udZoneActions{display:flex;align-items:center;gap:5px}
+.udZoneRow{padding:2px;border-top:1px solid var(--skin-border,#374867)}
+.udZoneActions{flex-wrap:wrap;padding:4px 2px}
+.udZoneRow .udSetRowName[aria-current=true]{background:color-mix(in srgb,var(--skin-accent,#78b8ff) 20%,transparent)}
+.udZoneList .udZoneActions{padding-left:9px}
+body:is([data-view-as=player],[data-view-as=viewer]) #udMergeBtn{display:none!important}
+.udMerge{display:grid;gap:10px}
+.udMergeSummary{margin:0}
+.udMergeConflicts{display:grid;gap:7px;max-height:43vh;overflow:auto}
+.udMergeConflicts fieldset{min-width:0;margin:0;padding:5px 8px;border:1px solid var(--skin-border,#374867);border-radius:7px}
+.udMergeChoices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.udMergeChoices label{display:grid;grid-template-columns:auto 1fr;align-items:start;gap:4px 6px;min-width:0;cursor:pointer}
+.udMergeChoices span{grid-column:2;overflow-wrap:anywhere;white-space:pre-wrap;max-height:7em;overflow:auto}
+
+/* Articles open above the board and leave its camera in place. */
+body:has(.app.ud) .articleFloat{z-index:127;background:linear-gradient(var(--skin-panel,#122034),var(--skin-panel,#122034)),#101726}
+.app.ud .articleFullPane{z-index:126;padding:18px max(18px,calc((100% - 1060px)/2));background:linear-gradient(var(--skin-panel,#122034),var(--skin-panel,#122034)),#101726}
+.app.ud .main.articleFull .detectiveView{visibility:hidden}
+
+.allRecords .arFilters{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.allRecords .arFilters select{padding-inline:6px}
+.allRecords .arHiddenRow{grid-template-columns:18px minmax(0,1fr);gap:3px 6px;cursor:default}
+.allRecords .arHiddenRow .btn{grid-column:2;justify-self:start}
+.allRecords .arHiddenRow .arMeta small{white-space:normal;overflow-wrap:anywhere}
+.allRecords .arReveal{background:none;border:0;padding:0;color:inherit;text-align:left;cursor:pointer}
+.allRecords .arReveal:is(:hover,:focus-visible) b{text-decoration:underline}
+
+#allRecVisibility[hidden]{display:none}
+.udSetSaveNote{flex-basis:100%}
+#udSetForm>.udSetActions{flex-wrap:wrap}
+
+/* Предпросмотр и сетевой зритель сохраняют инструменты просмотра и навигации. */
+body:is([data-view-as="player"],[data-view-as="viewer"]) :is(#udFile,#udNetBtn,#undoBtn,#redoBtn,#saveBanner),
+html.ugOnlinePlayer #udNetBtn{display:none!important}
+body.udReadOnly :is(#createEntityBtn,#undoBtn,#redoBtn,[data-sec-grip],[data-sec-menu],[data-sec-add],[data-sec-type-page],[data-sec-restore],[data-sec-edit],[data-sec-edit-record],[data-sec-check],[data-sec-step],[data-link-from]){display:none!important}
+
+.udEntityForm{max-width:540px;margin:auto;gap:7px}
+.udEntityForm>label,.udEntityExtras>label,.udEntityExtras section>label{font-weight:600}
+.udEntityExtras{margin-top:8px}
+.udEntityExtras>summary{cursor:pointer;padding:6px 0}
+.udEntityExtras section{margin:10px 0}
+.udEntityTypePicker{min-width:0;border:1px solid var(--line);border-radius:9px}
+.udEntityTypePicker>summary{cursor:pointer;padding:9px 10px;overflow-wrap:anywhere}
+.udEntityTypeChoices{padding:6px;max-height:min(280px,40vh);overflow:auto;overscroll-behavior:contain;scrollbar-width:thin}
+.udEntityTypePicker #udTypeFilter{width:calc(100% - 12px);margin:0 6px 6px}
+.udEntityTypeChoices button{display:block;width:100%;border:0;border-radius:6px;background:transparent;color:inherit;text-align:left;padding:8px 12px;cursor:pointer;font:inherit;overflow-wrap:anywhere}
+.udEntityTypeChoices .udTypeGroup button{padding-left:24px}
+.udEntityTypeChoices button:hover,.udEntityTypeChoices button[aria-pressed="true"]{background:rgba(120,184,255,.15)}
+.udEntityTypePicker :is(summary,button,input):focus-visible{outline:2px solid var(--accent,#74b8ff);outline-offset:-2px}
+.udEntityTypeChoices [hidden]{display:none!important}
+.udEntityExtras>input{width:100%;margin-bottom:8px}
+.udDescriptionEdit{display:grid;gap:6px;margin-top:6px}
+.udDescriptionEdit textarea{width:100%;box-sizing:border-box;resize:vertical}
+.udDescriptionActions{display:flex;gap:6px;flex-wrap:wrap}
+.app.ud #detectiveView .boardCard.small .boardText,
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)) .boardText{display:-webkit-box}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)) .boardText{font-size:calc(11px * var(--bname,1));flex-shrink:0}
+.app.ud #detectiveView .boardCard .boardPhoto{
+  position:relative;display:block;height:var(--ud-photo-h,auto);aspect-ratio:var(--ud-photo-ratio,4/3);
+  min-height:0;max-height:var(--ud-photo-h,260px);background:transparent;box-shadow:none;
+}
+.app.ud #detectiveView .boardCard.sized:not(.boardAutoPhoto) .boardPhoto{max-height:600px}
+.app.ud #detectiveView .boardCard:not(.selected) .boardPhoto{flex-grow:1}
+.app.ud #detectiveView .boardCard.boardFixed .boardPhoto{flex:1 1 auto}
+.app.ud #detectiveView .boardCard.boardFixed.selected .boardPhoto{flex-grow:0}
+.app.ud #detectiveView .boardCard.udAutoHeight .boardPhoto{flex:0 0 auto}
+.app.ud #detectiveView .boardCard .boardPhoto img{position:absolute;inset:0;object-fit:contain;filter:none}
+.app.ud #detectiveView .boardPhoto :is(img,[data-ud-photo-message],.udPhotoResize)[hidden]{display:none!important}
+.app.ud #detectiveView .boardPhoto [data-ud-photo-message]{position:absolute;inset:0;display:grid;place-items:center;text-align:center;pointer-events:none}
+.app.ud #detectiveView .boardCard .boardPhoto.udPhotoCover img{object-fit:cover}
+.app.ud #detectiveView .boardPhoto span:not(.udPhotoResize){color:inherit}
+.app.ud .udPhotoResize{position:absolute;inset:auto 0 0;height:9px;cursor:ns-resize;touch-action:none}
+.app.ud .udPhotoResize:hover{background:#24467544}
+/* Overview uses the same paper height as its ordinary layout. Labels overlay
+   the photo instead of competing with it for the remaining flex height. */
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto{height:var(--ud-overview-height);min-height:var(--ud-overview-height)}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto .boardPhoto{
+  position:absolute;inset:18px 8px 8px;width:auto;height:auto;max-height:none;
+  aspect-ratio:auto;margin:0;display:block;flex:none;
+}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto .boardName{
+  position:absolute;left:8px;right:8px;bottom:8px;z-index:1;padding:3px 5px;margin:0;
+  font-size:17px;line-height:1.15;background:color-mix(in srgb,var(--paper,#fdfbf4) 92%,transparent);
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;
+  max-height:45%;box-sizing:border-box;
+}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto :is(.boardText,.boardInside,.boardFrom,.boardKind,.boardCaseBar){display:none}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto .boardChips{
+  position:absolute;top:19px;left:9px;right:9px;margin:0;max-height:24%;overflow:hidden;z-index:1;
+}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto .boardStamp{max-width:calc(100% - 24px);font-size:11px;right:10px;bottom:36px}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto .udFixedIndicator{display:block;z-index:2}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).hasPhoto.selected .boardCaseBar{
+  position:absolute;top:100%;left:0;right:0;display:flex;z-index:3;background:var(--paper,#fdfbf4);padding:4px;
+}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)) .boardChips{display:flex}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)) .boardStamp{display:block}
+/* Large boards drop blurred shadows, but retain the meaning of statuses. */
+.app.ud #detectiveView.bBig .boardCard.gray{filter:grayscale(1)}
+.app.ud #detectiveView.bBig .boardCard.fade{filter:saturate(.4) contrast(.9)}
+.app.ud #detectiveView.bBig .boardCard.fade.gray{filter:grayscale(1) contrast(.9)}
+.app.ud #detectiveView:is(.bFar,.bBig) .boardCard[style*="--glow"]{box-shadow:0 0 0 2px var(--glow)}
+.app.ud #detectiveView .udVisIndicator{position:absolute;right:29px;top:7px;pointer-events:none}
+.app.ud #detectiveView .udVisIndicator svg{width:17px;height:12px}
+.udTypeGroup>summary{cursor:pointer;padding:8px 10px;font-weight:600}
+.udTypeGroup>summary small{font-weight:400;opacity:.7}
+.udCardMenu .udTypeSearch{width:calc(100% - 12px);margin:5px 6px}
+.udCardMenu .udTypeGroup button[hidden]{display:none}
+
+#artWikiTarget[hidden]{display:none}
+#artWikiTarget select{max-width:100%;min-width:0}
+.app.ud #detectiveView .boardCard.boardFixed{overflow:visible}
+.app.ud #detectiveView .boardCard.boardFixed.udOpen .udDetails{
+  position:absolute;z-index:5;top:calc(100% - 1px);left:0;width:100%;box-sizing:border-box;
+  margin:0;padding:8px;overscroll-behavior:contain;max-height:clamp(100px,36vh,340px);background:var(--paper,#f8f3df);
+  border-radius:0 0 6px 6px;box-shadow:0 4px 14px #0003;
+}
+.app.ud #detectiveView .boardCard:is(.k-folder,.k-case).boardFixed.udOpen .udDetails{background:var(--board-tinted-fill,var(--folder,#e8cd96))}
+.app.ud #detectiveView .boardCard.k-case.boardFixed.udOpen .udDetails{background:var(--board-tinted-fill,var(--case,#e2c084))}
+.app.ud #detectiveView.bFar :where(.boardCard:not(.boardMeasuringNear)) .udCardTools{display:none}
+
+.app.ud #detectiveView .boardCard.small .boardCaseBar,
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).selected .boardCaseBar{display:flex}
+.app.ud #detectiveView .boardCard:focus-within{z-index:21}
+.udCardMenu .udTypeGroup[hidden]{display:none}
+
+.app.ud #detectiveView .boardCard.small .boardText{-webkit-line-clamp:2}
+
+.udFullNote{padding:5px 6px 7px;overflow-wrap:anywhere}
+.udFullNote>b{display:block;margin-bottom:4px}
+
+.udUpdates {
+  box-sizing: border-box;
+  width: min(520px, 94vw);
+  max-height: 90vh;
+  padding: 1.25rem;
+  color: var(--text, #172742);
+  background: var(--panel, #f4f6fa);
+  border: 1px solid currentColor;
+  border-radius: 10px;
+}
+.udUpdates::backdrop { background: #101a2a80; }
+.udUpdates [data-notes] { white-space: pre-wrap; overflow-wrap: anywhere; }
+.udUpdates progress { width: 100%; }
+.udUpdates label { display: block; margin-block: .5rem; }
+.udUpdateActions { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 1rem; }
+.udUpdateActions button { padding: .4rem .6rem; cursor: pointer; }
+
+/* Related paper instances share a subtle outline while another copy is in focus. */
+#detectiveView .boardCard.udPaperPeer { outline: 2px dashed #a98943; outline-offset: 4px; }
+#detectiveView .boardCard[data-ud-paper-id]:focus-visible { outline: 2px solid #d2a63a; outline-offset: 4px; }
+
+.udSet>.udSetActions{flex-wrap:wrap}
+.udSetGrip{cursor:grab;padding:4px 6px;user-select:none}
+.udSetGrip:active{cursor:grabbing}
+.udSetDrop>summary{outline:2px solid var(--skin-accent,#78b8ff);outline-offset:-2px}
+
+/* B03: the lock remains recognisable even when overview hides edit controls. */
+.app.ud #detectiveView .udOverviewLock{display:none}
+.app.ud #detectiveView.bFar :where(.boardCard:not(.boardMeasuringNear)) .udOverviewLock{display:block;z-index:2}
+/* T01: ordinary words wrap at spaces; only an overlong token needs a fallback.
+   Keep overflow local to the preview, leaving pins, tabs and details accessible. */
+.app.ud #detectiveView .boardCard :is(.boardName,.boardText,.boardInside,.boardFrom,.boardChips){
+  min-width:0;max-width:100%;box-sizing:border-box;word-break:normal;overflow-wrap:break-word;
+}
+.app.ud #detectiveView .boardCard .boardText{white-space:pre-wrap}
+.app.ud #detectiveView .boardCard .boardFolderTab{
+  box-sizing:border-box;max-width:calc(100% - 10px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.app.ud #detectiveView .boardCard .boardChips .statusChip{
+  min-width:0;max-width:100%;box-sizing:border-box;white-space:normal;overflow-wrap:break-word;
+}
+.app.ud #detectiveView .boardCard .boardStamp{box-sizing:border-box;max-width:75%;overflow-wrap:break-word}
+.app.ud #detectiveView .boardCard.boardFixed .boardName{
+  display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:3;overflow:hidden;min-height:0;flex:0 0 auto;max-height:3.54em;
+}
+.app.ud #detectiveView .boardCard.boardFixed .boardText{min-height:0;flex:0 1 auto;-webkit-line-clamp:3}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed .udCardTools{
+  position:absolute;bottom:100%;right:0;max-width:100%;margin:0;padding:3px;background:var(--paper,#fdfbf4);z-index:4;
+}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed.udShortPaper{padding:18px 8px 6px}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed.udShortPaper :is(.boardKind,.boardFrom,.boardInside,.boardText,.boardChips){display:none}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed.udShortPaper .boardName{font-size:14px;line-height:1.15;-webkit-line-clamp:1;flex-shrink:0}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed.udShortPaper .boardPhoto{flex:1 1 0;height:0;margin:0}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed.udShortPaper .udMore{position:absolute;top:100%;left:0;margin:0;padding:3px;background:var(--paper,#fdfbf4)}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed.udShortPaper .boardCaseBar{position:absolute;top:calc(100% + 22px);left:0;right:0;margin:0;padding:3px;background:var(--paper,#fdfbf4)}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)):not(.hasPhoto) .boardName{font-size:clamp(14px,calc(17px * var(--bname,1)),20px);line-height:1.15}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).boardFixed:not(.hasPhoto) .boardName{-webkit-line-clamp:2}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).boardFixed.udShortPaper:not(.hasPhoto){padding:18px 8px 6px}
+.app.ud #detectiveView.bFar .boardCard:where(:not(.boardMeasuringNear)).boardFixed.udShortPaper:not(.hasPhoto) .boardName{font-size:14px;-webkit-line-clamp:1}
+.app.ud #detectiveView .udDetails :is(.secText,.udFullNote,.udFullNote>div){min-width:0;max-width:100%;overflow-wrap:break-word;word-break:normal}
+.app.ud #detectiveView .udDetails pre{white-space:pre-wrap;overflow-wrap:anywhere}
+
+/* A title must keep a readable line; owner controls must not consume its slot. */
+.app.ud #detectiveView .boardCard.boardFixed .udCardTools .udVisibility{flex:1 0 100%;margin:0}
+.app.ud #detectiveView .boardCard.boardFixed .udAddDesc{display:none}
+.app.ud #detectiveView .boardCard.boardFixed .boardInside{min-height:0;flex:0 1 auto;overflow:hidden}
+.app.ud #detectiveView .boardCard.boardFixed .boardChips{min-height:0;max-height:35%;flex:0 1 auto;overflow:hidden}
+
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed .udCardTools.udToolsBeside{
+  top:0;bottom:auto;left:calc(100% + 6px);right:auto;width:max-content;max-width:180px;margin-top:var(--ud-tools-y,0px);
+}
+.app.ud :is(#detectiveView:not(.bFar) .boardCard,#detectiveView .boardCard.boardMeasuringNear).boardFixed .udCardTools.udToolsBeside.udToolsLeft{left:auto;right:calc(100% + 6px)}
+.udThreadFilter{position:fixed;width:260px;max-width:calc(100vw - 16px);max-height:calc(100vh - 16px);overflow:auto;z-index:220}
+.udThreadFilterTitle{padding:8px;font-weight:700}
+.udThreadFilterPresets{display:flex;flex-wrap:wrap;gap:4px;padding:4px 6px 8px}
+.udThreadFilter .udThreadFilterPresets button{width:auto;border:1px solid var(--line,#53657b);border-radius:5px;padding:5px 8px}
+.udThreadFilter .udThreadFilterLevel{display:flex;align-items:center;gap:8px;white-space:normal;text-align:left}
+.udThreadFilterLevel b{width:24px;flex-shrink:0}.udThreadFilterLevel span{flex:1;min-width:0;overflow-wrap:anywhere}.udThreadFilterLevel i{font-style:normal}
+.udThreadFilterLevel[aria-pressed=true]{background:rgba(110,166,235,.14)}
+

@@ -1,0 +1,55 @@
+/* Universe Graph — «контракт» скинов (0.16): правила читаемости, которые действуют поверх всех тем.
+   Каждый пункт найден проверкой по реальным пикселям: текст сравнивался с тем, что на самом деле
+   нарисовано под ним, во всех 8 темах и на 15 поверхностях (окна, меню, виды, Мех). */
+
+/* --- Вторичный текст внутри окон берёт цвет самого окна (а окно уже окрашено темой). --- */
+body .modal :is(.widgetInfoBar,.widgetInfoBar strong,.widgetSectionTitle,.massSummary,.massSummary b,.widgetListMain b,.inlineHelp,.widgetHint){color:inherit!important}
+body .modal :is(.widgetInfoBar,.widgetSectionTitle,.massSummary,.widgetListMain small,.inlineHelp,.widgetHint){opacity:.78}
+body .modal .widgetListMain small{color:inherit!important}
+
+/* --- Светлые темы (High Fantasy, Modern): тексты, у которых остались светлые цвета тёмной темы. --- */
+:is(.app,body):is([data-visual-style="high-fantasy"],[data-visual-style="modern"]) :is(.tag,.treeNodeName,.outlineRelChip,.treeRelChip){color:var(--text)!important}
+:is(.app,body):is([data-visual-style="high-fantasy"],[data-visual-style="modern"]) :is(.badge,.toolBtn small,.scopeBtn:not(.active) span,.outlineChip:not(.outlineRelChip),.outlineLegendItem,#outlineMeta,.outlineHint,.treeChip:not(.treeRelChip),.searchItem small){color:var(--muted)!important}
+:is(.app,body):is([data-visual-style="high-fantasy"],[data-visual-style="modern"]) .outlineHint{background:transparent!important}
+/* Активная кнопка Local/Links — тёмная (High Fantasy) или зелёная (Forest): подпись светлая. */
+:is(.app,body):is([data-visual-style="high-fantasy"],[data-visual-style="forest"]) .scopeBtn.active span{color:rgba(255,255,255,.82)!important}
+/* Modern: кнопка «Загрузить» в редакторе сущности была тёмно-серой с тёмным текстом. */
+:is(.app,body)[data-visual-style="modern"] #mMediaUpload{background:#fff!important;color:#17191c!important;border-color:#9fa3a7!important}
+
+/* --- High Fantasy: панель Galaxy лежит на сером фоне — подложка из цвета панелей темы. --- */
+:is(.app,body)[data-visual-style="high-fantasy"] .galaxyToolbar>:is(.galaxyToolbarTitle,.galaxyOpacity,.galaxyStatus,.btn){background:var(--panel2)!important;color:var(--text)!important;border-color:var(--line2)!important}
+:is(.app,body)[data-visual-style="high-fantasy"] .galaxyToolbar :is(span,strong,output){color:var(--text)!important}
+
+/* --- Medieval: всплывающие поверхности — тёмное дерево, им нужны светлые «чернила». --- */
+:is(.app,body)[data-visual-style="medieval"] #searchResults .searchItem b{color:#f0dfb4!important}
+:is(.app,body)[data-visual-style="medieval"] #searchResults :is(.searchItem small,.searchGroup){color:#cdb68a!important}
+:is(.app,body)[data-visual-style="medieval"] #workspacePop :is(.workspacePopHead small,.workspaceGroupTitle){color:#cdb68a!important}
+:is(.app,body)[data-visual-style="medieval"] #mehStatus{color:#2e2013!important}
+
+/* --- Мех: шапка окна тёмная во всех темах, где текст был тёмным. --- */
+:is(.app,body):is([data-visual-style="medieval"],[data-visual-style="high-fantasy"],[data-visual-style="modern"]) .mehHead .mehBrandText strong{color:#f3f6ff!important}
+:is(.app,body):is([data-visual-style="medieval"],[data-visual-style="high-fantasy"],[data-visual-style="modern"]) .mehHead .mehBrandText small{color:rgba(235,240,250,.75)!important}
+:is(.app,body)[data-visual-style="high-fantasy"] :is(#mehStatus,#mehMoodBubble){color:#f3f6ff!important}
+/* Medieval: список блоков в конструкторе лежит на тёмном дереве. */
+:is(.app,body)[data-visual-style="medieval"] .modal .widgetListMain :is(b,small){color:#ecd9ae!important}
+:is(.app,body)[data-visual-style="medieval"] .modal :is(.widgetInfoBar,.widgetInfoBar strong){color:#ecd9ae!important}
+
+/* 0.18: the caption under a highlighted action («Войти» for a space) follows the button's own text colour. */
+.actionBtn small{color:inherit;opacity:.82}.actionBtn.primary small{color:inherit!important;opacity:1;font-weight:600}
+
+/* 0.20.5: the «Скрывать дальние узлы» switch followed a fixed light-blue colour, unreadable on light skins (high-fantasy, modern). */
+.left .switch{color:inherit}.left .switch span{opacity:.85}
+/* 0.20.5: «Войти» on the classic purple button was just under 3:1. */
+:is(.app,body)[data-visual-style="classic"] .actionBtn.primary{color:#fff}
+/* 0.24: High Fantasy — the type line under an Outline name and the hint above the list sit on light paper; the common muted
+   colour fell to 3:1 there (seen once the 9 px captions became 10 px and were measured) */
+:is(.app,body)[data-visual-style="high-fantasy"] #outlineView :is(.outlineType,.outlineHint){color:color-mix(in srgb,var(--text) 72%,var(--muted))!important}
+
+/* 0.25.1: every style has its own faces (styles/fonts.css, bundled). Text — --skin-font; big titles only — --skin-head
+   (a characterful face stays readable at title size; small labels and running text never get it). */
+:is(.app,body) :is(button,input,select,textarea){font-family:inherit}
+:is(.app,body)[data-visual-style] :is(.cardTitle h2,#modalTitle,.scopeTitle,.outlineTitle,.articleTitle,.logoText,.galaxyToolbarTitle strong,.mapTitle){font-family:var(--skin-head)!important}
+/* wide title faces (Unbounded, Russo One…) are set a little smaller so names fit; --skin-head-scale comes from the style */
+:is(.app,body)[data-visual-style] .scopeTitle{font-size:calc(18px * var(--skin-head-scale,1))}
+:is(.app,body)[data-visual-style] .cardTitle h2{font-size:calc(16px * var(--skin-head-scale,1))}
+:is(.app,body)[data-visual-style] .outlineTitle{font-size:calc(22px * var(--skin-head-scale,1))}

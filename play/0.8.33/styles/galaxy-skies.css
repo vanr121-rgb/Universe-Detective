@@ -1,0 +1,67 @@
+/* Universe Graph — небо Galaxy у каждого стиля своё (0.25.5, решение 14.10.2026: «Galaxy должен соответствовать каждому
+   из стилей, а не быть общей затычкой»). Старые 8 стилей рисуют своё небо в своих файлах; здесь — 14 стилей общего слоя.
+   Яркость неба — как у фона стиля (светлый стиль — светлое небо с тёмными подписями), мотив — из облика стиля. */
+:is(.app,body)[data-visual-style] .galaxyViewport{--gx-star:color-mix(in srgb,var(--skin-canvas-text) 70%,transparent)}
+/* звёздная пыль из трёх сеток разного шага — без видимого повтора */
+:is(.app,body)[data-skin-kind="tokens"] .galaxyViewport{background-color:var(--skin-bg);background-image:
+  radial-gradient(1.3px 1.3px at 23px 41px,var(--gx-star),transparent),radial-gradient(1px 1px at 87px 13px,var(--gx-star),transparent),
+  radial-gradient(1.6px 1.6px at 61px 97px,var(--gx-star),transparent),radial-gradient(1px 1px at 131px 71px,var(--gx-star),transparent),
+  radial-gradient(ellipse at 50% 45%,var(--skin-bg2),var(--skin-bg) 72%);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto,auto,auto,auto}
+
+/* Space New — фиолетовые туманности и золотая звёздная пыль */
+:is(.app,body)[data-visual-style="space-new"] .galaxyViewport{--gx-star:#f3d36b;background-image:
+  radial-gradient(1.4px 1.4px at 23px 41px,#fff6d8,transparent),radial-gradient(1px 1px at 87px 13px,#f3d36b,transparent),radial-gradient(1.8px 1.8px at 61px 97px,#ffe9a8,transparent),radial-gradient(1px 1px at 131px 71px,#c9b6ff,transparent),
+  radial-gradient(42% 34% at 26% 30%,rgba(92,45,170,.55),transparent 70%),radial-gradient(38% 30% at 74% 68%,rgba(150,40,120,.4),transparent 70%),radial-gradient(ellipse at 50% 50%,#1a0f3a,#0c0720 75%);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto,auto}
+/* Parchment — звёздная карта тушью на бумаге: круги склонений и меридианы */
+:is(.app,body)[data-visual-style="parchment"] .galaxyViewport{--gx-star:#23395b;background-image:
+  radial-gradient(1.3px 1.3px at 23px 41px,#23395b,transparent),radial-gradient(1px 1px at 87px 13px,#5e4f39,transparent),radial-gradient(1.6px 1.6px at 61px 97px,#23395b,transparent),radial-gradient(1px 1px at 131px 71px,#5e4f39,transparent),
+  repeating-radial-gradient(circle at 50% 50%,transparent 0 119px,rgba(35,57,91,.16) 119px 120px),repeating-conic-gradient(from 0deg at 50% 50%,rgba(35,57,91,.10) 0 .25deg,transparent .25deg 15deg),
+  radial-gradient(ellipse at 50% 50%,#f6eedb,#e8dab8 80%);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto,auto}
+/* Minimal — белый лист, редкая сетка точек и одна оранжевая искра */
+:is(.app,body)[data-visual-style="minimal"] .galaxyViewport{--gx-star:rgba(29,29,31,.35);background-image:
+  radial-gradient(1px 1px at 20px 20px,rgba(29,29,31,.22),transparent),radial-gradient(1px 1px at 87px 13px,rgba(29,29,31,.28),transparent),radial-gradient(1.4px 1.4px at 61px 97px,rgba(29,29,31,.22),transparent),radial-gradient(1px 1px at 131px 71px,rgba(29,29,31,.2),transparent),
+  radial-gradient(circle at 78% 22%,rgba(255,90,31,.14) 0 3%,transparent 9%),linear-gradient(#fbfaf7,#f4f2ec);background-size:40px 40px,157px 149px,211px 197px,263px 241px,auto,auto}
+/* High Contrast — чистый чёрный, редкие белые звёзды без свечения */
+:is(.app,body)[data-visual-style="high-contrast"] .galaxyViewport{--gx-star:#fff;background-image:
+  radial-gradient(1.6px 1.6px at 23px 41px,#fff,transparent),radial-gradient(1.2px 1.2px at 87px 13px,#fff,transparent),radial-gradient(2px 2px at 61px 97px,#ffd400,transparent),radial-gradient(1.2px 1.2px at 131px 71px,#fff,transparent),linear-gradient(#000,#000);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto}
+/* Noir — ночной дождь над серым городом и пятно луны сквозь тучи */
+:is(.app,body)[data-visual-style="noir"] .galaxyViewport{--gx-star:rgba(236,235,228,.55);background-image:
+  repeating-linear-gradient(105deg,rgba(255,255,255,.04) 0 1px,transparent 1px 9px),radial-gradient(circle at 80% 18%,rgba(236,235,228,.22) 0 4%,rgba(236,235,228,.06) 9%,transparent 20%),
+  radial-gradient(60% 30% at 30% 80%,rgba(0,0,0,.35),transparent 70%),linear-gradient(#3a3a37,#262624);background-size:auto,auto,auto,auto}
+/* Gothic — багровая ночь, огромная бледная луна, золото свечей вместо звёзд */
+:is(.app,body)[data-visual-style="gothic"] .galaxyViewport{--gx-star:#e8952e;background-image:
+  radial-gradient(1.3px 1.3px at 23px 41px,#e8952e,transparent),radial-gradient(1px 1px at 87px 13px,#f2e6d8,transparent),radial-gradient(1.6px 1.6px at 61px 97px,#e8952e,transparent),radial-gradient(1px 1px at 131px 71px,#f2e6d8,transparent),
+  radial-gradient(circle at 82% 16%,#efe3cf 0 5%,rgba(239,227,207,.25) 6%,transparent 14%),radial-gradient(40% 30% at 20% 75%,rgba(79,99,217,.12),transparent 70%),radial-gradient(ellipse at 50% 40%,#4a0f1a,#22080d 75%);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto,auto}
+/* Nordic — северное сияние лентами над стальной ночью, снежные звёзды */
+:is(.app,body)[data-visual-style="nordic"] .galaxyViewport{--gx-star:#eef6fb;background-image:
+  radial-gradient(1.3px 1.3px at 23px 41px,#eef6fb,transparent),radial-gradient(1px 1px at 87px 13px,#9fd3f5,transparent),radial-gradient(1.6px 1.6px at 61px 97px,#eef6fb,transparent),radial-gradient(1px 1px at 131px 71px,#9fd3f5,transparent),
+  radial-gradient(70% 16% at 40% 24%,rgba(80,220,170,.28),transparent 70%),radial-gradient(60% 12% at 62% 34%,rgba(120,190,245,.24),transparent 70%),radial-gradient(50% 10% at 30% 40%,rgba(150,110,230,.16),transparent 70%),linear-gradient(#172836,#22384a 70%,#2c465b);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto,auto,auto}
+/* Eastern — чёрный лак, красная луна и облака тушью */
+:is(.app,body)[data-visual-style="eastern"] .galaxyViewport{--gx-star:#f4ead8;background-image:
+  radial-gradient(1px 1px at 23px 41px,#f4ead8,transparent),radial-gradient(1px 1px at 131px 71px,#cdbba8,transparent),
+  radial-gradient(circle at 76% 24%,#c8321f 0 7%,rgba(200,50,31,.3) 7.5%,transparent 12%),radial-gradient(30% 6% at 64% 32%,rgba(244,234,216,.10),transparent 70%),radial-gradient(36% 7% at 30% 70%,rgba(244,234,216,.08),transparent 70%),linear-gradient(#1a0c0c,#0f0606);background-size:113px 107px,157px 149px,auto,auto,auto,auto,auto,auto,auto,auto,auto}
+/* Desert — светлое небо пустыни на закате, дюны внизу, бирюзовые звёзды */
+:is(.app,body)[data-visual-style="desert"] .galaxyViewport{--gx-star:#0b7c7c;background-image:
+  radial-gradient(1.3px 1.3px at 23px 41px,#0b7c7c,transparent),radial-gradient(1px 1px at 87px 13px,#8e3b16,transparent),radial-gradient(1.6px 1.6px at 61px 97px,#0b7c7c,transparent),radial-gradient(1px 1px at 131px 71px,#8e3b16,transparent),
+  radial-gradient(130% 30% at 30% 112%,rgba(142,59,22,.22),transparent 60%),radial-gradient(120% 26% at 80% 110%,rgba(142,59,22,.16),transparent 60%),radial-gradient(circle at 84% 14%,rgba(255,246,220,.75) 0 5%,transparent 16%),linear-gradient(#f6d7a8,#eab27a 70%,#e6a96a);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto,auto,auto}
+/* Nautical — штурманская карта: румбы от розы ветров и латунный круг */
+:is(.app,body)[data-visual-style="nautical"] .galaxyViewport{--gx-star:#eef6fa;background-image:
+  radial-gradient(1.3px 1.3px at 23px 41px,#eef6fa,transparent),radial-gradient(1px 1px at 87px 13px,#e0b354,transparent),radial-gradient(1.6px 1.6px at 61px 97px,#eef6fa,transparent),radial-gradient(1px 1px at 131px 71px,#a9c4d4,transparent),
+  repeating-conic-gradient(from 0deg at 18% 82%,rgba(224,179,84,.16) 0 .3deg,transparent .3deg 22.5deg),radial-gradient(circle at 18% 82%,transparent 0 70px,rgba(224,179,84,.3) 71px 72px,transparent 73px),linear-gradient(#0e3d60,#0b3350 60%,#082a42);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto,auto}
+/* Steampunk — латунный планетарий: кольца орбит и тёплый свет лампы */
+:is(.app,body)[data-visual-style="steampunk"] .galaxyViewport{--gx-star:#c9933b;background-image:
+  radial-gradient(1.3px 1.3px at 23px 41px,#c9933b,transparent),radial-gradient(1px 1px at 87px 13px,#f3e6d0,transparent),radial-gradient(1.6px 1.6px at 61px 97px,#4fa38a,transparent),
+  repeating-radial-gradient(circle at 86% 18%,transparent 0 30px,rgba(201,147,59,.18) 30px 32px,transparent 32px 56px),radial-gradient(ellipse at 40% 60%,rgba(201,147,59,.12),transparent 60%),radial-gradient(ellipse at 50% 50%,#2a1f16,#140e09 80%);background-size:113px 107px,157px 149px,211px 197px,auto,auto,auto,auto,auto,auto,auto,auto}
+/* Cyberpunk — неоновый горизонт: розовое зарево снизу, линии развёртки, зелёные звёзды */
+:is(.app,body)[data-visual-style="cyberpunk"] .galaxyViewport{--gx-star:#39ff88;background-image:
+  radial-gradient(1.2px 1.2px at 23px 41px,#39ff88,transparent),radial-gradient(1px 1px at 87px 13px,#ff2fa6,transparent),radial-gradient(1.4px 1.4px at 61px 97px,#f6eaff,transparent),
+  repeating-linear-gradient(0deg,rgba(255,255,255,.03) 0 1px,transparent 1px 4px),radial-gradient(80% 30% at 50% 108%,rgba(255,47,166,.4),transparent 70%),linear-gradient(#05020a,#160a24 70%,#2a0a2e);background-size:113px 107px,157px 149px,211px 197px,auto,auto,auto,auto,auto,auto,auto,auto}
+/* Wasteland — пыльная мгла, низкое ржавое солнце, редкие тусклые звёзды */
+:is(.app,body)[data-visual-style="wasteland"] .galaxyViewport{--gx-star:rgba(242,238,220,.6);background-image:
+  radial-gradient(1px 1px at 23px 41px,rgba(242,238,220,.6),transparent),radial-gradient(1.4px 1.4px at 131px 71px,rgba(212,220,58,.6),transparent),
+  radial-gradient(circle at 24% 78%,rgba(201,107,44,.55) 0 4%,rgba(201,107,44,.18) 9%,transparent 22%),repeating-linear-gradient(97deg,rgba(0,0,0,.05) 0 2px,transparent 2px 23px),linear-gradient(#2e2c22,#3d3a2c 60%,#4a4534);background-size:113px 107px,157px 149px,auto,auto,auto,auto,auto,auto,auto}
+/* True Medieval — расписной свод часовни: лазурь и золотые звёзды, как на средневековых потолках */
+:is(.app,body)[data-visual-style="true-medieval"] .galaxyViewport{--gx-star:#e7c97a;background-image:
+  radial-gradient(2.2px 2.2px at 23px 41px,#e7c97a,transparent),radial-gradient(1.6px 1.6px at 87px 13px,#b8862b,transparent),radial-gradient(2.6px 2.6px at 61px 97px,#e7c97a,transparent),radial-gradient(1.4px 1.4px at 131px 71px,#b8862b,transparent),
+  radial-gradient(ellipse at 50% 45%,transparent 50%,rgba(0,0,0,.45)),linear-gradient(#1f2f63,#18264f 70%,#121c3b);background-size:113px 107px,157px 149px,211px 197px,263px 241px,auto,auto}
+:is(.app,body)[data-visual-style="true-medieval"] .galaxyName{stroke:#121c3b}
